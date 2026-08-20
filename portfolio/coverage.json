@@ -1,0 +1,471 @@
+{
+  "generatedBy": "scripts/run-coverage.mjs",
+  "generatedAt": "2026-08-11",
+  "provider": "v8",
+  "note": "Aggregates sum covered/total across cleanly measured packages rather than averaging percentages. Anything not status \"ok\" — skipped, failed, or measured with a red suite — contributes nothing. Each package carries the date it was measured; a subset re-run leaves the others at their earlier date rather than restating them.",
+  "aggregate": {
+    "statements": 48.86,
+    "branches": 79.51,
+    "functions": 71.27,
+    "lines": 48.86,
+    "coveredStatements": 34313,
+    "totalStatements": 70226
+  },
+  "sharedPackagesAggregate": {
+    "statements": 94.18,
+    "branches": 83.83,
+    "functions": 79.97,
+    "lines": 94.18,
+    "coveredStatements": 19425,
+    "totalStatements": 20626,
+    "scope": "packages/* excluding @phiguard/ui — the domain, data, auth, billing and compliance layer"
+  },
+  "packages": {
+    "@phiguard/web": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 34309,
+        "covered": 12371,
+        "skipped": 0,
+        "pct": 36.05
+      },
+      "branches": {
+        "total": 2903,
+        "covered": 2300,
+        "skipped": 0,
+        "pct": 79.22
+      },
+      "functions": {
+        "total": 627,
+        "covered": 467,
+        "skipped": 0,
+        "pct": 74.48
+      },
+      "lines": {
+        "total": 34309,
+        "covered": 12371,
+        "skipped": 0,
+        "pct": 36.05
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/marketing": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 14026,
+        "covered": 2455,
+        "skipped": 0,
+        "pct": 17.5
+      },
+      "branches": {
+        "total": 339,
+        "covered": 198,
+        "skipped": 0,
+        "pct": 58.4
+      },
+      "functions": {
+        "total": 152,
+        "covered": 52,
+        "skipped": 0,
+        "pct": 34.21
+      },
+      "lines": {
+        "total": 14026,
+        "covered": 2455,
+        "skipped": 0,
+        "pct": 17.5
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/audit": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 371,
+        "covered": 355,
+        "skipped": 0,
+        "pct": 95.68
+      },
+      "branches": {
+        "total": 126,
+        "covered": 109,
+        "skipped": 0,
+        "pct": 86.5
+      },
+      "functions": {
+        "total": 28,
+        "covered": 25,
+        "skipped": 0,
+        "pct": 89.28
+      },
+      "lines": {
+        "total": 371,
+        "covered": 355,
+        "skipped": 0,
+        "pct": 95.68
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/auth": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 838,
+        "covered": 687,
+        "skipped": 0,
+        "pct": 81.98
+      },
+      "branches": {
+        "total": 153,
+        "covered": 126,
+        "skipped": 0,
+        "pct": 82.35
+      },
+      "functions": {
+        "total": 50,
+        "covered": 36,
+        "skipped": 0,
+        "pct": 72
+      },
+      "lines": {
+        "total": 838,
+        "covered": 687,
+        "skipped": 0,
+        "pct": 81.98
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/baa": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 373,
+        "covered": 359,
+        "skipped": 0,
+        "pct": 96.24
+      },
+      "branches": {
+        "total": 61,
+        "covered": 50,
+        "skipped": 0,
+        "pct": 81.96
+      },
+      "functions": {
+        "total": 13,
+        "covered": 11,
+        "skipped": 0,
+        "pct": 84.61
+      },
+      "lines": {
+        "total": 373,
+        "covered": 359,
+        "skipped": 0,
+        "pct": 96.24
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/billing": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 1224,
+        "covered": 1120,
+        "skipped": 0,
+        "pct": 91.5
+      },
+      "branches": {
+        "total": 406,
+        "covered": 345,
+        "skipped": 0,
+        "pct": 84.97
+      },
+      "functions": {
+        "total": 73,
+        "covered": 67,
+        "skipped": 0,
+        "pct": 91.78
+      },
+      "lines": {
+        "total": 1224,
+        "covered": 1120,
+        "skipped": 0,
+        "pct": 91.5
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/brand": {
+      "status": "skipped",
+      "reason": "no test files",
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/compliance": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 4002,
+        "covered": 3762,
+        "skipped": 0,
+        "pct": 94
+      },
+      "branches": {
+        "total": 657,
+        "covered": 562,
+        "skipped": 0,
+        "pct": 85.54
+      },
+      "functions": {
+        "total": 137,
+        "covered": 124,
+        "skipped": 0,
+        "pct": 90.51
+      },
+      "lines": {
+        "total": 4002,
+        "covered": 3762,
+        "skipped": 0,
+        "pct": 94
+      },
+      "retried": true,
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/config": {
+      "status": "skipped",
+      "reason": "config presets only, no source",
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/db": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 1783,
+        "covered": 1656,
+        "skipped": 0,
+        "pct": 92.87
+      },
+      "branches": {
+        "total": 233,
+        "covered": 187,
+        "skipped": 0,
+        "pct": 80.25
+      },
+      "functions": {
+        "total": 89,
+        "covered": 43,
+        "skipped": 0,
+        "pct": 48.31
+      },
+      "lines": {
+        "total": 1783,
+        "covered": 1656,
+        "skipped": 0,
+        "pct": 92.87
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/email": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 1061,
+        "covered": 873,
+        "skipped": 0,
+        "pct": 82.28
+      },
+      "branches": {
+        "total": 60,
+        "covered": 53,
+        "skipped": 0,
+        "pct": 88.33
+      },
+      "functions": {
+        "total": 24,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 58.33
+      },
+      "lines": {
+        "total": 1061,
+        "covered": 873,
+        "skipped": 0,
+        "pct": 82.28
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/integration": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 575,
+        "covered": 528,
+        "skipped": 0,
+        "pct": 91.82
+      },
+      "branches": {
+        "total": 126,
+        "covered": 89,
+        "skipped": 0,
+        "pct": 70.63
+      },
+      "functions": {
+        "total": 34,
+        "covered": 29,
+        "skipped": 0,
+        "pct": 85.29
+      },
+      "lines": {
+        "total": 575,
+        "covered": 528,
+        "skipped": 0,
+        "pct": 91.82
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/knowledge": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 2508,
+        "covered": 2403,
+        "skipped": 0,
+        "pct": 95.81
+      },
+      "branches": {
+        "total": 135,
+        "covered": 97,
+        "skipped": 0,
+        "pct": 71.85
+      },
+      "functions": {
+        "total": 21,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 66.66
+      },
+      "lines": {
+        "total": 2508,
+        "covered": 2403,
+        "skipped": 0,
+        "pct": 95.81
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/lead-magnets": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 599,
+        "covered": 567,
+        "skipped": 0,
+        "pct": 94.65
+      },
+      "branches": {
+        "total": 101,
+        "covered": 92,
+        "skipped": 0,
+        "pct": 91.08
+      },
+      "functions": {
+        "total": 13,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 53.84
+      },
+      "lines": {
+        "total": 599,
+        "covered": 567,
+        "skipped": 0,
+        "pct": 94.65
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/marketing-db": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 75,
+        "covered": 55,
+        "skipped": 0,
+        "pct": 73.33
+      },
+      "branches": {
+        "total": 5,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 60
+      },
+      "functions": {
+        "total": 5,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 60
+      },
+      "lines": {
+        "total": 75,
+        "covered": 55,
+        "skipped": 0,
+        "pct": 73.33
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/pdf": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 7217,
+        "covered": 7060,
+        "skipped": 0,
+        "pct": 97.82
+      },
+      "branches": {
+        "total": 138,
+        "covered": 132,
+        "skipped": 0,
+        "pct": 95.65
+      },
+      "functions": {
+        "total": 142,
+        "covered": 130,
+        "skipped": 0,
+        "pct": 91.54
+      },
+      "lines": {
+        "total": 7217,
+        "covered": 7060,
+        "skipped": 0,
+        "pct": 97.82
+      },
+      "measuredAt": "2026-08-11"
+    },
+    "@phiguard/ui": {
+      "status": "ok",
+      "exitCode": 0,
+      "statements": {
+        "total": 1265,
+        "covered": 62,
+        "skipped": 0,
+        "pct": 4.9
+      },
+      "branches": {
+        "total": 53,
+        "covered": 27,
+        "skipped": 0,
+        "pct": 50.94
+      },
+      "functions": {
+        "total": 33,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 15.15
+      },
+      "lines": {
+        "total": 1265,
+        "covered": 62,
+        "skipped": 0,
+        "pct": 4.9
+      },
+      "measuredAt": "2026-08-11"
+    }
+  }
+}

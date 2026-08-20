@@ -1,0 +1,78 @@
+---
+import { Image } from 'astro:assets'
+import { PHIGUARD_SIGNUP_URL } from '@phiguard/brand/identity'
+import { commercialPageCopy } from '@phiguard/knowledge/commercial'
+import { Lock } from 'lucide-astro'
+import dashboardImg from '../assets/product-dashboard.png'
+
+interface Props {
+  headline?: string
+  subheadline?: string
+  primaryCta?: { label: string; href: string }
+  secondaryCta?: { label: string; href: string }
+}
+
+const {
+  headline = commercialPageCopy.hero.headline,
+  subheadline = commercialPageCopy.hero.subheadline,
+  primaryCta = { label: 'Start free trial', href: PHIGUARD_SIGNUP_URL },
+  secondaryCta = { label: 'Review pricing', href: '/pricing' },
+} = Astro.props
+---
+
+<section class="page-surface">
+  <div class="shell-xl hero-grid">
+    <div>
+      <p class="kicker">HIPAA task management for small clinics</p>
+      <h1 class="hero-title text-balance">{headline}</h1>
+      <p class="hero-summary">{subheadline}</p>
+      <div class="hero-proof">
+        <div class="proof-pill">
+          <Lock class="h-4 w-4" aria-hidden="true" />
+          {commercialPageCopy.hero.proof[0]}
+        </div>
+        {commercialPageCopy.hero.proof.slice(1).map((proof) => (
+          <div class="proof-pill">{proof}</div>
+        ))}
+      </div>
+      <div class="hero-actions">
+        <a href={primaryCta.href} class="button-primary hero-cta-primary"
+           data-ph-cta={primaryCta.label} data-ph-location="hero-primary">
+          {primaryCta.label}
+        </a>
+        <a href={secondaryCta.href} class="button-secondary hero-cta-secondary"
+           data-ph-cta={secondaryCta.label} data-ph-location="hero-secondary">
+          {secondaryCta.label}
+        </a>
+      </div>
+      <p class="fine-print">
+        {commercialPageCopy.heroFinePrint}
+      </p>
+    </div>
+
+    <div class="hero-screenshot hero-preview">
+      <Image
+        src={dashboardImg}
+        alt="PHIGuard dashboard showing compliance tasks, BAA signed status, active checklists, and audit log for a medical clinic"
+        width={1200}
+        quality={85}
+        loading="eager"
+        fetchpriority="high"
+        class="hero-screenshot__img"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 720px) {
+    .hero-cta-primary,
+    .hero-cta-secondary {
+      width: 100%;
+    }
+
+    .hero-preview {
+      display: none;
+    }
+  }
+</style>

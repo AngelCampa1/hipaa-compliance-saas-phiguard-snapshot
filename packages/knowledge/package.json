@@ -1,0 +1,37 @@
+{
+  "name": "@phiguard/knowledge",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./app": "./src/app.ts",
+    "./marketing": "./src/marketing.ts",
+    "./commercial": "./src/commercial.ts",
+    "./support": "./src/support.ts",
+    "./legal-trust": "./src/legal-trust.ts",
+    "./public": "./src/public.ts",
+    "./email": "./src/email.ts",
+    "./marketing-infra": "./src/marketing-infra.ts"
+  },
+  "scripts": {
+    "knowledge:sync": "tsx scripts/sync.ts",
+    "knowledge:check": "tsx scripts/check.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/ scripts/",
+    "test": "pnpm knowledge:check && vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@phiguard/billing": "workspace:*",
+    "@phiguard/brand": "workspace:*"
+  },
+  "devDependencies": {
+    "@phiguard/config": "workspace:*",
+    "@vitest/coverage-v8": "^3.2.4",
+    "tsx": "^4.20.6",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".astro/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"],
+      "inputs": ["**/*.ts", "**/*.tsx", "tsconfig*.json", "package.json"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"],
+      "inputs": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "eslint.config*", ".eslintrc*", "package.json"]
+    },
+    "test": {
+      "inputs": ["src/**", "*.config.*", "vitest.config.*", "vitest.setup.*", "package.json"],
+      "env": ["NODE_ENV"],
+      "outputs": []
+    },
+    "test:e2e": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "env": ["DATABASE_URL", "BETTER_AUTH_SECRET", "BETTER_AUTH_URL", "NODE_ENV", "CI"],
+      "outputs": ["playwright-report/**", "test-results/**"]
+    },
+    "build:local": {
+      "cache": false,
+      "env": ["PDF_LOCAL_ONLY"],
+      "outputs": ["dist/**"]
+    }
+  }
+}

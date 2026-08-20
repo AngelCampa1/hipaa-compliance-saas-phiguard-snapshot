@@ -1,0 +1,24 @@
+{
+  "name": "@phiguard/lead-magnets",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@phiguard/brand": "workspace:*"
+  },
+  "devDependencies": {
+    "@phiguard/config": "workspace:*",
+    "@vitest/coverage-v8": "^2.1.9",
+    "typescript": "^5.7",
+    "vitest": "^2"
+  }
+}

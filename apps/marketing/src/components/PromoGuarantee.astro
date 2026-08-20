@@ -1,0 +1,43 @@
+---
+import { Check } from 'lucide-astro'
+import { limitedOfferCommercialCopy } from '../data/product'
+---
+
+<div class="promo-guarantee" aria-label="Limited offer and guarantee">
+  <div class="promo-guarantee__item">
+    <Check class="h-4 w-4 text-success-700" aria-hidden="true" />
+    <span>
+      <strong>{limitedOfferCommercialCopy.promoBadge}.</strong>
+      {limitedOfferCommercialCopy.promoAutoApplyLabel}.
+    </span>
+  </div>
+  <div class="promo-guarantee__item">
+    <Check class="h-4 w-4 text-success-700" aria-hidden="true" />
+    <span>{limitedOfferCommercialCopy.guarantee}</span>
+  </div>
+</div>
+
+<style>
+  .promo-guarantee {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border: 1px solid var(--phig-color-border-default);
+    border-radius: 8px;
+    background: var(--phig-color-success-50);
+  }
+
+  .promo-guarantee__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    color: var(--phig-color-text-secondary);
+    font-size: 0.94rem;
+    line-height: 1.6;
+  }
+
+  .promo-guarantee__item strong {
+    color: var(--phig-color-text-primary);
+  }
+</style>

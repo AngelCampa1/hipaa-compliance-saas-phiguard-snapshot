@@ -1,0 +1,77 @@
+{
+  "generatedBy": "apps/web/e2e/portfolio-screenshots.spec.ts",
+  "seededBy": "apps/web/scripts/demo-seed.ts",
+  "organization": "Riverbend Health Partners",
+  "note": "This archive is a fraction of what the capture spec asks for. The original run wrote 43 files, but the spec only failed a screen on HTTP >= 400, and the router redirects on the client, so every screen the seeded account could not reach still resolved 200 and was written to disk under the requested screen's name. 38 of the 43 files were the onboarding gate wearing another screen's filename. Those were deleted rather than relabelled, and the spec now compares the landed URL with the requested one. What is left is what was genuinely captured. Re-running the full archive needs Docker, a seeded account that has completed onboarding, and a re-capture.",
+  "counts": {
+    "locations": 3,
+    "members": 5,
+    "tasks": 18,
+    "comments": 2,
+    "checklists": 6,
+    "itemsCompleted": 7,
+    "incidents": 6,
+    "policiesPublished": 4,
+    "riskItems": 8,
+    "trainingCompleted": 8,
+    "controlsEvidenced": 7
+  },
+  "shots": [
+    {
+      "file": "public-entry.png",
+      "path": "/",
+      "caption": "Unauthenticated entry page",
+      "role": "anonymous",
+      "viewport": "desktop",
+      "bytes": 50431
+    },
+    {
+      "file": "login.png",
+      "path": "/login",
+      "caption": "Sign in",
+      "role": "anonymous",
+      "viewport": "desktop",
+      "bytes": 11387
+    },
+    {
+      "file": "signup.png",
+      "path": "/signup",
+      "caption": "Create account",
+      "role": "anonymous",
+      "viewport": "desktop",
+      "bytes": 46669
+    },
+    {
+      "file": "forgot-password.png",
+      "path": "/forgot-password",
+      "caption": "Password reset request",
+      "role": "anonymous",
+      "viewport": "desktop",
+      "bytes": 9931
+    },
+    {
+      "file": "onboarding-choose-plan.png",
+      "path": "/app/dashboard",
+      "caption": "Onboarding gate — plan choice and BAA acceptance, step 2 of 5 (synthetic seed account)",
+      "role": "org_owner",
+      "viewport": "desktop",
+      "bytes": 80175
+    },
+    {
+      "file": "billing.png",
+      "path": "/app/billing",
+      "caption": "Plan and billing, with trial and legal-acceptance status (synthetic seed account)",
+      "role": "org_owner",
+      "viewport": "desktop",
+      "bytes": 53453
+    },
+    {
+      "file": "onboarding-choose-plan.mobile.png",
+      "path": "/app/dashboard",
+      "caption": "Onboarding gate at 375px (synthetic seed account)",
+      "role": "org_owner",
+      "viewport": "mobile",
+      "bytes": 25305
+    }
+  ]
+}

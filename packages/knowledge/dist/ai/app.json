@@ -1,0 +1,432 @@
+{
+  "generatedAt": "static",
+  "domain": "mixed",
+  "bundle": "authenticated-app",
+  "items": [
+    {
+      "id": "app.help.topics",
+      "domain": "app",
+      "title": "Authenticated help topics",
+      "summary": "Help Center topics, categories, steps, and route guidance for app users.",
+      "body": "Your first day in PHIGuard: A short path for a clinic administrator who has never used PHIGuard before.\nCreate your first task: Use a task when someone needs to do a specific piece of work and mark it done.\nFind and update a task: Search for a task, change its status, and leave a short note.\nStart a HIPAA checklist: Assign a starter template so your clinic has a clear list of compliance work.\nComplete a checklist item: Mark an item done only after the clinic has actually completed the work.\nUnderstand the compliance program page: Know what policies, training, risk, and vendors are for.\nOpen a downloaded file or PDF: Find a downloaded report and open it even if you are not comfortable with files.\nInvite a teammate: Add another person without giving them more access than they need.\nUnderstand billing and trial status: Know what your billing page is telling you before you change anything.\nAsk PHIGuard for help: What to send support when you need a person to look at the issue.",
+      "tags": [
+        "help",
+        "app",
+        "guidance"
+      ],
+      "audience": [
+        "authenticated users",
+        "clinic staff"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "authenticated-help",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "app.route.guidance",
+      "domain": "app",
+      "title": "Route-level contextual help",
+      "summary": "Route help panels, warnings, and tooltips shown inside authenticated PHIGuard.",
+      "body": "Dashboard: Your home base. Start with the items that need attention, then move into the matching page.\nOnboarding: A step-by-step setup path for plan choice, legal acceptance, trial start, teammate invite, and first checklist.\nTasks: Tasks are the clinic follow-up list. Use them when one person needs to do work and leave a record.\nNew task: Create one clear piece of follow-up work for a teammate or clinic location.\nTask details: This page shows the work, status, owner, comments, attachments, and audit activity for one task.\nCompliance overview: A map of the clinic compliance program: checklists, incidents, policies, and program records.\nChecklists: Assign starter templates and track compliance work by clinic location.\nChecklist details: Guided mode walks through one safeguard at a time. List mode shows everything at once.\nIncidents: Track privacy, security, and compliance events from initial report through resolution.\nPolicies: Policies are documents the clinic publishes and staff may need to acknowledge.\nCompliance program: A broader program view for policies, training, risk assessments, and vendors.\nProgram policies: Create, publish, and review policy documents for the organization.\nTraining: Track workforce training assignments, due dates, and completion state.\nRisk assessments: Document larger risks, scoring, owners, and follow-up work.\nVendors: Track outside companies and whether a Business Associate Agreement is needed or expiring.\nReports: Reports help you review progress and export records for internal review.\nAudit log: The audit log records important actions so the clinic can review who did what and when.\nMembers: Invite teammates and manage what each person can access.\nLocations: Locations separate work by clinic site, department, or operating unit.\nIntegrations: Connect Google Workspace or Microsoft 365 for supported integration features.\nBilling: Billing shows trial, subscription, legal acceptance, and Stripe account status.",
+      "tags": [
+        "routes",
+        "tooltips",
+        "warnings"
+      ],
+      "audience": [
+        "authenticated users",
+        "customer support"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [
+        "app.help.topics"
+      ],
+      "consumers": [
+        "authenticated-help",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "commercial.plans.display",
+      "domain": "commercial",
+      "title": "Plan display copy",
+      "summary": "Public pricing display copy derived from the canonical billing plan source.",
+      "body": "PHIGuard uses flat per-clinic pricing, not per-user fees.\nA Business Associate Agreement is included on every public plan.\nThe primary trial path is a 30-day free trial with no credit card required.\n30-day free trial\nLimited time offer: 80% off the first year. Auto-applied at checkout.\n30-day money-back guarantee",
+      "tags": [
+        "pricing",
+        "plans",
+        "promotion"
+      ],
+      "audience": [
+        "buyers",
+        "sales",
+        "support"
+      ],
+      "source": {
+        "kind": "derived",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "commercial.marketing.page-copy",
+      "domain": "commercial",
+      "title": "Reusable public pricing and trial copy",
+      "summary": "Canonical marketing page copy for public pricing, trial, no-card, BAA, and audit posture claims.",
+      "body": "Per-clinic pricing. BAA at every tier.\nPHIGuard gives practice administrators a calmer way to run compliance work. One clinic price, an immutable audit trail, and guardrails that generic task tools do not give you.\nEvery plan includes a signed Business Associate Agreement and an immutable audit trail. No enterprise contracts. No surprise scaling costs.\nWhat should a small clinic choose first?: Most small clinics choose Essentials when they need the HIPAA baseline and not the extra structure of the higher plans.\nWhen does Clinic make more sense?: Clinic fits better once your practice has more coordination, more users, or a need for calendar and integration support.\nWhat pushes an organization to Group?: Group is for multi-location reporting and advanced compliance work, such as policy, training, vendor, risk, and SOC 2 evidence management.\nDo you offer a custom path?: Yes. Compliance Ops is a custom path for teams that need hands-on compliance support. It is not a public price card.\nCan we just start a trial instead of talking to sales?: Yes. Self-serve trial signup is the main action, and you do not need a credit card to start.",
+      "tags": [
+        "pricing",
+        "trial",
+        "baa",
+        "audit",
+        "marketing-page"
+      ],
+      "audience": [
+        "buyers",
+        "clinic administrators",
+        "marketing"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "support.contact.no-phi",
+      "domain": "support",
+      "title": "Support contact and no-PHI warning",
+      "summary": "Use angel.campa@phiguard.app for support handoff and do not send PHI by email.",
+      "body": "Please do not email patient names, dates of birth, medical record numbers, or other PHI.\nContact: angel.campa@phiguard.app",
+      "tags": [
+        "support",
+        "no-phi",
+        "handoff"
+      ],
+      "audience": [
+        "authenticated users",
+        "marketing visitors",
+        "support"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "authenticated-help",
+        "authenticated-support",
+        "marketing-assistant"
+      ]
+    },
+    {
+      "id": "email.transactional.public-copy",
+      "domain": "support",
+      "title": "Transactional email public copy",
+      "summary": "Public-safe copy for signup, trial, lead-magnet, unsubscribe, and footer email surfaces.",
+      "body": "Your PHIGuard account is ready. Continue setup to choose a plan, review the BAA, and start organizing the clinic compliance work in one auditable workspace.\nNo credit card was required to get started. If you want PHIGuard to continue after the trial, add billing details before the trial ends.\nPHIGuard gives small clinics a HIPAA-native task management system with a BAA available from day one - no enterprise contract, no per-user fees.\nYou are receiving this because an account was created for this email address.\nYou are receiving this because you created a PHIGuard account.\nYou received this email because you requested a free resource at phiguard.app.\nYou received this email because you requested a PHIGuard resource.\nYou received this email because you subscribed at phiguard.app.\nYou are receiving this because you requested a PHIGuard resource or signed up for product updates.",
+      "tags": [
+        "email",
+        "transactional",
+        "support",
+        "trial"
+      ],
+      "audience": [
+        "trial users",
+        "resource subscribers"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "transactional-email",
+        "marketing-email",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "email.signup-trial.sequence",
+      "domain": "commercial",
+      "title": "Signup trial nurture sequence",
+      "summary": "Public-safe signup trial nurture subjects, preview text, body copy, and CTA labels.",
+      "body": "Welcome to PHIGuard: Your account is ready. Continue setup to choose a plan, review the BAA, and start organizing clinic compliance work in one auditable workspace.\nYour PHIGuard trial is live: Your 30-day free trial is active with no credit card required. Add billing details before the trial ends if you want service to continue without a pause.\nKeep your HIPAA work moving: Use the trial to centralize recurring compliance tasks, incidents, evidence, and audit trail activity before the trial window closes.",
+      "tags": [
+        "email",
+        "trial",
+        "nurture",
+        "billing"
+      ],
+      "audience": [
+        "trial users"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "commercial"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "transactional-email",
+        "marketing-email",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "legalTrust.baa",
+      "domain": "legalTrust",
+      "title": "Business Associate Agreement",
+      "summary": "PHIGuard makes the BAA part of the standard signup, before you use any PHI features.",
+      "body": "PHIGuard makes the BAA part of the standard signup, before you use any PHI features.\nThis is a public summary, not legal advice. It does not replace reading the signed agreement.",
+      "tags": [
+        "legal",
+        "trust",
+        "baa"
+      ],
+      "audience": [
+        "buyers",
+        "clinic admins",
+        "support"
+      ],
+      "source": {
+        "kind": "summary",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "legal-summary"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "legalTrust.terms",
+      "domain": "legalTrust",
+      "title": "Terms and legal acceptance",
+      "summary": "Signing in and billing may require current Terms and BAA acceptance by someone allowed to act for your clinic.",
+      "body": "Signing in and billing may require current Terms and BAA acceptance by someone allowed to act for your clinic.\nOnly accept legal documents if you have the authority to bind the clinic or organization.",
+      "tags": [
+        "legal",
+        "trust",
+        "terms"
+      ],
+      "audience": [
+        "buyers",
+        "clinic admins",
+        "support"
+      ],
+      "source": {
+        "kind": "summary",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "legal-summary"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "legalTrust.security",
+      "domain": "legalTrust",
+      "title": "Security and trust posture",
+      "summary": "PHIGuard keeps security claims careful. We describe the controls we have today and do not claim certifications we have not finished.",
+      "body": "PHIGuard keeps security claims careful. We describe the controls we have today and do not claim certifications we have not finished.\nWe only claim a milestone once the evidence and review behind it are done.",
+      "tags": [
+        "legal",
+        "trust",
+        "security"
+      ],
+      "audience": [
+        "buyers",
+        "clinic admins",
+        "support"
+      ],
+      "source": {
+        "kind": "summary",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "legal-summary"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "legalTrust.security.public",
+      "domain": "legalTrust",
+      "title": "Public security posture",
+      "summary": "Public-safe security page claims for safeguards, telemetry boundaries, audit controls, and encryption posture.",
+      "body": "Encryption and transport protections: App traffic runs over HTTPS, and managed infrastructure encrypts stored data at rest.\nAccess and identity boundaries: The product uses unique user logins and role-based access, so each action ties back to the person who did it.\nAppend-only audit behavior: Audit events are kept in an append-only record. They are not treated like a feed you can edit.\nMarketing and app telemetry separation: Analytics stay on the public site. The signed-in product does not load third-party marketing scripts.\nAccess control: Role-based access and unique user logins keep clinic actions tied to a person.\nAudit controls: Product activity is kept in an append-only audit record, not a feed you can edit.\nTransmission security: HTTPS/TLS protects app traffic in transit.\nStored data protection: Managed infrastructure encrypts stored data at rest.\nTelemetry boundary: Public-site analytics stay separate from the signed-in app.",
+      "tags": [
+        "security",
+        "trust",
+        "technical-safeguards"
+      ],
+      "audience": [
+        "buyers",
+        "privacy officers",
+        "security reviewers"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "legal-summary"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "legalTrust.subprocessors.public",
+      "domain": "legalTrust",
+      "title": "Public subprocessor inventory",
+      "summary": "Public inventory of providers and service-provider boundaries disclosed on the subprocessor page.",
+      "body": "Managed database provider: Managed PostgreSQL database hosting; Application data and audit data stored in PostgreSQL; Database provider\nSentry: Application error monitoring and alerting; Sanitized error and request metadata with PHI scrubbing enabled; Operational monitoring\nResend: Transactional email and marketing email delivery; Recipient email address and message metadata only; no PHI permitted in email content; Email delivery\nStripe: Subscription billing and payment processing; Organization billing metadata and billing contact details only; no PHI permitted; Billing provider\nPostHog: Marketing-site analytics only; Public-site analytics only; not loaded in the authenticated app; Marketing analytics",
+      "tags": [
+        "subprocessors",
+        "vendors",
+        "trust"
+      ],
+      "audience": [
+        "buyers",
+        "privacy officers",
+        "security reviewers"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "mutable-claim"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    }
+  ]
+}

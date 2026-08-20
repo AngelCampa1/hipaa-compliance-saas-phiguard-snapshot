@@ -1,0 +1,322 @@
+---
+import { commercialPageCopy } from '@phiguard/knowledge/commercial'
+import { Check } from 'lucide-astro'
+import { marketingPlans, sitePrimaryCta } from '../data/product'
+import PromoGuarantee from './PromoGuarantee.astro'
+---
+
+<section class="page-surface page-surface--tight">
+  <div class="shell-lg">
+    <slot name="header">
+      <p class="kicker">Pricing</p>
+      <h2 class="section-title text-balance">{commercialPageCopy.pricingTable.heading}</h2>
+      <p class="section-body">
+        {commercialPageCopy.pricingTable.body}
+      </p>
+    </slot>
+
+    <div class="billing-toggle-wrap">
+      <div class="billing-toggle" data-billing-toggle role="radiogroup" aria-label="Billing period">
+        <button class="billing-btn" role="radio" data-period="annual" aria-checked="true" tabindex="0">
+          Annual
+          <span class="billing-badge">{commercialPageCopy.pricingTable.annualBadge}</span>
+        </button>
+        <button class="billing-btn" role="radio" data-period="monthly" aria-checked="false" tabindex="-1">
+          Monthly
+        </button>
+      </div>
+    </div>
+
+    <PromoGuarantee />
+
+    <div data-billing="annual" data-billing-cards>
+      <div class="pricing-grid">
+        {marketingPlans.map((plan) => (
+          <div class:list={['feature-card pricing-card relative', plan.highlighted && 'assurance-panel']}>
+            {plan.highlighted && (
+              <div class="absolute -top-3 left-6 inline-flex items-center rounded-full bg-brand-600 px-3 py-1 text-xs font-bold text-text-inverse">
+                Recommended starting plan
+              </div>
+            )}
+
+            <div class="pricing-card__header">
+              <p class="panel-label">{plan.name}</p>
+              <span class="pricing-promo-badge">{plan.promoBadge}</span>
+            </div>
+            <div class="mb-3 flex flex-wrap items-end gap-2">
+              <span class="pricing-list-price" data-show-annual>{plan.priceAnnualMonthlyList}</span>
+              <span
+                class="display-face text-3xl sm:text-4xl md:text-5xl leading-none tracking-tight text-text-primary"
+                data-show-annual
+              >{plan.priceAnnualMonthly}</span>
+              <span class="pricing-list-price" data-show-monthly>{plan.priceMonthlyList}</span>
+              <span
+                class="display-face text-3xl sm:text-4xl md:text-5xl leading-none tracking-tight text-text-primary"
+                data-show-monthly
+              >{plan.priceMonthly}</span>
+              <div class="flex flex-col gap-0.5">
+                <span class="text-sm text-text-secondary" data-show-annual>/mo per clinic</span>
+                <span class="text-xs text-text-muted" data-show-annual><s>{plan.priceAnnualList}</s> {plan.priceAnnual}/year paid upfront annually</span>
+                <span class="text-xs text-text-muted pricing-renewal" data-show-annual>Then {plan.priceAnnualList}/year after the first year</span>
+                <span class="text-sm text-text-secondary" data-show-monthly>/mo per clinic</span>
+                <span class="text-xs text-text-muted pricing-renewal" data-show-monthly>Then {plan.priceMonthlyList}/mo after the first year</span>
+              </div>
+            </div>
+            <p class="pricing-summary">{plan.summary}</p>
+            <p class="fine-print pricing-members">Up to {plan.maxMembers} staff members</p>
+
+            <div class="proof-pill" aria-label="BAA included">
+              <Check class="h-3.5 w-3.5 text-success-700" aria-hidden="true" />
+              {commercialPageCopy.pricingTable.baaBadge}
+            </div>
+
+            <ul class="list-clean pricing-capabilities" role="list">
+              {plan.capabilities.map((capability) => (
+                <li class="flex items-start gap-2.5 text-sm text-text-secondary">
+                  <Check class="mt-0.5 h-4 w-4 shrink-0 text-success-600" aria-hidden="true" />
+                  <span>{capability}</span>
+                </li>
+              ))}
+            </ul>
+
+            <p class="fine-print pricing-fit">{plan.fit}</p>
+
+            <a href={plan.ctaHref} class:list={[plan.highlighted ? 'button-primary' : 'button-secondary', 'w-full']}
+               data-ph-pricing-cta={plan.name}
+               data-ph-pricing-price={plan.priceAnnualAmount}
+               data-ph-pricing-list-price={plan.priceAnnualListAmount}
+               data-ph-pricing-annual-price={plan.priceAnnualAmount}
+               data-ph-pricing-annual-list-price={plan.priceAnnualListAmount}
+               data-ph-pricing-monthly-price={plan.priceMonthlyAmount}
+               data-ph-pricing-monthly-list-price={plan.priceMonthlyListAmount}
+               data-ph-pricing-promo={plan.promoBadge}
+               data-ph-pricing-billing="annual">
+              {sitePrimaryCta.label}
+            </a>
+          </div>
+        ))}
+      </div>
+
+      <p class="fine-print">
+        <span data-show-annual>{commercialPageCopy.pricingTable.annualFinePrint}</span>
+        <span data-show-monthly>{commercialPageCopy.pricingTable.monthlyFinePrint}</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .billing-toggle-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .billing-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border-radius: 9999px;
+    border: 1px solid var(--phig-color-border-default);
+    background: var(--phig-color-surface-50);
+  }
+
+  .billing-btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.375rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--phig-color-text-secondary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.25;
+  }
+
+  .billing-btn:focus-visible {
+    outline: 2px solid var(--phig-color-border-focus);
+    outline-offset: 3px;
+    box-shadow: var(--phig-shadow-focus-brand);
+  }
+
+  .billing-btn:hover {
+    color: var(--phig-color-text-primary);
+  }
+
+  .billing-btn[aria-checked="true"] {
+    background: var(--phig-color-brand-600);
+    color: var(--phig-color-text-inverse);
+    font-weight: 600;
+  }
+
+  .billing-btn[aria-checked="true"]:hover {
+    color: var(--phig-color-text-inverse);
+  }
+
+  .billing-badge {
+    margin-left: 0.5rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    background: var(--phig-color-success-100);
+    color: var(--phig-color-success-700);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  /* Badge inside active button: white-on-translucent so it reads on the brand bg */
+  .billing-btn[aria-checked="true"] .billing-badge {
+    background: color-mix(in oklch, var(--phig-color-text-inverse) 18%, transparent);
+    color: color-mix(in oklch, var(--phig-color-text-inverse) 95%, transparent);
+  }
+
+  [data-billing="annual"] [data-show-monthly] { display: none; }
+  [data-billing="monthly"] [data-show-annual] { display: none; }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  @media (min-width: 560px) {
+    .pricing-grid {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+  }
+
+  .pricing-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pricing-card__header {
+    display: flex;
+    min-height: 2.25rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .pricing-promo-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: var(--phig-color-success-100);
+    color: var(--phig-color-success-700);
+    padding: 0.25rem 0.55rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .pricing-list-price {
+    color: var(--phig-color-text-muted);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: line-through;
+  }
+
+  .pricing-summary {
+    margin: 0 0 0.6rem;
+    color: var(--phig-color-text-secondary);
+    font-size: 0.94rem;
+    line-height: 1.7;
+  }
+
+  .pricing-members {
+    margin-top: 0;
+  }
+
+  .pricing-capabilities {
+    margin-top: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .pricing-fit {
+    margin-top: auto;
+    margin-bottom: 1.25rem;
+  }
+
+  @media (max-width: 520px) {
+    .billing-toggle {
+      width: 100%;
+      align-items: stretch;
+    }
+
+    .billing-btn {
+      flex: 1;
+      justify-content: center;
+      padding-inline: 0.75rem;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('[data-billing-toggle]')
+  const cards = document.querySelector('[data-billing-cards]')
+  const btns = toggle
+    ? Array.from(toggle.querySelectorAll<HTMLButtonElement>('[data-period]'))
+    : []
+
+  function activate(btn: HTMLButtonElement) {
+    const period = btn.getAttribute('data-period') ?? 'annual'
+    const previousPeriod = cards?.getAttribute('data-billing') ?? 'annual'
+    cards?.setAttribute('data-billing', period)
+    btns.forEach((b) => {
+      const active = b === btn
+      b.setAttribute('aria-checked', String(active))
+      b.setAttribute('tabindex', active ? '0' : '-1')
+    })
+    cards?.querySelectorAll<HTMLAnchorElement>('[data-ph-pricing-billing]').forEach((a) => {
+      const price = a.getAttribute(`data-ph-pricing-${period}-price`)
+      const listPrice = a.getAttribute(`data-ph-pricing-${period}-list-price`)
+
+      if (price) {
+        a.setAttribute('data-ph-pricing-price', price)
+      }
+      if (listPrice) {
+        a.setAttribute('data-ph-pricing-list-price', listPrice)
+      }
+      a.setAttribute('data-ph-pricing-billing', period)
+    })
+
+    if (previousPeriod !== period) {
+      const analytics = (window as unknown as {
+        phiguardAnalytics?: { track?: (event: string, props?: Record<string, unknown>) => void }
+      }).phiguardAnalytics
+      analytics?.track?.('pricing_billing_toggled', {
+        billing_period: period,
+        location: 'pricing-toggle',
+      })
+    }
+  }
+
+  btns.forEach((btn, i) => {
+    btn.addEventListener('click', () => activate(btn))
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault()
+        const next = btns[(i + 1) % btns.length]
+        activate(next)
+        next.focus()
+      }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault()
+        const prev = btns[(i - 1 + btns.length) % btns.length]
+        activate(prev)
+        prev.focus()
+      }
+    })
+  })
+
+</script>

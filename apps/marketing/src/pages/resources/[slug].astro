@@ -1,0 +1,209 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import LeadMagnetForm from '../../components/LeadMagnetForm.astro'
+import RelatedContent from '../../components/RelatedContent.astro'
+import { getContributor } from '../../lib/contributors'
+import { buildArticleSchema, buildBreadcrumbSchema, buildFAQSchema } from '../../lib/seo'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+
+type ResourceEntry = CollectionEntry<'resources'>
+type LearnEntry = CollectionEntry<'learn'>
+type SourceItem = { title: string; url: string; publisher?: string }
+
+export async function getStaticPaths() {
+  const resources = await getCollection('resources')
+  for (const resource of resources) {
+    const fileSlug = resource.id.replace(/\.[^.]+$/, '')
+    if (fileSlug !== resource.data.magnetSlug) {
+      throw new Error(
+        `Resource content file mismatch: file "${resource.id}" has magnetSlug "${resource.data.magnetSlug}". ` +
+        'The filename (without extension) must match the magnetSlug frontmatter field.',
+      )
+    }
+  }
+  return resources.map((resource: ResourceEntry) => ({
+    params: { slug: resource.data.magnetSlug },
+    props: { resource },
+  }))
+}
+
+const { resource } = Astro.props as { resource: ResourceEntry }
+const { data } = resource
+const { Content, headings } = await render(resource)
+const author = getContributor(data.author)
+const reviewer = getContributor(data.reviewer)
+const learnEntries = await getCollection('learn')
+const relatedLearnEntry = data.relatedLearnPath
+  ? learnEntries.find((entry: LearnEntry) => `/learn/${entry.id.replace(/\.md$/, '').replace(/\/index$/, '')}` === data.relatedLearnPath)
+  : null
+
+const faqSchema = data.faq && data.faq.length > 0 ? buildFAQSchema(data.faq) : null
+const tocHeadings = headings.filter((heading: { depth: number }) => heading.depth <= 2)
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Resources', url: '/resources' },
+  { name: 'Free Tools', url: '/resources/tools' },
+  { name: data.title, url: `/resources/${data.magnetSlug}` },
+])
+const articleSchema = buildArticleSchema({
+  headline: data.title,
+  description: data.metaDescription,
+  url: `/resources/${data.magnetSlug}`,
+  datePublished: data.publishedAt,
+  dateModified: data.updatedAt,
+  authorName: author.name,
+  authorUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${author.slug}`,
+  authorSameAs: author.sameAs,
+  reviewerName: reviewer.name,
+  reviewerUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${reviewer.slug}`,
+  schemaType: 'Article',
+  citations: data.sources,
+})
+const jsonLd = faqSchema ? [breadcrumbs, articleSchema, faqSchema] : [breadcrumbs, articleSchema]
+---
+
+<MarketingLayout
+  title={`${data.seoTitle ?? data.title} | PHIGuard`}
+  description={data.metaDescription}
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/resources/${data.magnetSlug}`}
+  jsonLd={jsonLd}
+  ogType="article"
+  publishedTime={data.publishedAt.toISOString()}
+  modifiedTime={data.updatedAt.toISOString()}
+>
+  <section class="article-frame">
+    <div class="shell-lg resource-layout">
+      <article>
+        <div style="margin-bottom: 1.25rem;">
+          <Breadcrumbs crumbs={[
+            { label: "Home", href: "/" },
+            { label: "Resources", href: "/resources" },
+            { label: "Free Tools", href: "/resources/tools" },
+            { label: data.title },
+          ]} />
+        </div>
+        <h1 class="article-hero-title text-balance">{data.title}</h1>
+        <p class="article-lead">{data.description}</p>
+
+        <div class="editorial-card" style="margin-top: 1.75rem;">
+          <p class="panel-label">Short answer</p>
+          <p style="margin: 0;">{data.summary}</p>
+        </div>
+
+        <div class="editorial-card" style="margin-top: 1.75rem;">
+          <p class="panel-label">What is inside</p>
+          <ul class="list-clean">
+            {data.bullets.map((bullet: string) => (
+              <li>{bullet}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="section-body" style="margin-top: 1.75rem;">
+          <p>
+            Each resource is built for a specific clinic workflow: vendor review, risk analysis, training evidence, incident readiness, or recurring compliance follow-up.
+          </p>
+        </div>
+
+        <div class="article-prose max-w-none" style="margin-top: 2rem;">
+          <Content />
+        </div>
+
+        <div class="editorial-card" style="margin-top: 1.75rem;">
+          <p class="panel-label">Editorial details</p>
+          <p><strong>Written by:</strong> <a href={`/contributors/${author.slug}`}>{author.name}</a></p>
+          <p><strong>Reviewed by:</strong> <a href={`/contributors/${reviewer.slug}`}>{reviewer.name}</a></p>
+          <p><strong>Updated:</strong> {data.updatedAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          {data.relatedCommercialPath && <p><strong>Best next step:</strong> <a href={data.relatedCommercialPath}>Open the matching product path</a></p>}
+          {data.verificationDate && <p><strong>Verified:</strong> {data.verificationDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>}
+        </div>
+
+        <div class="editorial-card" style="margin-top: 1.75rem;">
+          <p class="panel-label">Sources</p>
+          <ul class="list-clean">
+            {data.sources.map((source: SourceItem) => (
+              <li>
+                <a href={source.url}>{source.title}</a>
+                {source.publisher && <span> | {source.publisher}</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </article>
+
+      <aside id="get-resource" class="resource-sidebar" aria-label="Get free resource">
+        <div class="resource-panel">
+          <p class="panel-label">Download the PDF</p>
+          <h2 class="display-face text-2xl leading-tight tracking-tight text-text-primary">{data.headline}</h2>
+          <p style="margin-top: 0.85rem;">Enter your email and we will send the PDF.</p>
+          <div style="margin-top: 1rem;">
+            <LeadMagnetForm magnetSlug={data.magnetSlug} />
+          </div>
+        </div>
+
+        {tocHeadings.length > 1 && (
+          <div class="faq-panel">
+            <h3>On this page</h3>
+            <ol class="m-0 pl-4">
+              {tocHeadings.map((heading: { slug: string; text: string }) => (
+                <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        {data.faq && data.faq.length > 0 && (
+          <div class="faq-panel">
+            <h3>Questions</h3>
+            <div class="flex flex-col gap-4">
+              {data.faq.map(({ q, a }: { q: string; a: string }) => (
+                <details>
+                  <summary class="cursor-pointer font-semibold text-text-primary">{q}</summary>
+                  <p style="margin-top: 0.5rem;">{a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        )}
+      </aside>
+    </div>
+  </section>
+
+  <RelatedContent
+    cluster="resources"
+    eyebrow="Next actions"
+    heading="Use the resource, then move into the next decision."
+    items={[
+      relatedLearnEntry
+        ? {
+            href: data.relatedLearnPath!,
+            title: relatedLearnEntry.data.title,
+            description: relatedLearnEntry.data.metaDescription,
+            eyebrow: 'Background guide',
+          }
+        : null,
+      data.relatedCommercialPath
+        ? {
+            href: data.relatedCommercialPath,
+            title: 'Open the matching product path',
+            description: 'Move from template or worksheet into the product, pricing, or comparison page that fits this workflow.',
+            eyebrow: 'Commercial path',
+          }
+        : null,
+      {
+        href: '/resources/tools',
+        title: 'Browse every free tool and template',
+        description: 'Return to the hub that lists every downloadable template, checklist, worksheet, and log in the library.',
+        eyebrow: 'Parent hub',
+      },
+      {
+        href: '/resources/guides',
+        title: 'Review vendor HIPAA guides',
+        description: 'Use the decision-support guides when the clinic is choosing whether to keep a current tool or move the workflow elsewhere.',
+        eyebrow: 'Vendor evaluation',
+      },
+    ].filter(Boolean)}
+  />
+</MarketingLayout>

@@ -1,0 +1,155 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro'
+import { buildBreadcrumbSchema } from '../lib/seo'
+import { legalNotice, publicSubprocessors } from '@phiguard/knowledge/legal-trust'
+import { SUPPORT_EMAIL } from '@phiguard/knowledge/support'
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Privacy Policy', url: '/privacy' },
+])
+---
+
+<LegalLayout
+  title="Privacy Policy | PHIGuard"
+  description="PHIGuard privacy policy for the marketing site and product, including analytics boundaries, billing data, service providers, retention, and contact details."
+  canonicalUrl="https://phiguard.app/privacy"
+  jsonLd={breadcrumbs}
+>
+  <h1>Privacy Policy</h1>
+  <p>
+    <strong>PHIGuard has shut down.</strong> We left this page up as a record. It shows how we
+    handled data when the service ran. Nothing here collects data now.
+  </p>
+  <p><em>Effective date: April 21, 2026</em></p>
+
+  <h2>Who we are</h2>
+  <p>
+    PHIGuard is operated by <strong>{legalNotice.entity}</strong>. This
+    Privacy Policy describes how PHIGuard collects, uses, and discloses information about visitors to
+    the public marketing site and administrators or staff who use the PHIGuard product.
+  </p>
+  <p>
+    Questions about this policy can be sent to
+    <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
+  </p>
+
+  <h2>Scope</h2>
+  <p>
+    This policy applies to personal information PHIGuard processes for the public website and product
+    administration. PHI processed by PHIGuard for a customer is governed by the customer's Business
+    Associate Agreement and the applicable HIPAA rules, not by this policy alone.
+  </p>
+
+  <h2>Information we collect</h2>
+  <h3>Account and organization information</h3>
+  <p>
+    When a customer creates or manages a PHIGuard workspace, PHIGuard may collect organization name,
+    customer legal entity name, administrator and user names, email addresses, titles, and account setup
+    details needed to provide the service.
+  </p>
+
+  <h3>Billing and subscription information</h3>
+  <p>
+    PHIGuard processes subscription billing through Stripe. PHIGuard stores organization-level billing
+    metadata and billing state needed to manage subscriptions, but does not store full payment card numbers.
+  </p>
+
+  <h3>Legal acceptance records</h3>
+  <p>
+    When an authorized organization administrator accepts the current Terms and BAA, PHIGuard stores the
+    signer name, title, email, customer legal entity name, acceptance timestamp, and associated document
+    snapshot and execution artifacts.
+  </p>
+
+  <h3>Product usage and security data</h3>
+  <p>
+    PHIGuard processes authentication events, audit events, and other operational metadata needed to
+    secure the product, troubleshoot issues, and provide product functionality. Error monitoring data is
+    sanitized before transmission to PHIGuard's monitoring vendor.
+  </p>
+
+  <h3>Marketing-site analytics</h3>
+  <p>
+    The public marketing site uses PostHog for analytics only after visitor consent. PHIGuard does not
+    load PostHog on authenticated app routes. The marketing site does not use session replay or third-party
+    advertising pixels inside the authenticated product.
+  </p>
+
+  <h3>Communications</h3>
+  <p>
+    If you email PHIGuard or submit a form, PHIGuard may retain the message and related metadata to respond,
+    provide support, or maintain legal and operational records.
+  </p>
+
+  <h2>How we use information</h2>
+  <ul>
+    <li>Provide, secure, and support the PHIGuard service.</li>
+    <li>Process onboarding, legal acceptance, subscription management, and billing.</li>
+    <li>Send transactional and administrative communications.</li>
+    <li>Respond to support, legal, privacy, and security inquiries.</li>
+    <li>Monitor reliability, investigate incidents, and improve the product.</li>
+    <li>Comply with legal obligations and enforce PHIGuard's agreements.</li>
+  </ul>
+
+  <h2>PHI handling boundary</h2>
+  <p>
+    When a customer uses PHIGuard to create, receive, maintain, or transmit PHI, PHIGuard handles that
+    information under the applicable BAA. PHIGuard does not use PHI for marketing. PHI must not be included
+    in marketing emails, nurture emails, or public-site analytics.
+  </p>
+
+  <h2>Service providers and subprocessors</h2>
+  <p>
+    PHIGuard uses a limited set of third-party service providers to operate the marketing site and product.
+    The current public list is available on the <a href="/subprocessors">Subprocessors</a> page.
+  </p>
+  <p>
+    As of this policy date, PHIGuard publicly discloses {publicSubprocessors.map((vendor) => vendor.name).join(', ')}
+    as relevant service providers or subprocessors depending on the data path and
+    scope involved. Google Workspace and Microsoft 365 calendar sync connections operate in the customer's
+    tenant boundary.
+  </p>
+
+  <h2>Data retention</h2>
+  <p>
+    PHIGuard retains information for as long as needed to provide the service, maintain required records,
+    support customers, and comply with law. Audit evidence is designed for long-term retention, and audit
+    records are retained for at least six years where required by PHIGuard's HIPAA documentation posture.
+  </p>
+  <p>
+    After account termination, PHIGuard follows its then-current export and deletion handling. Some backup,
+    legal, security, and accounting records may be retained for a longer period where required or permitted.
+  </p>
+
+  <h2>Security practices</h2>
+  <p>
+    PHIGuard uses HTTPS, encryption at rest provided through managed infrastructure, append-only audit
+    controls for audit events, scoped application access controls, and sanitized telemetry handling. A fuller
+    public summary is available on the <a href="/security">Security</a> page.
+  </p>
+
+  <h2>Your choices and rights</h2>
+  <p>
+    Depending on your jurisdiction, you may have rights to request access to, correction of, or deletion of
+    certain personal information. Privacy requests can be sent to
+    <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
+  </p>
+  <p>
+    Requests concerning PHI generally must be handled through the relevant covered entity or customer
+    organization, subject to HIPAA and the BAA.
+  </p>
+
+  <h2>Changes to this policy</h2>
+  <p>
+    PHIGuard may update this Privacy Policy from time to time. Material updates will be reflected by
+    changing the effective date on this page and, when appropriate, through additional notice.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    {legalNotice.entity}<br />
+    {legalNotice.addressLines.join(', ')}<br />
+    <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+  </p>
+</LegalLayout>

@@ -1,0 +1,137 @@
+{
+  "title": "West Virginia HIPAA breach notification guide for clinics",
+  "seoTitle": "West Virginia HIPAA Breach Notification",
+  "description": "West Virginia clinics handling a suspected HIPAA breach should preserve evidence, assess federal HIPAA duties, check official state agency starting points, and document every decision.",
+  "metaDescription": "West Virginia HIPAA breach notification guide: OCR timelines, state checkpoints, incident checklist, sources, and clinic workflow steps.",
+  "summary": "West Virginia clinics should treat breach notification as a documented incident workflow. Preserve facts first, run the HIPAA four-factor breach assessment, check federal timing rules, and use West Virginia Attorney General or West Virginia Department of Health as official starting points for state-specific research before sending notices.",
+  "slug": "west-virginia",
+  "state": "West Virginia",
+  "stateAbbreviation": "WV",
+  "pageFamily": "breach-notification",
+  "primaryKeyword": "West Virginia HIPAA breach notification",
+  "intent": "operational-research",
+  "directAnswer": "West Virginia HIPAA breach notification work starts with the federal HIPAA Breach Notification Rule: identify what happened, preserve evidence, assess whether unsecured PHI was breached, and notify affected people and regulators when required. West Virginia clinics should also check official state agency materials and counsel guidance before external notices go out. A strong response file should show the discovery date, incident owner, affected systems, PHI categories, patient population, vendor involvement, containment steps, four-factor analysis, notice decisions, and remediation work, including why notice was or was not required.",
+  "stateContext": "West Virginia incidents can involve rural access, Appalachian referral routes, and small staff coverage, especially for clinics serving regional referral markets. The clinic should avoid rushing to send notices before it knows what PHI was involved, which systems or vendors were touched, whether the information was secured, and which state or federal reporting paths apply. For West Virginia, the incident file should reflect the operating reality behind rural access, Appalachian referral routes, and small staff coverage. A clinic serving regional referral markets may need facts from front-desk intake, clinical staff, billing, outside vendors, referral partners, and temporary access paths before it can decide whether unsecured PHI was involved. The response should preserve enough detail to support the HIPAA assessment and any state-specific follow-up without turning early assumptions into final conclusions. The local review should translate rural access, Appalachian referral routes, small staff coverage into named workflows, evidence owners, vendor records, and review dates instead of relying on a generic statewide checklist.",
+  "operationalGuidance": [
+    "Open an incident record immediately and preserve logs, screenshots, vendor messages, device facts, patient communication records, staff statements, timestamps, and system ownership details for the West Virginia clinic.",
+    "Use the HIPAA four-factor assessment to decide whether an impermissible use or disclosure is a reportable breach, and document the nature of PHI, unauthorized recipient, whether the PHI was acquired or viewed, and mitigation facts.",
+    "Use West Virginia Attorney General and West Virginia Department of Health as official agency starting points before sending patient, media, regulator, or consumer notices, and record the date each source was checked.",
+    "Coordinate with vendors and business associates quickly if rural access or another outside workflow may have exposed PHI, but keep clinic-owned decision notes separate from unsupported vendor assumptions.",
+    "Keep notice drafting, approval, mailing, electronic delivery, regulator submission evidence, patient lists, translation needs, and call-center or front-desk scripts together in one incident file.",
+    "After containment, review whether Appalachian referral routes or small staff coverage requires access changes, retraining, vendor remediation, policy updates, or additional monitoring for teams operating around regional referral markets. The local review should translate rural access, Appalachian referral routes, small staff coverage into named workflows, evidence owners, vendor records, and review dates instead of relying on a generic statewide checklist."
+  ],
+  "stateSpecificNotes": [
+    "rural access changes the fact-gathering plan: identify the systems, people, vendors, patient groups, locations, and handoff points involved before deciding whether notice is required.",
+    "Appalachian referral routes should be tested against access logs, vendor messages, staff notes, patient communication records, device facts, and any temporary access granted during the relevant period.",
+    "small staff coverage belongs in remediation, because breach response should end with access, training, vendor, and workflow changes the clinic can prove later with dates and owners.",
+    "For West Virginia, the cited state agencies are starting points for current official materials, not a claim that this page exhausts state breach law or replaces counsel review.",
+    "Clinics serving regional referral markets should keep location and department facts clear because patient lists, front-desk scripts, referral partners, and vendor contacts can differ across the same incident."
+  ],
+  "keyTakeaways": [
+    "The HIPAA Breach Notification Rule is the federal baseline for unsecured PHI breaches.",
+    "West Virginia clinics should check official state agency materials before assuming federal HIPAA is the only notice path.",
+    "Evidence preservation matters before root-cause theories harden.",
+    "Breach decisions should be documented even when the clinic concludes notice is not required."
+  ],
+  "practicalChecklist": [
+    "Open an incident record with date, discoverer, affected systems, suspected PHI, assigned owner, discovery timeline, containment owner, and evidence location.",
+    "Contain the issue without deleting logs, messages, files, tickets, screenshots, patient communications, device facts, or vendor evidence needed for the assessment.",
+    "Identify whether PHI was unsecured and which patients, records, locations, referral partners, or vendors may be affected for clinics serving regional referral markets.",
+    "Run the HIPAA four-factor breach risk assessment and document the conclusion, including uncertainty, mitigation, unauthorized recipient facts, and who approved the decision.",
+    "Check current West Virginia state agency resources and counsel guidance before finalizing notices, and capture whether West Virginia Attorney General or West Virginia Department of Health was used during review.",
+    "Prepare patient, OCR, media, vendor, and state-related notice drafts only for paths that apply, with separate approval records for content, mailing list, delivery method, and timing.",
+    "Track deadlines, approvals, mailing or electronic delivery evidence, returned mail, patient questions, regulator submissions, vendor commitments, and post-incident remediation.",
+    "Update training, access controls, vendor records, policies, and workflow documentation after the incident closes, especially where rural access, Appalachian referral routes, or small staff coverage contributed to the event."
+  ],
+  "sources": [
+    {
+      "title": "HIPAA Breach Notification Rule",
+      "url": "https://www.hhs.gov/hipaa/for-professionals/breach-notification/index.html",
+      "publisher": "HHS Office for Civil Rights"
+    },
+    {
+      "title": "45 CFR Part 164",
+      "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164",
+      "publisher": "Electronic Code of Federal Regulations"
+    },
+    {
+      "title": "HIPAA Privacy Rule",
+      "url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+      "publisher": "HHS Office for Civil Rights"
+    },
+    {
+      "title": "HIPAA Security Rule",
+      "url": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html",
+      "publisher": "HHS Office for Civil Rights"
+    },
+    {
+      "title": "West Virginia Department of Health",
+      "url": "https://dhhr.wv.gov/",
+      "publisher": "West Virginia Department of Health"
+    },
+    {
+      "title": "West Virginia Attorney General",
+      "url": "https://ago.wv.gov/",
+      "publisher": "West Virginia Attorney General"
+    }
+  ],
+  "faq": [
+    {
+      "q": "When does a West Virginia clinic need HIPAA breach notification?",
+      "a": "Notification may be required when unsecured PHI is breached under the HIPAA Breach Notification Rule. The clinic should document the facts, run the required assessment, identify the PHI and patients involved, preserve evidence, and check state agency starting points and counsel guidance before deciding. The decision file should explain the conclusion even when the clinic determines notice is not required."
+    },
+    {
+      "q": "Does West Virginia have separate breach notification duties?",
+      "a": "West Virginia may have state privacy, consumer protection, health, or licensing materials that affect notice decisions. Use West Virginia Attorney General and West Virginia Department of Health as verification points, record the date checked, and involve counsel for legal interpretation. This page is a research aid, not a complete state-law notice analysis."
+    },
+    {
+      "q": "What should West Virginia clinics do first after a suspected breach?",
+      "a": "Preserve evidence, contain the issue, assign an incident owner, identify the systems and PHI involved, and start a documented breach assessment before sending external notices. For West Virginia, the first file should include logs, screenshots, vendor messages, staff statements, patient communication facts, discovery timing, and the reason each immediate containment step was taken."
+    },
+    {
+      "q": "Can PHIGuard send breach notices for a clinic?",
+      "a": "PHIGuard helps organize incident evidence, owners, tasks, vendor follow-up, deadline tracking, and remediation documentation for clinics operating in West Virginia. Notice content and legal determinations should be reviewed by qualified counsel or the responsible clinic team before patient, OCR, media, vendor, or state-related notices are sent."
+    }
+  ],
+  "internalLinks": [
+    {
+      "href": "/pricing",
+      "label": "PHIGuard pricing",
+      "description": "Review current plan and BAA details."
+    },
+    {
+      "href": "/hipaa",
+      "label": "HIPAA overview",
+      "description": "Product capabilities for HIPAA operations."
+    },
+    {
+      "href": "/security",
+      "label": "Security",
+      "description": "Security posture for clinics evaluating PHI workflows."
+    },
+    {
+      "href": "/baa",
+      "label": "Business Associate Agreement",
+      "description": "Review BAA availability before PHI use."
+    },
+    {
+      "href": "/resources/hipaa-breach-decision-tree",
+      "label": "HIPAA breach decision tree"
+    },
+    {
+      "href": "/learn/incident-response/hipaa-breach-notification-timelines",
+      "label": "HIPAA breach notification timelines"
+    },
+    {
+      "href": "/locations/hipaa-compliance-software/west-virginia",
+      "label": "West Virginia compliance software guide"
+    }
+  ],
+  "relatedStateSlug": "west-virginia",
+  "relatedCitySlugs": [],
+  "author": "angel-campa",
+  "reviewer": "phiguard-compliance-research",
+  "publishedAt": "2026-05-06",
+  "updatedAt": "2026-05-06",
+  "verificationDate": "2026-05-06"
+}

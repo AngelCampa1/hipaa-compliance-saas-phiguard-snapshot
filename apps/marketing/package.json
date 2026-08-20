@@ -1,0 +1,62 @@
+{
+  "name": "@phiguard/marketing",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "config": {
+    "SENTRY_PROJECT": "phiguard-marketing"
+  },
+  "scripts": {
+    "dev": "astro dev --port 4321",
+    "build": "astro build",
+    "deploy": "node scripts/build-for-deploy.mjs && wrangler deploy",
+    "preview": "astro preview",
+    "typecheck": "astro check",
+    "lint": "eslint src/",
+    "test": "vitest run --passWithNoTests",
+    "legacy:sync": "node scripts/sync-legacy-paths.mjs",
+    "legacy:check": "node scripts/sync-legacy-paths.mjs --check",
+    "gen:og": "pnpm run gen:brand && node scripts/generate-og-images.mjs",
+    "gen:brand": "node scripts/generate-brand-assets.mjs",
+    "seo:check": "node scripts/seo-smoke-check.mjs",
+    "funnel:check": "node scripts/lead-funnel-smoke-check.mjs",
+    "content:check": "node scripts/content-funnel-check.mjs",
+    "ai:content:check": "node scripts/ai-citation-quality-check.mjs",
+    "ai:content:report": "node scripts/ai-citation-quality-check.mjs --write-report",
+    "aeo:check": "node scripts/aeo-smoke-check.mjs",
+    "plan:check": "node scripts/plan-cta-check.mjs",
+    "links:check": "node scripts/link-check.mjs --no-cache",
+    "links:check:internal": "node scripts/link-check.mjs --internal-only",
+    "test:nav": "playwright test --project=chromium",
+    "test:nav:headed": "playwright test --project=chromium --headed",
+    "test:mobile": "playwright test --project=mobile-320 --project=mobile-375 --project=mobile-414",
+    "test:seo": "pnpm legacy:check && pnpm build && pnpm seo:check && pnpm funnel:check && pnpm content:check && pnpm ai:content:check && pnpm aeo:check && pnpm plan:check && pnpm links:check"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3",
+    "@fontsource/besley": "^5.2.8",
+    "@fontsource/geist-mono": "^5.2.7",
+    "@fontsource/public-sans": "^5.2.7",
+    "@phiguard/billing": "workspace:*",
+    "@phiguard/brand": "workspace:*",
+    "@phiguard/knowledge": "workspace:*",
+    "@phiguard/lead-magnets": "workspace:*",
+    "@sentry/browser": "^10.48.0",
+    "@sentry/cloudflare": "^10.48.0",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^5",
+    "lucide-astro": "^0.556.0",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9",
+    "@phiguard/config": "workspace:*",
+    "@playwright/test": "^1.44.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "@vitest/coverage-v8": "^2.1.9",
+    "satori": "^0.26.0",
+    "typescript": "^5.7",
+    "vitest": "^2"
+  }
+}

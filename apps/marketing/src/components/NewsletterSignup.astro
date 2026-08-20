@@ -1,0 +1,199 @@
+---
+import { PHIGUARD_APP_ORIGIN } from '@phiguard/brand/identity'
+import TurnstileWidget from './TurnstileWidget.astro'
+
+const appUrl = import.meta.env.PUBLIC_APP_URL ?? PHIGUARD_APP_ORIGIN
+const apiUrl = `${appUrl}/api/marketing/leads`
+---
+
+<form
+  class="ns-form"
+  action={apiUrl}
+  method="POST"
+  aria-label="Get HIPAA compliance tips"
+>
+  <input type="hidden" name="magnetSlug" value="newsletter" />
+  <input type="hidden" name="utm_source" value="" />
+  <input type="hidden" name="utm_medium" value="" />
+  <input type="hidden" name="utm_campaign" value="" />
+  <input type="hidden" name="utm_content" value="" />
+  <input type="hidden" name="referrer" value="" />
+  <input type="hidden" name="source_page_path" value="" />
+  <input type="hidden" name="cta_context" value="newsletter-footer" />
+
+  <div class="ns-hp" aria-hidden="true">
+    <label for="ns-company">Company website</label>
+    <input type="text" id="ns-company" name="company_website" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <label for="ns-email" class="sr-only">Email address</label>
+  <input
+    type="email"
+    id="ns-email"
+    name="email"
+    placeholder="your@clinic.com"
+    required
+    class="ns-input form-field"
+    autocomplete="email"
+  />
+  <button type="submit" class="ns-btn touch-target">Get HIPAA tips</button>
+  <TurnstileWidget />
+  <p class="ns-status" role="status" aria-live="polite" data-newsletter-status hidden></p>
+</form>
+
+<p class="ns-microcopy">Get practical HIPAA tips by email.</p>
+
+<script>
+  const params = new URLSearchParams(window.location.search)
+
+  document.querySelectorAll<HTMLFormElement>('.ns-form').forEach((form) => {
+    const set = (name: string, value: string) => {
+      const input = form.querySelector<HTMLInputElement>(`input[name="${name}"]`)
+      if (input) input.value = value
+    }
+
+    set('utm_source', params.get('utm_source') ?? '')
+    set('utm_medium', params.get('utm_medium') ?? '')
+    set('utm_campaign', params.get('utm_campaign') ?? '')
+    set('utm_content', params.get('utm_content') ?? '')
+    set('referrer', document.referrer)
+    set('source_page_path', window.location.pathname)
+
+    const status = form.querySelector<HTMLParagraphElement>('[data-newsletter-status]')
+
+    const setStatus = (message: string, tone: 'success' | 'error') => {
+      if (!status) return
+      status.textContent = message
+      status.hidden = !message
+      status.dataset.tone = tone
+    }
+
+    if (params.get('error') === 'delivery-failed') {
+      setStatus('Could not subscribe right now. Please try again.', 'error')
+    } else if (params.get('error') === 'verification') {
+      setStatus("Couldn't verify you're human. Please try again.", 'error')
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]')
+      const formData = new FormData(form)
+      const email = String(formData.get('email') ?? '')
+      const defaultLabel = btn?.textContent ?? 'Get HIPAA tips'
+      const analytics = (window as unknown as { phiguardAnalytics?: {
+        identifyLead?: (identity: { email: string; leadId?: string }) => void
+        track?: (event: string, props?: Record<string, unknown>) => void
+      } }).phiguardAnalytics
+
+      if (btn) btn.disabled = true
+      if (btn) btn.textContent = 'Sending...'
+      setStatus('', 'success')
+      analytics?.track?.('newsletter_submitted', { status: 'attempted' })
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: { Accept: 'application/json' },
+        })
+        if (res.ok) {
+          const result = await res.clone().json().catch(() => null) as { leadId?: string; id?: string } | null
+          analytics?.identifyLead?.({ email, leadId: result?.leadId ?? result?.id })
+          analytics?.track?.('newsletter_submitted', { status: 'succeeded' })
+          form.reset()
+          if (btn) btn.textContent = 'Sent'
+          setStatus('Check your inbox.', 'success')
+        } else {
+          analytics?.track?.('newsletter_submit_failed', { reason: `status_${res.status}` })
+          if (btn) btn.disabled = false
+          if (btn) btn.textContent = defaultLabel
+          setStatus('Could not subscribe right now. Please try again.', 'error')
+        }
+      } catch {
+        analytics?.track?.('newsletter_submit_failed', { reason: 'network_error' })
+        if (btn) btn.disabled = false
+        if (btn) btn.textContent = defaultLabel
+        setStatus('Could not subscribe right now. Please try again.', 'error')
+      }
+    })
+  })
+</script>
+
+<style>
+  .ns-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .ns-form {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0);
+    white-space: nowrap; border-width: 0;
+  }
+  /* Honeypot: removed from view and tab order; only bots autofill it. */
+  .ns-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .ns-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.625rem 0.875rem;
+    border: 1.5px solid #374151;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    background: #1f2937;
+    color: #f9fafb;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .ns-input::placeholder { color: #6b7280; }
+  .ns-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+  .ns-btn {
+    width: 100%;
+    padding: 0.625rem 1.125rem;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 640px) {
+    .ns-btn {
+      width: auto;
+    }
+  }
+  .ns-btn:hover { background: #1d4ed8; }
+  .ns-status {
+    width: 100%;
+    margin: 0.25rem 0 0;
+    font-size: 0.75rem;
+    color: #9ca3af;
+  }
+  .ns-status[data-tone='success'] { color: #86efac; }
+  .ns-status[data-tone='error'] { color: #fca5a5; }
+  .ns-microcopy {
+    margin: 0.5rem 0 0;
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+</style>

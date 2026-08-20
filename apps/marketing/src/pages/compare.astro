@@ -1,0 +1,221 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import MarketingLayout from '../layouts/MarketingLayout.astro'
+import CTA from '../components/CTA.astro'
+import ComparisonWinnerPositioning from '../components/ComparisonWinnerPositioning.astro'
+import { buildBreadcrumbSchema, buildCollectionPageSchema, buildOrganizationSchema } from '../lib/seo'
+import { comparisonRows, siteSecondaryCtas } from '../data/product'
+
+type ComparisonEntry = CollectionEntry<'comparisons'>
+type AlternativeEntry = CollectionEntry<'alternatives'>
+type PracticeTypeEntry = CollectionEntry<'practice-types'>
+type BestEntry = CollectionEntry<'best'>
+
+const [comparisonEntries, alternatives, practiceTypes, bestPages] = await Promise.all([
+  getCollection('comparisons'),
+  getCollection('alternatives'),
+  getCollection('practice-types'),
+  getCollection('best'),
+]) as [ComparisonEntry[], AlternativeEntry[], PracticeTypeEntry[], BestEntry[]]
+
+const sortByUpdated = <T extends { data: { updatedAt?: Date; publishedAt?: Date } }>(a: T, b: T) => {
+  const aDate = a.data.updatedAt?.getTime() ?? a.data.publishedAt?.getTime() ?? 0
+  const bDate = b.data.updatedAt?.getTime() ?? b.data.publishedAt?.getTime() ?? 0
+  return bDate - aDate
+}
+
+const comparisonCards = comparisonEntries.sort(sortByUpdated).map((entry) => ({
+  href: `/compare/${entry.id.replace(/\.md$/, '')}`,
+  eyebrow: 'Comparison',
+  title: entry.data.title,
+  description: entry.data.metaDescription,
+}))
+
+const alternativeCards = alternatives.sort(sortByUpdated).map((entry) => ({
+  href: `/alternatives/${entry.id.replace(/\.md$/, '')}`,
+  eyebrow: 'Alternative',
+  title: entry.data.title,
+  description: entry.data.metaDescription,
+}))
+
+const shortlistCards = bestPages.sort(sortByUpdated).map((entry) => ({
+  href: `/resources/best/${entry.id.replace(/\.md$/, '')}`,
+  eyebrow: 'Shortlist',
+  title: entry.data.title,
+  description: entry.data.metaDescription,
+}))
+
+const practiceCards = practiceTypes.sort(sortByUpdated).map((entry) => ({
+  href: `/practice-types/${entry.id.replace(/\.md$/, '')}`,
+  eyebrow: 'Practice type',
+  title: entry.data.title,
+  description: entry.data.metaDescription,
+}))
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Compare', url: '/compare' },
+])
+const collectionSchema = buildCollectionPageSchema({
+  name: 'PHIGuard Compare Hub',
+  description: 'Comparison pages, alternatives, and shortlist buying guides for healthcare teams evaluating PHI workflow software.',
+  url: '/compare',
+  items: [...comparisonCards, ...alternativeCards, ...shortlistCards, ...practiceCards].map((card) => ({
+    name: card.title,
+    url: card.href,
+    description: card.description,
+  })),
+})
+---
+
+<MarketingLayout
+  title="Compare | PHIGuard Decision Center"
+  description="Comparison pages, alternatives, and shortlist buying guides for clinics evaluating HIPAA-native workflow software."
+  jsonLd={[breadcrumbs, collectionSchema, buildOrganizationSchema()]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Compare</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.35rem, 4.6vw, 4rem);">HIPAA software comparisons for clinic buying decisions.</h1>
+        <p class="hero-summary">
+          Most clinics land here while choosing between a general team tool and one built for healthcare. Pick the comparison, shortlist, or product page that matches your question. You should not have to read every page to find an answer.
+        </p>
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">Best entry points</p>
+        <div class="assurance-list">
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Named competitor already in mind</span><span class="assurance-meta">Alternatives</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Still building the shortlist</span><span class="assurance-meta">Best-of pages</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Need specialty fit</span><span class="assurance-meta">Practice pages</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Ready for pricing</span><span class="assurance-meta"><a href="/pricing">/pricing</a></span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <ComparisonWinnerPositioning variant="hub" />
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <div class="table-shell compact-table">
+        <div class="table-scroll">
+        <table aria-label="PHIGuard compare summary">
+          <thead>
+            <tr>
+              <th>Requirement</th>
+              <th>Generic tool posture</th>
+              <th>PHIGuard posture</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparisonRows.map((row) => (
+              <tr>
+                <td>{row.requirement}</td>
+                <td>{row.generic}</td>
+                <td>{row.phiguard}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <p class="table-note">
+        Competitor terms, pricing, and HIPAA positions change over time. Check the linked vendor pages and each vendor&apos;s own current documentation before you buy.
+      </p>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Direct comparisons</p>
+      <h2 class="section-title text-balance">When you already have two or three products in mind.</h2>
+      <div class="detail-grid" style="margin-top: 1.75rem;">
+        {comparisonCards.map((card) => (
+          <a href={card.href} class="link-card">
+            <small>{card.eyebrow}</small>
+            <strong>{card.title}</strong>
+            <span>{card.description}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Generic tool alternatives</p>
+      <h2 class="section-title text-balance">When you want to replace a generic work tool.</h2>
+      <p class="section-body"><a href="/alternatives" class="inline-flex items-center min-h-11">Open the alternatives hub</a> for the full list of replacements.</p>
+      <div class="detail-grid" style="margin-top: 1.75rem;">
+        {alternativeCards.map((card) => (
+          <a href={card.href} class="link-card">
+            <small>{card.eyebrow}</small>
+            <strong>{card.title}</strong>
+            <span>{card.description}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Shortlists</p>
+      <h2 class="section-title text-balance">When you are still deciding what kind of HIPAA software you need.</h2>
+      <div class="detail-grid" style="margin-top: 1.75rem;">
+        {shortlistCards.map((card) => (
+          <a href={card.href} class="link-card">
+            <small>{card.eyebrow}</small>
+            <strong>{card.title}</strong>
+            <span>{card.description}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Practice fit</p>
+      <h2 class="section-title text-balance">When your specialty matters as much as the software category.</h2>
+      <p class="section-body"><a href="/practice-types" class="inline-flex items-center min-h-11">Open the practice-types hub</a> for the full list of specialties.</p>
+      <div class="detail-grid" style="margin-top: 1.75rem;">
+        {practiceCards.map((card) => (
+          <a href={card.href} class="link-card">
+            <small>{card.eyebrow}</small>
+            <strong>{card.title}</strong>
+            <span>{card.description}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg link-grid">
+      <a href="/product" class="link-card">
+        <small>Product</small>
+        <strong>See what PHIGuard actually covers</strong>
+        <span>The product page lists the features behind the comparison claims.</span>
+      </a>
+      <a href="/resources/guides" class="link-card">
+        <small>Vendor guides</small>
+        <strong>Check which plan covers what you need</strong>
+        <span>The vendor guides help you confirm BAA terms, plan eligibility, and any caveats.</span>
+      </a>
+      <a href="/pricing" class="link-card">
+        <small>Pricing</small>
+        <strong>Compare the cost</strong>
+        <span>See how one flat price per clinic fits once your shortlist is set.</span>
+      </a>
+    </div>
+  </section>
+
+  <CTA
+    heading="Narrow the field here, then look at the product."
+    subheading="Once you have a shortlist, check the feature, pricing, and BAA pages to confirm the fit."
+    secondaryLabel={siteSecondaryCtas.product.label}
+    secondaryHref={siteSecondaryCtas.product.href}
+  />
+</MarketingLayout>

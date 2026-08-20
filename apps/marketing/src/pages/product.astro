@@ -1,0 +1,216 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro'
+import CTA from '../components/CTA.astro'
+import {
+  comparisonRows,
+  limitedOfferCommercialCopy,
+  marketingPlans,
+  productPillars,
+  sitePrimaryCta,
+  siteSecondaryCtas,
+  trustClaims,
+} from '../data/product'
+import { PLANS, getMinimumPlanForFeatures } from '@phiguard/billing'
+import { buildBreadcrumbSchema, buildCollectionPageSchema, buildSoftwareApplicationSchema } from '../lib/seo'
+import { ShieldCheck, ClipboardList, FileArchive, AlertTriangle, Building2 } from 'lucide-astro'
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Product', url: '/product' },
+])
+
+const featureCollectionSchema = buildCollectionPageSchema({
+  name: 'PHIGuard feature landing pages',
+  description:
+    'In-depth pages for PHIGuard task management, evidence, incident response, program operations, and multi-location controls.',
+  url: '/product',
+  items: productPillars.map((pillar) => ({
+    name: pillar.name,
+    url: `/product/features/${pillar.slug}`,
+    description: pillar.summary,
+  })),
+})
+
+const pillarIcons = {
+  'tasks-audit': ShieldCheck,
+  'checklists-evidence': ClipboardList,
+  'program-operations': FileArchive,
+  incidents: AlertTriangle,
+  'group-operations': Building2,
+} as const
+
+const publicPlanList = `${marketingPlans.slice(0, -1).map((plan) => plan.name).join(', ')}, and ${marketingPlans.at(-1)?.name}`
+const programOperationsPlanName = PLANS[getMinimumPlanForFeatures(['multi_location_rollup'])].name
+---
+
+<MarketingLayout
+  title="Product | PHIGuard HIPAA Operations Hub"
+  description={`See how PHIGuard helps clinics run recurring HIPAA tasks, audit history, evidence, incidents, and advanced ${programOperationsPlanName}-plan program modules.`}
+  jsonLd={[breadcrumbs, buildSoftwareApplicationSchema(), featureCollectionSchema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg hero-grid">
+      <div>
+        <p class="kicker">Product</p>
+        <h1 class="hero-title text-balance">Turn recurring HIPAA chores into assigned, auditable work.</h1>
+        <p class="hero-summary">
+          PHIGuard gives clinics one place to assign HIPAA work, attach proof, track incidents, and keep the audit trail together. It is built for the office manager who needs to know what is done today and what will stand up later.
+        </p>
+        <div class="hero-actions">
+          <a href={sitePrimaryCta.href} class="button-primary">{sitePrimaryCta.label}</a>
+          <a href="#capabilities" class="button-secondary">See how it works</a>
+        </div>
+        <div class="hero-rail">
+          {trustClaims.map((claim) => (
+            <div class="metric-item">
+              <span class="metric-value">{claim.title}</span>
+              <span class="metric-label">{claim.body}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="surface-stack">
+        <div class="preview-panel preview-panel--tall">
+          <p class="panel-label">Product view</p>
+          <h2 class="preview-title">What clinics see in practice</h2>
+          <ul class="preview-list">
+            <li>
+              <strong>Task queue with owners and due dates</strong>
+              <span class="eyebrow-value">Recurring HIPAA work lives in one shared record instead of email and side spreadsheets.</span>
+            </li>
+            <li>
+              <strong>Evidence attached to the work itself</strong>
+              <span class="eyebrow-value">Exports, attachments, and operational proof stay connected to the step that produced them.</span>
+            </li>
+            <li>
+              <strong>Incidents stay visible</strong>
+              <span class="eyebrow-value">Security events can be filed, tracked, and retained without inventing an ad hoc process.</span>
+            </li>
+          </ul>
+        </div>
+        <div class="preview-panel">
+          <p class="panel-label">Deep links</p>
+          <ul class="commercial-list">
+            {productPillars.map((pillar) => (
+              <li>
+                <strong><a href={`/product/features/${pillar.slug}`}>{pillar.name}</a></strong>
+                <span class="eyebrow-value">{pillar.audience}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="capabilities" class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">How it works</p>
+      <h2 class="section-title text-balance">Five product areas keep the work, proof, and history together.</h2>
+      <p class="section-body">
+        Here are the pieces that usually decide the purchase: recurring tasks, evidence, incidents, audit history, and the advanced {programOperationsPlanName}-plan operations.
+      </p>
+
+      <div class="jump-grid">
+        {productPillars.map((pillar) => (
+          <a href={`/product/features/${pillar.slug}`} class="jump-card">
+            <small>{pillar.audience}</small>
+            <h3>{pillar.name}</h3>
+            <p>{pillar.summary}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {productPillars.map((pillar) => {
+    const Icon = pillarIcons[pillar.id]
+
+    return (
+      <section id={pillar.id} class="page-surface page-surface--tight">
+        <div class="shell-lg section-grid">
+          <div>
+            <p class="kicker">Product area</p>
+            <div class="icon-badge">
+              <Icon class="h-5 w-5" aria-hidden="true" />
+            </div>
+            <h2 class="section-title text-balance">{pillar.name}</h2>
+            <p class="section-body">{pillar.summary}</p>
+            <p class="fine-print">{pillar.audience}</p>
+          </div>
+
+          <div>
+            <p>{pillar.detail}</p>
+            <div class="detail-grid">
+              {pillar.bullets.map((bullet) => (
+                <div class="detail-card">
+                  <h3>{bullet}</h3>
+                </div>
+              ))}
+            </div>
+            <a href={`/product/features/${pillar.slug}`} class="button-secondary" style="margin-top: 1rem;">Read the full feature page</a>
+          </div>
+        </div>
+      </section>
+    )
+  })}
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Plan fit</p>
+        <h2 class="section-title text-balance">The plan question is about clinic size, handoffs, locations, and governance needs.</h2>
+        <p class="section-body">
+          {publicPlanList} start from the same HIPAA baseline. The difference is how much workflow structure, integration support, compliance program coverage, and cross-location visibility your organization needs.
+        </p>
+      </div>
+      <div class="clinic-fit-grid">
+        {marketingPlans.map((plan) => (
+          <div class="clinic-fit-card">
+            <h3>{plan.name}</h3>
+            <p>{plan.fit}</p>
+            <p class="fine-print" style="margin-top: 0.85rem;">{plan.priceAnnualMonthly}/month equivalent and {plan.priceAnnual}/year paid upfront annually after {limitedOfferCommercialCopy.yearlyPromoCode}. List price {plan.priceAnnualMonthlyList}/month equivalent, {plan.priceAnnualList}/year, or {plan.priceMonthlyList}/month paid monthly. Up to {plan.maxMembers} staff.</p>
+            <a href={plan.ctaHref} class="button-tertiary">Start {plan.name} free trial</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Why it exists</p>
+      <h2 class="section-title text-balance">Generic task tools leave clinics to manage HIPAA evidence and history somewhere else.</h2>
+      <div class="table-shell compact-table" style="margin-top: 1.75rem;">
+        <div class="table-scroll">
+        <table aria-label="PHIGuard product comparison summary">
+          <thead>
+            <tr>
+              <th>Requirement</th>
+              <th>Generic tool posture</th>
+              <th>PHIGuard posture</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparisonRows.map((row) => (
+              <tr>
+                <td>{row.requirement}</td>
+                <td>{row.generic}</td>
+                <td>{row.phiguard}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    heading="See how the clinic work fits, then choose the plan."
+    subheading="When you are ready, check pricing, review security, or look at the BAA. Pick whatever answers your last question before you start the trial."
+    secondaryLabel={siteSecondaryCtas.security.label}
+    secondaryHref={siteSecondaryCtas.security.href}
+  />
+</MarketingLayout>

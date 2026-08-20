@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /app
+Disallow: /api
+Disallow: /api/auth
+Disallow: /accept-invite
+Disallow: /forgot-password
+Disallow: /login
+Disallow: /partner
+Disallow: /partner/dashboard
+Disallow: /partner/login
+Disallow: /partner/verify
+Disallow: /signup
+Disallow: /signup/check-email

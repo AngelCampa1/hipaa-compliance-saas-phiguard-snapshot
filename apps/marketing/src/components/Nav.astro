@@ -1,0 +1,484 @@
+---
+import { PHIGUARD_APP_ORIGIN, PHIGUARD_SIGNUP_URL } from '@phiguard/brand/identity'
+import { primaryNavLinks, resourcesMegaMenuGroups } from '../lib/internal-links'
+import BrandLogo from './BrandLogo.astro'
+
+const navLinks = primaryNavLinks
+
+const currentPath = Astro.url.pathname
+const loginUrl = `${PHIGUARD_APP_ORIGIN}/login`
+
+function isActiveNavLink(href: string) {
+  if (href === '/product') return currentPath === '/product'
+  if (href === '/pricing') return currentPath === '/pricing'
+  if (href === '/security') return currentPath === '/security' || currentPath === '/trust'
+  if (href === '/about') return currentPath === '/about'
+  if (href === '/hipaa') return currentPath === '/hipaa'
+  if (href === '/compare') {
+    return currentPath === '/compare'
+      || currentPath.startsWith('/compare/')
+      || currentPath.startsWith('/alternatives/')
+      || currentPath.startsWith('/practice-types/')
+  }
+  if (href === '/resources') {
+    return currentPath === '/resources'
+      || currentPath.startsWith('/resources/')
+      || currentPath === '/learn'
+      || currentPath.startsWith('/learn/')
+      || currentPath === '/glossary'
+      || currentPath === '/contributors'
+      || currentPath.startsWith('/contributors/')
+  }
+
+  return false
+}
+
+function getNavLinkClass(href: string) {
+  const baseClass =
+    'block rounded-full px-4 py-2 text-body no-underline transition-colors duration-150'
+
+  if (isActiveNavLink(href)) {
+    return `${baseClass} bg-surface-100 text-text-primary`
+  }
+
+  return `${baseClass} text-text-secondary hover:bg-surface-100 hover:text-text-primary`
+}
+---
+
+<header class="nav-header z-50 border-b border-border-default bg-background/92 backdrop-blur-md safe-top">
+  <nav class="shell-xl flex h-18 items-center gap-8 px-6" aria-label="Main navigation">
+    <a href="/" class="flex shrink-0 items-center gap-3 no-underline" aria-label="PHIGuard home">
+      <div>
+        <BrandLogo class="h-8 w-auto" />
+        <span class="block text-xs uppercase tracking-caps text-text-muted">For practice administrators</span>
+      </div>
+    </a>
+
+    <ul class="hidden flex-1 list-none gap-1 p-0 lg:flex" role="list">
+      {navLinks.map((link) => (
+        <li class={link.href === '/resources' ? 'nav-mega-item' : undefined}>
+          {link.href === '/resources' ? (
+            <>
+              <a
+                href={link.href}
+                class={`${getNavLinkClass(link.href)} nav-mega-trigger`}
+                aria-current={isActiveNavLink(link.href) ? 'page' : undefined}
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="resources-mega-menu"
+                data-ph-nav-link
+                data-ph-location="header-nav"
+              >
+                {link.label}
+              </a>
+              <div id="resources-mega-menu" class="nav-mega-menu" aria-label="Resources menu">
+                <div class="nav-mega-shell">
+                  {resourcesMegaMenuGroups.map((group) => (
+                    <section class="nav-mega-group" aria-labelledby={`mega-${group.title.toLowerCase().replaceAll(' ', '-')}`}>
+                      <a href={group.href ?? '/resources'} class="nav-mega-heading" id={`mega-${group.title.toLowerCase().replaceAll(' ', '-')}`}>
+                        {group.title}
+                      </a>
+                      {group.description && <p>{group.description}</p>}
+                      <ul role="list" class="nav-mega-list">
+                        {group.links.map((item) => (
+                          <li>
+                            <a href={item.href} class="nav-mega-link" data-ph-nav-link data-ph-location="resources-megamenu">
+                              <span>{item.label}</span>
+                              {item.description && <small>{item.description}</small>}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <a
+              href={link.href}
+              class={getNavLinkClass(link.href)}
+              aria-current={isActiveNavLink(link.href) ? 'page' : undefined}
+              data-ph-nav-link
+              data-ph-location="header-nav"
+            >
+              {link.label}
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+
+    <div class="hidden shrink-0 items-center gap-3 lg:flex">
+      <a
+        href={loginUrl}
+        class="block rounded-full px-4 py-2 text-body text-text-secondary no-underline transition-colors duration-150 hover:bg-surface-100"
+        data-ph-nav-link
+        data-ph-location="header-account"
+      >
+        Sign in
+      </a>
+      <a href={PHIGUARD_SIGNUP_URL} class="button-primary" data-ph-cta="Start free trial" data-ph-location="header-account">
+        Start free trial
+      </a>
+    </div>
+
+    <button
+      id="nav-hamburger"
+      class="touch-target nav-mobile-toggle ml-auto cursor-pointer rounded-lg border-0 bg-transparent text-text-secondary lg:hidden"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+      </svg>
+    </button>
+  </nav>
+</header>
+
+<div
+  id="mobile-menu"
+  class="mobile-menu-sheet"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Navigation menu"
+  hidden
+>
+  <div class="mobile-menu-inner safe-top safe-bottom">
+    <div class="mobile-menu-header">
+      <div class="flex shrink-0 items-center gap-3" aria-hidden="true">
+        <BrandLogo class="h-7 w-auto" />
+      </div>
+      <button
+        id="nav-close"
+        class="touch-target nav-close-btn cursor-pointer rounded-lg border-0 bg-transparent text-text-secondary"
+        aria-label="Close menu"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav aria-label="Mobile navigation">
+      <ul role="list" class="list-none m-0 flex flex-col gap-1 p-0">
+        {navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class={`mobile-nav-link block rounded-xl px-3 py-3 no-underline ${isActiveNavLink(link.href) ? 'bg-surface-100 text-text-primary' : 'text-text-secondary hover:bg-surface-100'}`}
+              aria-current={isActiveNavLink(link.href) ? 'page' : undefined}
+              data-ph-nav-link
+              data-ph-location="mobile-nav"
+              data-mobile-link
+            >
+              {link.label}
+            </a>
+            {link.href === '/resources' && (
+              <ul role="list" class="m-0 list-none p-0 pl-3">
+                {resourcesMegaMenuGroups.map((group) => (
+                  <li>
+                    <a
+                      href={group.href ?? '/resources'}
+                      class="mobile-nav-link block rounded-xl px-3 py-2 text-sm font-semibold text-text-primary no-underline hover:bg-surface-100"
+                      data-ph-nav-link
+                      data-ph-location="mobile-resources-nav"
+                      data-mobile-link
+                    >
+                      {group.title}
+                    </a>
+                    <ul role="list" class="m-0 list-none p-0 pl-3">
+                      {group.links.slice(0, 2).map((item) => (
+                        <li>
+                          <a
+                            href={item.href}
+                            class="mobile-nav-link block rounded-xl px-3 py-2 text-sm text-text-secondary no-underline hover:bg-surface-100"
+                            data-ph-nav-link
+                            data-ph-location="mobile-resources-nav"
+                            data-mobile-link
+                          >
+                            {item.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+        <li>
+          <a href={loginUrl} class="mobile-nav-link block rounded-xl px-3 py-3 text-text-secondary no-underline hover:bg-surface-100" data-ph-nav-link data-ph-location="mobile-account" data-mobile-link>
+            Sign in
+          </a>
+        </li>
+        <li class="pt-2">
+          <a href={PHIGUARD_SIGNUP_URL} class="button-primary w-full" data-ph-cta="Start free trial" data-ph-location="mobile-account" data-mobile-link>
+            Start free trial
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<script>
+  const hamburger = document.getElementById('nav-hamburger') as HTMLButtonElement | null
+  const closeBtn = document.getElementById('nav-close') as HTMLButtonElement | null
+  const menu = document.getElementById('mobile-menu') as HTMLElement | null
+
+  if (hamburger && closeBtn && menu) {
+    function getFocusable(): HTMLElement[] {
+      return Array.from(
+        menu!.querySelectorAll<HTMLElement>(
+          'a[href]:not([tabindex="-1"]), button:not([tabindex="-1"])',
+        ),
+      )
+    }
+
+    function openMenu() {
+      menu!.hidden = false
+      hamburger!.setAttribute('aria-expanded', 'true')
+      document.body.style.overflow = 'hidden'
+      closeBtn!.focus()
+    }
+
+    function closeMenu() {
+      menu!.hidden = true
+      hamburger!.setAttribute('aria-expanded', 'false')
+      document.body.style.overflow = ''
+      hamburger!.focus()
+    }
+
+    hamburger.addEventListener('click', openMenu)
+    closeBtn.addEventListener('click', closeMenu)
+
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !menu.hidden) closeMenu()
+    })
+
+    menu.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return
+      const focusable = getFocusable()
+      if (focusable.length === 0) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    })
+
+    menu.querySelectorAll<HTMLElement>('[data-mobile-link]').forEach((link) => {
+      link.addEventListener('click', () => {
+        menu!.hidden = true
+        hamburger!.setAttribute('aria-expanded', 'false')
+        document.body.style.overflow = ''
+      })
+    })
+
+    document.addEventListener('astro:page-load', () => {
+      if (!menu.hidden) {
+        menu.hidden = true
+        hamburger!.setAttribute('aria-expanded', 'false')
+        document.body.style.overflow = ''
+      }
+    })
+  }
+
+  const megaItem = document.querySelector('.nav-mega-item')
+  const megaTrigger = document.querySelector('.nav-mega-trigger')
+
+  if (megaItem && megaTrigger) {
+    function setMegaExpanded(expanded: boolean) {
+      megaTrigger!.setAttribute('aria-expanded', expanded ? 'true' : 'false')
+    }
+
+    megaItem.addEventListener('mouseenter', () => setMegaExpanded(true))
+    megaItem.addEventListener('mouseleave', () => setMegaExpanded(false))
+    megaItem.addEventListener('focusin', () => setMegaExpanded(true))
+    megaItem.addEventListener('focusout', () => {
+      window.setTimeout(() => {
+        if (!megaItem.contains(document.activeElement)) setMegaExpanded(false)
+      }, 0)
+    })
+    megaItem.addEventListener('keydown', (event: Event) => {
+      const e = event as KeyboardEvent
+      if (e.key !== 'Escape') return
+      setMegaExpanded(false)
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+      const triggerElement = megaTrigger as HTMLElement
+      triggerElement.focus()
+    })
+  }
+</script>
+
+<style>
+  .nav-header {
+    position: relative;
+  }
+
+  .nav-mega-item {
+    position: relative;
+  }
+
+  .nav-mega-trigger::after {
+    content: '';
+    display: inline-block;
+    width: 0.38rem;
+    height: 0.38rem;
+    margin-left: 0.45rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-0.12rem) rotate(45deg);
+  }
+
+  .nav-mega-menu {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 0.75rem);
+    width: min(72rem, calc(100vw - 2rem));
+    max-width: calc(100vw - 2rem);
+    transform: translateX(-50%) translateY(-0.35rem);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 140ms ease, transform 140ms ease, visibility 140ms ease;
+  }
+
+  .nav-mega-item:hover .nav-mega-menu,
+  .nav-mega-item:focus-within .nav-mega-menu {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .nav-mega-menu::before {
+    content: '';
+    position: absolute;
+    inset: -0.75rem 0 auto;
+    height: 0.75rem;
+  }
+
+  .nav-mega-shell {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--phig-color-border-default);
+    border-radius: 1rem;
+    background: var(--phig-color-background);
+    box-shadow: 0 20px 60px rgb(15 23 42 / 0.16);
+  }
+
+  .nav-mega-group {
+    min-width: 0;
+    padding: 0.6rem;
+  }
+
+  .nav-mega-heading {
+    display: block;
+    color: var(--phig-color-text-primary);
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1.25;
+    text-decoration: none;
+  }
+
+  .nav-mega-group p {
+    margin: 0.35rem 0 0.75rem;
+    color: var(--phig-color-text-muted);
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  .nav-mega-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav-mega-link {
+    display: block;
+    min-width: 0;
+    padding: 0.52rem 0.58rem;
+    border-radius: 0.6rem;
+    color: var(--phig-color-text-secondary);
+    font-size: 0.82rem;
+    line-height: 1.25;
+    text-decoration: none;
+  }
+
+  .nav-mega-link:hover,
+  .nav-mega-link:focus-visible {
+    background: var(--phig-color-surface-100);
+    color: var(--phig-color-text-primary);
+  }
+
+  .nav-mega-link span,
+  .nav-mega-link small {
+    display: block;
+  }
+
+  .nav-mega-link span {
+    font-weight: 700;
+  }
+
+  .nav-mega-link small {
+    margin-top: 0.2rem;
+    color: var(--phig-color-text-muted);
+    font-size: 0.72rem;
+    line-height: 1.35;
+  }
+
+  .nav-mobile-toggle:hover,
+  .nav-close-btn:hover {
+    background: var(--phig-color-surface-100);
+    color: var(--phig-color-text-primary);
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+
+  .mobile-menu-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: var(--phig-color-background);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-menu-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 1.25rem 1.5rem;
+  }
+
+  .mobile-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--phig-color-border-default);
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-menu-sheet {
+      display: none;
+    }
+  }
+</style>

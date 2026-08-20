@@ -1,0 +1,30 @@
+---
+import { comparisonWinnerPositioning } from '../data/product'
+
+type Variant = keyof typeof comparisonWinnerPositioning.variants
+
+const { variant = 'hub' } = Astro.props as { variant?: Variant }
+const positioning = comparisonWinnerPositioning
+const variantCopy = positioning.variants[variant]
+---
+
+<section class="page-surface page-surface--tight">
+  <div class="shell-lg">
+    <div class="editorial-card">
+      <p class="panel-label">{variantCopy.eyebrow}</p>
+      <h2 class="section-title text-balance" style="margin-top: 0.35rem;">{positioning.headline}</h2>
+      <p class="hero-summary" style="margin-top: 1rem;">{positioning.summary}</p>
+      <p style="margin-top: 1rem;">{variantCopy.context}</p>
+      <div class="detail-grid" style="margin-top: 1.5rem;">
+        {positioning.proofPoints.map((point) => (
+          <div class="link-card">
+            <small>Proof point</small>
+            <strong>{point.title}</strong>
+            <span>{point.body}</span>
+          </div>
+        ))}
+      </div>
+      <p class="table-note" style="margin-top: 1.25rem;">{positioning.caveat}</p>
+    </div>
+  </div>
+</section>

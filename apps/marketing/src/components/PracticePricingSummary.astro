@@ -1,0 +1,58 @@
+---
+import { marketingPlans, limitedOfferCommercialCopy } from '../data/product'
+import { commercialKnowledgeCopy } from '@phiguard/knowledge/commercial'
+---
+
+<div class="practice-pricing-summary editorial-card" style="margin-top: 1.5rem;">
+  <p class="panel-label">Pricing and plan fit</p>
+  <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--phig-color-text-secondary);">
+    {commercialKnowledgeCopy.baaIncluded} Annual billing is the default.
+    <a href="/pricing">See full pricing details and monthly options.</a>
+  </p>
+  <ul class="list-clean practice-pricing-list" role="list">
+    {marketingPlans.map((plan) => (
+      <li class="practice-pricing-item">
+        <strong>{plan.name}</strong>
+        <span class="practice-pricing-amount">
+          {plan.priceAnnualMonthly}/mo equivalent with {limitedOfferCommercialCopy.yearlyPromoCode}, paid upfront annually
+        </span>
+        <span class="practice-pricing-fit">{plan.summary}</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .practice-pricing-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .practice-pricing-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--phig-color-border-subtle);
+    font-size: 0.875rem;
+  }
+
+  .practice-pricing-item:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .practice-pricing-amount {
+    color: var(--phig-color-text-secondary);
+    font-size: 0.8125rem;
+  }
+
+  .practice-pricing-fit {
+    color: var(--phig-color-text-muted);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+</style>

@@ -1,0 +1,27 @@
+Copyright (c) 2026 Angel Campa. All rights reserved.
+
+This repository is source-available for reading and review only. It is a
+portfolio artifact of a product that has been shut down.
+
+No licence is granted. In particular, no permission is given to use, copy,
+modify, merge, publish, distribute, sublicense, or sell this software or any
+part of it, or to create derivative works from it, whether for commercial or
+non-commercial purposes.
+
+You may read the source, quote short excerpts with attribution for the purpose
+of commentary or review, and clone the repository for the sole purpose of
+reading it.
+
+Third-party dependencies referenced by this repository remain under their own
+licences, which are not affected by this notice.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+The compliance material in this repository (docs/hipaa, the marketing content
+corpus, and the generated PDF templates) is not legal advice and was never
+reviewed by counsel.

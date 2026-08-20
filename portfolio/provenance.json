@@ -1,0 +1,16 @@
+{
+  "note": "Git history of the private source repository, read from git by scripts/portfolio-metrics.mjs --record-provenance. The published snapshot is a single squashed commit and cannot recount it, so this is the record.",
+  "commits": 876,
+  "firstCommit": "2026-04-14",
+  "lastCommit": "2026-08-11",
+  "contributors": [
+    {
+      "commits": 841,
+      "name": "Angel Campa"
+    },
+    {
+      "commits": 35,
+      "name": "AI Alex"
+    }
+  ]
+}

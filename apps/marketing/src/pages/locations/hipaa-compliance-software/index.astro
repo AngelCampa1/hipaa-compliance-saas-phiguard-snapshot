@@ -1,0 +1,102 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import MarketingLayout from '../../../layouts/MarketingLayout.astro'
+import CTA from '../../../components/CTA.astro'
+import { buildBreadcrumbSchema, buildCollectionPageSchema } from '../../../lib/seo'
+
+type StateGuideEntry = CollectionEntry<'state-guides'>
+
+const guides = (await getCollection('state-guides'))
+  .filter((entry: StateGuideEntry) => entry.data.pageFamily === 'compliance-software')
+  .sort((a: StateGuideEntry, b: StateGuideEntry) => a.data.state.localeCompare(b.data.state))
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'HIPAA compliance software by state', url: '/locations/hipaa-compliance-software' },
+])
+
+const collectionSchema = buildCollectionPageSchema({
+  name: 'HIPAA Compliance Software by State',
+  description: 'State-focused commercial software guidance for US clinics evaluating HIPAA compliance operations, BAAs, vendor evidence, and recurring controls.',
+  url: '/locations/hipaa-compliance-software',
+  items: guides.map((entry: StateGuideEntry) => ({
+    name: entry.data.title,
+    url: `/locations/hipaa-compliance-software/${entry.data.slug}`,
+    description: entry.data.metaDescription,
+  })),
+})
+---
+
+<MarketingLayout
+  title="HIPAA Compliance Software by State | PHIGuard"
+  description="Browse state-focused HIPAA compliance software pages for clinics comparing BAA-ready operations, vendor tracking, incident evidence, and workforce tasks."
+  canonicalUrl="https://phiguard.app/locations/hipaa-compliance-software"
+  jsonLd={[breadcrumbs, collectionSchema]}
+>
+  <section class="hub-hero">
+    <div class="hub-inner">
+      <p class="hub-eyebrow">State software guides</p>
+      <h1 class="hub-heading">HIPAA compliance software guidance for clinics in every state</h1>
+      <p class="hub-subheading">
+        These pages translate federal HIPAA requirements and state verification checkpoints into software evaluation steps for clinic administrators.
+      </p>
+      <div class="location-topic-row" aria-label="Related HIPAA topics">
+        <a href="/pricing">Pricing</a>
+        <a href="/hipaa">HIPAA overview</a>
+        <a href="/security">Security</a>
+        <a href="/baa">BAA</a>
+        <a href="/locations/hipaa-breach-notification">Breach notification by state</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="hub-section">
+    <div class="hub-inner">
+      <div class="editorial-card location-hub-note">
+        <p class="panel-label">How to use this hub</p>
+        <p>
+          Pick the state where your clinic operates, then use the checklist to compare HIPAA software against local operating realities, federal OCR expectations, and state agency verification points. These pages are educational and not legal advice.
+        </p>
+      </div>
+
+      <div class="detail-grid">
+        {guides.map((entry: StateGuideEntry) => (
+          <a class="link-card" href={`/locations/hipaa-compliance-software/${entry.data.slug}`}>
+            <small>{entry.data.stateAbbreviation}</small>
+            <strong>{entry.data.state}</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    heading="Compare HIPAA software against the work your state clinics actually run."
+    subheading="PHIGuard gives US clinics a BAA-ready operating layer for risk analysis, vendor evidence, workforce tasks, and incident follow-through."
+  />
+</MarketingLayout>
+
+<style is:global>
+  .location-topic-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .location-topic-row a {
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    color: #0f172a;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.55rem 0.85rem;
+    text-decoration: none;
+  }
+
+  .location-hub-note {
+    margin-bottom: 2rem;
+  }
+</style>

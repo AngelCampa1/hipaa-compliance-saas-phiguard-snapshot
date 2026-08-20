@@ -1,0 +1,89 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro'
+import CTA from '../components/CTA.astro'
+import { buildBreadcrumbSchema, buildOrganizationSchema } from '../lib/seo'
+import { marketingPlans, siteSecondaryCtas } from '../data/product'
+import { SUPPORT_EMAIL } from '@phiguard/knowledge/support'
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Trust', url: '/trust' },
+])
+const publicPlanList = `${marketingPlans.slice(0, -1).map((plan) => plan.name).join(', ')}, and ${marketingPlans.at(-1)?.name}`
+---
+
+<MarketingLayout
+  title="Trust | PHIGuard"
+  description="PHIGuard trust page covering public disclosure posture, current assessment language, and buyer-support links for security, pricing, and BAA review."
+  jsonLd={[breadcrumbs, buildOrganizationSchema()]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Trust</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.35rem, 4.6vw, 4rem);">Easy to review, with no overstated claims.</h1>
+        <p class="hero-summary">
+          This page shows how PHIGuard talks about assessments, disclosures, and recordkeeping. It is shorter than a sales page and more useful than a status banner.
+        </p>
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">Public posture</p>
+        <div class="assurance-list">
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Security questions handled directly</span><span class="assurance-meta" style="overflow-wrap: anywhere;">{SUPPORT_EMAIL}</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">HIPAA documentation program</span><span class="assurance-meta">Active</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Formal milestones</span><span class="assurance-meta">Only claimed when complete</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Buyer next steps</span><span class="assurance-meta">Product, pricing, BAA</span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg comparison-grid">
+      <div class="comparison-card">
+        <h3>Conservative claims</h3>
+        <p>Our public pages describe what is true today. We do not imply completed certifications, uptime promises, or reports we have not published.</p>
+      </div>
+      <div class="comparison-card">
+        <h3>Operational recordkeeping</h3>
+        <p>We focus on audit history, evidence, and incident records because those are things you can check for yourself.</p>
+      </div>
+      <div class="comparison-card">
+        <h3>Direct review paths</h3>
+        <p>Instead of another form, this page sends you straight to what you need next: product detail, pricing, or the BAA.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg link-grid">
+      <a href="/product" class="link-card">
+        <small>Product</small>
+        <strong>Inspect the capability story</strong>
+        <span>See the anchored breakdown of tasks, evidence, incidents, and advanced workflows.</span>
+      </a>
+      <a href="/pricing" class="link-card">
+        <small>Pricing</small>
+        <strong>Find the right plan</strong>
+        <span>See how your clinic size and needs match {publicPlanList}.</span>
+      </a>
+      <a href="/security" class="link-card">
+        <small>Security</small>
+        <strong>Review the technical safeguards</strong>
+        <span>Go from trust language to the specific safeguard summary when you need a technical review.</span>
+      </a>
+      <a href="/baa" class="link-card">
+        <small>BAA</small>
+        <strong>Review the agreement</strong>
+        <span>If your counsel or administrator needs the legal document, go straight to the BAA page.</span>
+      </a>
+    </div>
+  </section>
+
+  <CTA
+    heading="A trust page should help you move forward."
+    subheading="Use it to link your security review, plan choice, and a look at what the product does."
+    secondaryLabel={siteSecondaryCtas.pricing.label}
+    secondaryHref={siteSecondaryCtas.pricing.href}
+  />
+</MarketingLayout>

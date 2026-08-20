@@ -1,0 +1,430 @@
+{
+  "generatedBy": "scripts/portfolio-metrics.mjs",
+  "note": "Counts cover git-tracked files only. \"lines\" matches `wc -l`; \"codeLines\" excludes blank lines.",
+  "repository": {
+    "commits": 876,
+    "trackedFiles": 2082,
+    "firstCommit": "2026-04-14",
+    "lastCommit": "2026-08-11",
+    "contributors": [
+      {
+        "commits": 841,
+        "name": "Angel Campa"
+      },
+      {
+        "commits": 35,
+        "name": "AI Alex"
+      }
+    ]
+  },
+  "totals": {
+    "authoredFiles": 835,
+    "authoredLines": 159092,
+    "authoredCodeLines": 142963,
+    "sourceLines": 87205,
+    "testLines": 57202,
+    "testToSourceRatio": 0.66
+  },
+  "byCategory": {
+    "marketing-content": {
+      "files": 869,
+      "lines": 106877,
+      "codeLines": 85746
+    },
+    "source": {
+      "files": 516,
+      "lines": 85354,
+      "codeLines": 77932
+    },
+    "docs": {
+      "files": 157,
+      "lines": 55367,
+      "codeLines": 36756
+    },
+    "test": {
+      "files": 153,
+      "lines": 54084,
+      "codeLines": 47725
+    },
+    "generated": {
+      "files": 15,
+      "lines": 37871,
+      "codeLines": 35271
+    },
+    "config": {
+      "files": 92,
+      "lines": 22585,
+      "codeLines": 17196
+    },
+    "automation": {
+      "files": 51,
+      "lines": 10984,
+      "codeLines": 9661
+    },
+    "e2e": {
+      "files": 29,
+      "lines": 3118,
+      "codeLines": 2663
+    },
+    "terraform": {
+      "files": 14,
+      "lines": 1861,
+      "codeLines": 1598
+    },
+    "styles": {
+      "files": 4,
+      "lines": 1851,
+      "codeLines": 1645
+    },
+    "sql": {
+      "files": 68,
+      "lines": 1840,
+      "codeLines": 1739
+    },
+    "asset": {
+      "files": 114,
+      "lines": 0,
+      "codeLines": 0
+    }
+  },
+  "byExtension": {
+    "md": {
+      "files": 826,
+      "lines": 134396
+    },
+    "ts": {
+      "files": 421,
+      "lines": 95366
+    },
+    "json": {
+      "files": 263,
+      "lines": 53770
+    },
+    "tsx": {
+      "files": 195,
+      "lines": 41394
+    },
+    "csv": {
+      "files": 6,
+      "lines": 14847
+    },
+    "yaml": {
+      "files": 2,
+      "lines": 13222
+    },
+    "astro": {
+      "files": 71,
+      "lines": 10507
+    },
+    "mjs": {
+      "files": 43,
+      "lines": 9356
+    },
+    "tf": {
+      "files": 14,
+      "lines": 1861
+    },
+    "css": {
+      "files": 4,
+      "lines": 1851
+    },
+    "sql": {
+      "files": 68,
+      "lines": 1840
+    },
+    "(none)": {
+      "files": 12,
+      "lines": 1778
+    },
+    "txt": {
+      "files": 7,
+      "lines": 1031
+    },
+    "example": {
+      "files": 3,
+      "lines": 197
+    },
+    "yml": {
+      "files": 2,
+      "lines": 115
+    },
+    "jsonc": {
+      "files": 2,
+      "lines": 110
+    },
+    "js": {
+      "files": 18,
+      "lines": 74
+    },
+    "svg": {
+      "files": 8,
+      "lines": 24
+    },
+    "sh": {
+      "files": 1,
+      "lines": 24
+    },
+    "mts": {
+      "files": 1,
+      "lines": 18
+    },
+    "ps1": {
+      "files": 1,
+      "lines": 11
+    },
+    "png": {
+      "files": 114,
+      "lines": 0
+    }
+  },
+  "workspaces": [
+    {
+      "path": "apps/web",
+      "name": "@phiguard/web",
+      "files": 284,
+      "lines": 79543,
+      "sourceLines": 43644,
+      "testLines": 32229,
+      "testFiles": 99,
+      "testCases": 1065
+    },
+    {
+      "path": "apps/marketing",
+      "name": "@phiguard/marketing",
+      "files": 1033,
+      "lines": 134933,
+      "sourceLines": 14401,
+      "testLines": 3325,
+      "testFiles": 17,
+      "testCases": 188
+    },
+    {
+      "path": "packages/pdf",
+      "name": "@phiguard/pdf",
+      "files": 80,
+      "lines": 9893,
+      "sourceLines": 9242,
+      "testLines": 232,
+      "testFiles": 3,
+      "testCases": 8
+    },
+    {
+      "path": "packages/compliance",
+      "name": "@phiguard/compliance",
+      "files": 41,
+      "lines": 15229,
+      "sourceLines": 5243,
+      "testLines": 9953,
+      "testFiles": 13,
+      "testCases": 294
+    },
+    {
+      "path": "packages/knowledge",
+      "name": "@phiguard/knowledge",
+      "files": 23,
+      "lines": 5632,
+      "sourceLines": 2787,
+      "testLines": 436,
+      "testFiles": 2,
+      "testCases": 15
+    },
+    {
+      "path": "packages/db",
+      "name": "@phiguard/db",
+      "files": 126,
+      "lines": 26118,
+      "sourceLines": 2460,
+      "testLines": 2741,
+      "testFiles": 5,
+      "testCases": 124
+    },
+    {
+      "path": "packages/ui",
+      "name": "@phiguard/ui",
+      "files": 36,
+      "lines": 2554,
+      "sourceLines": 2323,
+      "testLines": 181,
+      "testFiles": 2,
+      "testCases": 28
+    },
+    {
+      "path": "packages/billing",
+      "name": "@phiguard/billing",
+      "files": 26,
+      "lines": 4387,
+      "sourceLines": 1603,
+      "testLines": 2741,
+      "testFiles": 9,
+      "testCases": 128
+    },
+    {
+      "path": "packages/email",
+      "name": "@phiguard/email",
+      "files": 19,
+      "lines": 2056,
+      "sourceLines": 1502,
+      "testLines": 512,
+      "testFiles": 3,
+      "testCases": 20
+    },
+    {
+      "path": "packages/auth",
+      "name": "@phiguard/auth",
+      "files": 24,
+      "lines": 2365,
+      "sourceLines": 1085,
+      "testLines": 1236,
+      "testFiles": 10,
+      "testCases": 79
+    },
+    {
+      "path": "packages/integration",
+      "name": "@phiguard/integration",
+      "files": 12,
+      "lines": 1987,
+      "sourceLines": 779,
+      "testLines": 1171,
+      "testFiles": 4,
+      "testCases": 34
+    },
+    {
+      "path": "packages/lead-magnets",
+      "name": "@phiguard/lead-magnets",
+      "files": 5,
+      "lines": 845,
+      "sourceLines": 681,
+      "testLines": 136,
+      "testFiles": 1,
+      "testCases": 13
+    },
+    {
+      "path": "packages/audit",
+      "name": "@phiguard/audit",
+      "files": 20,
+      "lines": 2028,
+      "sourceLines": 632,
+      "testLines": 1345,
+      "testFiles": 6,
+      "testCases": 82
+    },
+    {
+      "path": "packages/baa",
+      "name": "@phiguard/baa",
+      "files": 8,
+      "lines": 1079,
+      "sourceLines": 496,
+      "testLines": 551,
+      "testFiles": 2,
+      "testCases": 10
+    },
+    {
+      "path": "packages/brand",
+      "name": "@phiguard/brand",
+      "files": 7,
+      "lines": 217,
+      "sourceLines": 189,
+      "testLines": 0,
+      "testFiles": 0,
+      "testCases": 0
+    },
+    {
+      "path": "packages/marketing-db",
+      "name": "@phiguard/marketing-db",
+      "files": 12,
+      "lines": 280,
+      "sourceLines": 115,
+      "testLines": 31,
+      "testFiles": 1,
+      "testCases": 2
+    },
+    {
+      "path": "packages/config",
+      "name": "@phiguard/config",
+      "files": 6,
+      "lines": 72,
+      "sourceLines": 23,
+      "testLines": 0,
+      "testFiles": 0,
+      "testCases": 0
+    }
+  ],
+  "tests": {
+    "files": 182,
+    "unitFiles": 153,
+    "e2eFiles": 29,
+    "cases": 2109,
+    "unitCases": 1942,
+    "e2eCases": 167,
+    "suites": 331
+  },
+  "database": {
+    "postgresTables": 49,
+    "postgresEnums": 29,
+    "d1Tables": 3,
+    "schemaFiles": 48,
+    "phiTaggedSchemaFiles": 18,
+    "postgresMigrations": 62,
+    "manualMigrations": 1,
+    "d1Migrations": 5,
+    "triggers": 4,
+    "policies": 0,
+    "functions": 2
+  },
+  "routes": {
+    "webTotal": 74,
+    "webApp": 41,
+    "webApi": 18,
+    "astroPages": 46,
+    "marketingContentFiles": 869,
+    "contentCollections": {
+      "learn": 302,
+      "city-guides": 100,
+      "state-guides": 100,
+      "guides": 91,
+      "resources": 63,
+      "best": 55,
+      "alternatives": 41,
+      "comparisons": 41,
+      "practice-types": 39,
+      "hipaa-software": 32,
+      "personas": 5
+    }
+  },
+  "infrastructure": {
+    "terraformFiles": 14,
+    "terraformLines": 1861,
+    "terraformResources": 61,
+    "terraformResourceTypes": {
+      "aws_secretsmanager_secret": 10,
+      "aws_secretsmanager_secret_version": 10,
+      "aws_kms_key": 6,
+      "aws_kms_alias": 6,
+      "aws_s3_bucket": 3,
+      "aws_s3_bucket_public_access_block": 3,
+      "aws_s3_bucket_versioning": 3,
+      "aws_s3_bucket_server_side_encryption_configuration": 3,
+      "aws_s3_bucket_policy": 3,
+      "aws_s3_bucket_lifecycle_configuration": 2,
+      "aws_route53_record": 2,
+      "aws_security_group": 1,
+      "aws_cloudfront_origin_access_control": 1,
+      "aws_s3_bucket_ownership_controls": 1,
+      "aws_cloudfront_distribution": 1,
+      "aws_cloudtrail": 1,
+      "aws_cloudwatch_log_group": 1,
+      "aws_iam_role": 1,
+      "aws_iam_role_policy": 1,
+      "aws_wafv2_web_acl": 1,
+      "aws_wafv2_web_acl_logging_configuration": 1
+    },
+    "terraformModules": 5,
+    "wranglerConfigs": 2,
+    "githubWorkflows": 1
+  },
+  "automation": {
+    "files": 51,
+    "lines": 10984,
+    "tested": 0
+  }
+}

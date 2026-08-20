@@ -1,0 +1,87 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import CTA from '../../components/CTA.astro'
+import { buildBreadcrumbSchema, buildCollectionPageSchema } from '../../lib/seo'
+
+type AlternativeEntry = CollectionEntry<'alternatives'>
+
+const alternatives = (await getCollection('alternatives')).sort(
+  (a: AlternativeEntry, b: AlternativeEntry) => a.data.competitor.localeCompare(b.data.competitor),
+)
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Compare', url: '/compare' },
+  { name: 'Alternatives', url: '/alternatives' },
+])
+
+const collectionSchema = buildCollectionPageSchema({
+  name: 'HIPAA software alternatives',
+  description: 'Named alternatives for clinics replacing generic productivity, collaboration, and workflow tools with HIPAA-ready operations software.',
+  url: '/alternatives',
+  items: alternatives.map((entry: AlternativeEntry) => {
+    const slug = entry.id.replace(/\.md$/, '')
+
+    return {
+      name: entry.data.title,
+      url: `/alternatives/${slug}`,
+      description: entry.data.metaDescription,
+    }
+  }),
+})
+---
+
+<MarketingLayout
+  title="HIPAA Software Alternatives | PHIGuard"
+  description="Browse every PHIGuard alternative page for clinics comparing generic productivity, workflow, and collaboration software against HIPAA-ready operations."
+  canonicalUrl="https://phiguard.app/alternatives"
+  jsonLd={[breadcrumbs, collectionSchema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Alternatives</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.35rem, 4.6vw, 4rem);">HIPAA software alternatives for clinics replacing generic tools.</h1>
+        <p class="hero-summary">
+          Use this hub when a clinic already knows the product it wants to replace. Every alternative page connects vendor research to a more specific product, pricing, or comparison path.
+        </p>
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">Decision routes</p>
+        <div class="assurance-list">
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Compare exact products</span><span class="assurance-meta"><a href="/compare">Compare</a></span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Build a shortlist</span><span class="assurance-meta"><a href="/resources/best">Best-of</a></span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Verify vendor posture</span><span class="assurance-meta"><a href="/resources/guides">Guides</a></span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">All alternative pages</p>
+      <h2 class="section-title text-balance">Choose the tool currently carrying too much patient-adjacent work.</h2>
+      <div class="detail-grid" style="margin-top: 1.75rem;">
+        {alternatives.map((entry: AlternativeEntry) => {
+          const slug = entry.id.replace(/\.md$/, '')
+
+          return (
+            <a class="link-card" href={`/alternatives/${slug}`}>
+              <small>{entry.data.competitor}</small>
+              <strong>{entry.data.title}</strong>
+              <span>{entry.data.metaDescription}</span>
+            </a>
+          )
+        })}
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    heading="Move from replacement research to a defensible clinic workflow."
+    subheading="Once the current tool is clear, use PHIGuard's product and pricing pages to decide whether a purpose-built HIPAA operating layer is the better fit."
+    secondaryLabel="View pricing"
+    secondaryHref="/pricing"
+  />
+</MarketingLayout>

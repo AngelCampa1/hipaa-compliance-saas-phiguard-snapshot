@@ -1,0 +1,101 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import MarketingLayout from '../../../layouts/MarketingLayout.astro'
+import CTA from '../../../components/CTA.astro'
+import { buildBreadcrumbSchema, buildCollectionPageSchema } from '../../../lib/seo'
+
+type StateGuideEntry = CollectionEntry<'state-guides'>
+
+const guides = (await getCollection('state-guides'))
+  .filter((entry: StateGuideEntry) => entry.data.pageFamily === 'breach-notification')
+  .sort((a: StateGuideEntry, b: StateGuideEntry) => a.data.state.localeCompare(b.data.state))
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'HIPAA breach notification by state', url: '/locations/hipaa-breach-notification' },
+])
+
+const collectionSchema = buildCollectionPageSchema({
+  name: 'HIPAA Breach Notification by State',
+  description: 'State-focused breach notification workflow guidance for US clinics handling suspected HIPAA incidents and state notification checkpoints.',
+  url: '/locations/hipaa-breach-notification',
+  items: guides.map((entry: StateGuideEntry) => ({
+    name: entry.data.title,
+    url: `/locations/hipaa-breach-notification/${entry.data.slug}`,
+    description: entry.data.metaDescription,
+  })),
+})
+---
+
+<MarketingLayout
+  title="HIPAA Breach Notification by State | PHIGuard"
+  description="Browse state-focused HIPAA breach notification pages for clinics triaging incidents, federal OCR timelines, state checkpoints, and patient notice workflows."
+  canonicalUrl="https://phiguard.app/locations/hipaa-breach-notification"
+  jsonLd={[breadcrumbs, collectionSchema]}
+>
+  <section class="hub-hero">
+    <div class="hub-inner">
+      <p class="hub-eyebrow">State breach workflows</p>
+      <h1 class="hub-heading">HIPAA breach notification guidance for clinics in every state</h1>
+      <p class="hub-subheading">
+        Each page starts with the federal HIPAA Breach Notification Rule, then adds state verification checkpoints and a practical incident workflow for clinic administrators.
+      </p>
+      <div class="location-topic-row" aria-label="Related incident response topics">
+        <a href="/learn/incident-response">Incident response hub</a>
+        <a href="/resources/hipaa-breach-decision-tree">Breach decision tree</a>
+        <a href="/resources/incident-response-plan">Incident response plan</a>
+        <a href="/locations/hipaa-compliance-software">Software by state</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="hub-section">
+    <div class="hub-inner">
+      <div class="editorial-card location-hub-note">
+        <p class="panel-label">How to use this hub</p>
+        <p>
+          Pick the state where the affected clinic operates, preserve evidence, run the federal HIPAA breach assessment, and verify current state notice duties before any external notice goes out. These pages are educational and not legal advice.
+        </p>
+      </div>
+
+      <div class="detail-grid">
+        {guides.map((entry: StateGuideEntry) => (
+          <a class="link-card" href={`/locations/hipaa-breach-notification/${entry.data.slug}`}>
+            <small>{entry.data.stateAbbreviation}</small>
+            <strong>{entry.data.state}</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    heading="Turn incident response into documented clinic work."
+    subheading="PHIGuard helps teams track suspected incidents, assigned owners, vendor evidence, and follow-through without losing the audit trail."
+  />
+</MarketingLayout>
+
+<style is:global>
+  .location-topic-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .location-topic-row a {
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    color: #0f172a;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.55rem 0.85rem;
+    text-decoration: none;
+  }
+
+  .location-hub-note {
+    margin-bottom: 2rem;
+  }
+</style>

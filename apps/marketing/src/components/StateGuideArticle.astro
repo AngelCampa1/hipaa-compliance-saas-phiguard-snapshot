@@ -1,0 +1,195 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../layouts/MarketingLayout.astro'
+import CTA from './CTA.astro'
+import FAQ from './FAQ.astro'
+import LeadCapturePanel from './LeadCapturePanel.astro'
+import RelatedContent from './RelatedContent.astro'
+import { getContributor } from '../lib/contributors'
+import { resolveCanonicalContentCopy } from '../lib/canonical-content-copy'
+import { buildArticleSchema, buildBreadcrumbSchema, buildFAQSchema } from '../lib/seo'
+
+type StateGuideEntry = CollectionEntry<'state-guides'>
+type SourceItem = StateGuideEntry['data']['sources'][number]
+type FaqItem = StateGuideEntry['data']['faq'][number]
+type ResolvedFaqItem = { q: string; a: string }
+type TextItem = StateGuideEntry['data']['operationalGuidance'][number]
+type InternalLinkItem = StateGuideEntry['data']['internalLinks'][number]
+
+interface Props {
+  entry: StateGuideEntry
+  hubPath: string
+  hubLabel: string
+  familyLabel: string
+  relatedItems: Array<{
+    href: string
+    title: string
+    description: string
+    eyebrow?: string
+  }>
+}
+
+const { entry, hubPath, hubLabel, familyLabel, relatedItems } = Astro.props
+const data = entry.data
+const author = getContributor(data.author)
+const reviewer = getContributor(data.reviewer)
+const pagePath = `${hubPath}/${data.slug}`
+const resolvedFaq = data.faq.map((item: FaqItem) => ({
+  q: item.q,
+  a: resolveCanonicalContentCopy(item.a),
+})) satisfies ResolvedFaqItem[]
+const faqItems = resolvedFaq.map((item: ResolvedFaqItem) => ({ question: item.q, answer: item.a }))
+const recommendedMagnetSlug = data.pageFamily === 'breach-notification'
+  ? 'hipaa-breach-decision-tree'
+  : 'hipaa-compliance-self-assessment'
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: hubLabel, url: hubPath },
+  { name: data.state, url: pagePath },
+])
+
+const articleSchema = buildArticleSchema({
+  headline: data.title,
+  description: data.metaDescription,
+  url: pagePath,
+  datePublished: data.publishedAt,
+  dateModified: data.updatedAt,
+  authorName: author.name,
+  authorUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${author.slug}`,
+  authorSameAs: author.sameAs,
+  reviewerName: reviewer.name,
+  reviewerUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${reviewer.slug}`,
+  schemaType: 'BlogPosting',
+  citations: data.sources,
+})
+
+const faqSchema = buildFAQSchema(resolvedFaq)
+---
+
+<MarketingLayout
+  title={`${data.seoTitle} | PHIGuard`}
+  description={data.metaDescription}
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}${pagePath}`}
+  jsonLd={[breadcrumbs, articleSchema, faqSchema]}
+  ogType="article"
+  publishedTime={data.publishedAt.toISOString()}
+  modifiedTime={data.updatedAt.toISOString()}
+>
+  <article class="article-frame">
+    <div class="shell-lg">
+      <nav class="kicker" aria-label="Breadcrumb" style="margin-bottom: 1.25rem;">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href={hubPath}>{hubLabel}</a>
+        <span>/</span>
+        <span aria-current="page">{data.state}</span>
+      </nav>
+
+      <div class="section-grid" style="align-items: start;">
+        <div>
+          <p class="panel-label">{data.primaryKeyword}</p>
+          <h1 class="article-hero-title text-balance">{data.title}</h1>
+          <p class="article-lead">{data.directAnswer}</p>
+        </div>
+        <aside class="sidebar-card">
+          <p class="panel-label">Reviewed and verified</p>
+          <p><strong>Written by:</strong> <a href={`/contributors/${author.slug}`}>{author.name}</a></p>
+          <p><strong>Reviewed by:</strong> <a href={`/contributors/${reviewer.slug}`}>{reviewer.name}</a></p>
+          <p><strong>Verified:</strong> {data.verificationDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          <p><strong>Updated:</strong> {data.updatedAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          <p><strong>Scope:</strong> {familyLabel} guidance for {data.state} clinics. Educational only, not legal advice.</p>
+        </aside>
+      </div>
+
+      <div class="article-grid" style="margin-top: 2rem;">
+        <div class="article-main">
+          <div class="editorial-card" style="margin-bottom: 1.5rem;">
+            <p class="panel-label">Short answer</p>
+            <p style="margin: 0;">{data.summary}</p>
+          </div>
+
+          <section class="article-prose">
+            <h2>{data.state} operating context</h2>
+            <p>{data.stateContext}</p>
+
+            <h2>Operational guidance for {data.state} clinics</h2>
+            <ul>
+              {data.operationalGuidance.map((item: TextItem) => <li>{item}</li>)}
+            </ul>
+
+            <h2>State-specific operating notes</h2>
+            <ul>
+              {data.stateSpecificNotes.map((item: TextItem) => <li>{item}</li>)}
+            </ul>
+
+            <h2>Practical checklist</h2>
+            <ol>
+              {data.practicalChecklist.map((item: TextItem) => <li>{item}</li>)}
+            </ol>
+
+            <h2>Where PHIGuard fits</h2>
+            <p>
+              PHIGuard supports US clinics with recurring compliance work, vendor and BAA tracking, workforce tasks, incident evidence, and audit-ready documentation. Review <a href="/pricing">pricing</a>, <a href="/hipaa">HIPAA capabilities</a>, <a href="/security">security</a>, and the <a href="/baa">BAA</a> before using PHIGuard for PHI workflows.
+            </p>
+
+            <h2>Educational disclaimer</h2>
+            <p>
+              This page is educational and does not provide legal advice. Verify current federal and {data.state} requirements with counsel or the cited agencies before sending notices, changing patient-record workflows, or adopting a new PHI-handling vendor.
+            </p>
+
+            <h2>Sources</h2>
+            <ul>
+              {data.sources.map((source: SourceItem) => (
+                <li>
+                  <a href={source.url}>{source.title}</a>
+                  {source.publisher && <span> | {source.publisher}</span>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        <aside class="resource-sidebar">
+          <section class="sidebar-card">
+            <h3>Key takeaways</h3>
+            <ul class="m-0 pl-4">
+              {data.keyTakeaways.map((takeaway: TextItem) => <li>{takeaway}</li>)}
+            </ul>
+          </section>
+
+          <section class="sidebar-card">
+            <h3>Internal links</h3>
+            <ul class="m-0 pl-4">
+              {data.internalLinks.map((link: InternalLinkItem) => (
+                <li><a href={link.href}>{link.label}</a></li>
+              ))}
+            </ul>
+          </section>
+
+          <LeadCapturePanel
+            variant="sidebar"
+            magnetSlug={recommendedMagnetSlug}
+            ctaContext="inline-content-upgrade"
+            eyebrow="Recommended resource"
+          />
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  <FAQ items={faqItems} heading={`${data.state} HIPAA questions clinics ask`} />
+
+  <RelatedContent
+    cluster="city-guides"
+    eyebrow="Related locations"
+    heading={`Continue with related ${data.state} and state HIPAA pages.`}
+    items={relatedItems}
+  />
+
+  <CTA
+    heading={`Run ${data.state} HIPAA work as recurring clinic operations.`}
+    subheading="PHIGuard helps US clinics organize compliance tasks, vendor evidence, workforce follow-through, and incident documentation with a BAA included at every tier."
+  />
+</MarketingLayout>

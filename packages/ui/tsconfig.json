@@ -1,0 +1,4 @@
+{
+  "extends": "@phiguard/config/tsconfig/app",
+  "include": ["src"]
+}

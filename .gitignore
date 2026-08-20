@@ -1,0 +1,86 @@
+# Worktrees
+.worktrees/
+.claude/worktrees/
+
+# Node
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.astro/
+.next/
+.turbo/
+.vite/
+*.tsbuildinfo
+bundle-meta.json
+.playwright-mcp/
+/.playwright-cli/
+/.superpowers/
+apps/web/.playwright-runtime/
+apps/*/dist/
+apps/*/.astro/
+apps/*/.turbo/
+packages/*/dist/
+!packages/knowledge/dist/
+!packages/knowledge/dist/ai/
+!packages/knowledge/dist/ai/*.json
+
+# Environment
+.env
+.env.local
+.env.*.local
+.dev.vars
+.dev.vars.*
+
+# Wrangler
+.wrangler/
+
+# Coverage
+coverage/
+test-results/
+playwright-report/
+/output/
+
+# Local automation artifacts
+.claude/settings.local.json
+/stdout
+/*.png
+apps/marketing/seo-audit/*/broken-links-internal.md
+apps/marketing/seo-audit/ai-citation-quality-report.json
+docs/marketing/linkedin-content/**/postiz-linkedin-schedule-state.json
+docs/marketing/linkedin-content/**/logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+
+# Terraform
+infra/terraform/.terraform/
+infra/terraform/*.tfstate
+infra/terraform/*.tfstate.backup
+infra/terraform/*.tfvars
+infra/terraform/.terraform.lock.hcl
+
+# Docker
+docker-compose.override.yml
+
+# Local dev log files (pnpm preview, manual server runs)
+marketing-manual-*.log
+tmp-preview.*
+apps/web/manual-preview-*.log
+tmp-*.log
+tmp-*.err.log
+wrangler-tail*.log
+wrangler-tail*.err.log
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Locally minted private-registry auth token (never commit)
+.env.local.vreg
+.wrangler-dev.local.jsonc

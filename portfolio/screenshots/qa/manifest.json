@@ -1,0 +1,43 @@
+{
+  "generatedBy": "manual QA session, 2026-04-19 — not the automated capture spec",
+  "provenance": "These four were taken by hand during a QA sweep against a local dev clinic and lived in docs/qa/screenshots/ until this snapshot was prepared. They were promoted here because they are the only verified captures of the compliance product in a populated state. They are hand-selected, so unlike the app/ and marketing/ manifests this one is not reproducible by re-running a script. Each entry records the filename it had in the QA session.",
+  "organization": "PHIGuard Dev Clinic",
+  "shots": [
+    {
+      "file": "audit-log.png",
+      "sourceFile": "docs/qa/screenshots/audit-log-search-results.png",
+      "path": "/app/audit",
+      "caption": "Audit log — append-only record, filterable by actor, resource type, resource ID and date range. Captured before QA finding P2-008 landed, so the Actor column still shows raw ids; the shipped UI resolves them to names",
+      "role": "org_owner",
+      "viewport": "desktop",
+      "bytes": 92277
+    },
+    {
+      "file": "compliance-checklist-detail.png",
+      "sourceFile": "docs/qa/screenshots/compliance-checklist-detail.png",
+      "path": "/app/compliance/checklists/:id",
+      "caption": "Access Review checklist — items cited to 45 CFR §164.308, each with an inline PHI warning on evidence upload",
+      "role": "org_owner",
+      "viewport": "desktop",
+      "bytes": 76661
+    },
+    {
+      "file": "compliance-checklists-list.png",
+      "sourceFile": "docs/qa/screenshots/compliance-checklists-list.png",
+      "path": "/app/compliance/checklists",
+      "caption": "Checklist rollout — assign one starter template across locations without duplicating the template",
+      "role": "org_owner",
+      "viewport": "desktop",
+      "bytes": 53759
+    },
+    {
+      "file": "task-detail-activity.png",
+      "sourceFile": "docs/qa/screenshots/13-task-comment-with-author.png",
+      "path": "/app/tasks/:id",
+      "caption": "Task detail — status, assignee, and the activity trail read back out of the audit events the task's own mutations wrote",
+      "role": "org_owner",
+      "viewport": "desktop",
+      "bytes": 63661
+    }
+  ]
+}

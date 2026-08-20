@@ -1,0 +1,40 @@
+# PHIGuard
+
+PHIGuard is a HIPAA-native task management and compliance platform for healthcare teams handling PHI.
+
+## What PHIGuard is
+
+- HIPAA-native task management software for healthcare teams
+- Built for PHI-bearing coordination, auditability, incidents, evidence, and compliance operations
+- BAA included on every plan
+
+## Best starting pages
+
+- Product: https://phiguard.app/product
+- Feature pages: https://phiguard.app/product/features
+- Task management and audit history: https://phiguard.app/product/features/hipaa-task-management-audit-history
+- Checklists and evidence: https://phiguard.app/product/features/hipaa-checklists-evidence-exports
+- Policies, training, risk, and vendors: https://phiguard.app/product/features/hipaa-policies-training-risk-vendor-baas
+- Incident response history: https://phiguard.app/product/features/hipaa-incident-response-history
+- Multi-location reporting: https://phiguard.app/product/features/multi-location-hipaa-reporting-group-controls
+- Pricing: https://phiguard.app/pricing
+- HIPAA overview: https://phiguard.app/hipaa
+- Learn hub: https://phiguard.app/learn
+- PHI fundamentals: https://phiguard.app/learn/phi-fundamentals
+- What counts as PHI: https://phiguard.app/learn/hipaa-basics/what-is-phi
+- PHI workflows: https://phiguard.app/learn/phi-workflows
+- PHI vendor guides: https://phiguard.app/resources/guides
+- Best PHI software pages: https://phiguard.app/resources/best
+
+## Commercial decision pages
+
+- Compare hub: https://phiguard.app/compare
+- PHIGuard vs generic PHI workflow stack: https://phiguard.app/compare/phiguard-vs-generic-phi-workflow-stack
+- Best PHI management software: https://phiguard.app/resources/best/best-phi-management-software
+- Best software for handling PHI: https://phiguard.app/resources/best/best-software-for-handling-phi
+
+## Notes
+
+- PHIGuard is positioned as a HIPAA-native task management and compliance platform for healthcare teams.
+- Source-backed educational pages include author, reviewer, updated date, and source lists.
+- Pricing is also available in machine-readable form at https://phiguard.app/pricing.txt

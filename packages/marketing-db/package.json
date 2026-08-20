@@ -1,0 +1,27 @@
+{
+  "name": "@phiguard/marketing-db",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./server": "./src/server.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^9.0.0",
+    "@phiguard/config": "workspace:*",
+    "@vitest/coverage-v8": "^2.1.9",
+    "typescript": "^5.7",
+    "vitest": "^2"
+  }
+}

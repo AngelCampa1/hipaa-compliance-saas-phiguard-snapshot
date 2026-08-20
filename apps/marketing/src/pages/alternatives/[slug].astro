@@ -1,0 +1,292 @@
+---
+import { getCollection, render } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+import type { GetStaticPaths } from 'astro'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import CTA from '../../components/CTA.astro'
+import CanonicalCommercialNote from '../../components/CanonicalCommercialNote.astro'
+import FAQ from '../../components/FAQ.astro'
+import ComparisonWinnerPositioning from '../../components/ComparisonWinnerPositioning.astro'
+import LeadCapturePanel from '../../components/LeadCapturePanel.astro'
+import RelatedContent from '../../components/RelatedContent.astro'
+import { marketingPlans } from '../../data/product'
+import { resolveCanonicalContentCopy } from '../../lib/canonical-content-copy'
+import { getContributor } from '../../lib/contributors'
+import { buildArticleSchema, buildBreadcrumbSchema, buildFAQSchema } from '../../lib/seo'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+
+type AlternativeFaq = { q: string; a: string }
+type SourceItem = { title: string; url: string; publisher?: string }
+const publicPlanSummary = marketingPlans.map((plan) => plan.name).join(', ')
+
+const alternativeFaqs: Record<string, AlternativeFaq[]> = {
+  'airtable-alternative': [
+    { q: 'Can a clinic use Airtable for PHI-heavy task tracking?', a: 'Only after confirming Airtable\'s HIPAA eligibility, contract terms, and operating controls. For small clinics, that usually means an enterprise path rather than a simple self-serve subscription.' },
+    { q: 'What is the main compliance gap with Airtable?', a: 'Airtable is a flexible database platform, not a HIPAA-native workflow system. Clinics still have to solve audit defensibility, access discipline, and PHI-safe process design on top of it.' },
+    { q: 'When does PHIGuard make more sense than Airtable?', a: 'When your team needs a system purpose-built for compliance tasks, incident tracking, and clinic operations without building a custom process stack first.' },
+  ],
+  'asana-alternative': [
+    { q: 'Does Asana offer a BAA for small clinics?', a: 'Not on self-serve plans. Asana\'s HIPAA support is tied to its Enterprise offering, so a small clinic usually has to enter a higher-cost sales process before it can use Asana for PHI-related workflows.' },
+    { q: 'Why do clinics move PHI-related work out of Asana?', a: 'Because the problem is not just project management. Clinics need a signed BAA, audit controls, role-based access, and notification guardrails that were not the original design center for Asana.' },
+    { q: 'Can we still keep Asana for non-clinical work?', a: 'Yes. Many teams keep Asana for marketing or internal project work and move patient-adjacent tasks, compliance workflows, and incident tracking into PHIGuard.' },
+  ],
+  'basecamp-alternative': [
+    { q: 'Is Basecamp a practical HIPAA task tool for a clinic?', a: 'Basecamp may feel simpler than enterprise PM suites, but simplicity does not equal HIPAA readiness. Clinics still need a BAA, defensible access controls, and auditability for PHI-related work.' },
+    { q: 'Why compare Basecamp to PHIGuard if Basecamp has flat pricing?', a: 'Because pricing is only one part of the decision. The bigger issue is whether the product was designed to support compliant clinic workflows rather than general team collaboration.' },
+    { q: 'Should we replace Basecamp entirely?', a: 'Not necessarily. Some teams keep Basecamp for non-PHI coordination and use PHIGuard anywhere the workflow touches patient information, compliance evidence, or incident handling.' },
+  ],
+  'clickup-alternative': [
+    { q: 'Does ClickUp sign a BAA on standard plans?', a: 'No. ClickUp\'s HIPAA support is associated with its Enterprise plan, so smaller clinics evaluating PHI-related use cases usually face a custom sales process before they get contractual coverage.' },
+    { q: 'What makes ClickUp risky for clinic workflows?', a: 'ClickUp is highly flexible, but that flexibility means the clinic is responsible for making sure task structures, notifications, permissions, and audit needs are handled safely.' },
+    { q: 'Why choose PHIGuard over ClickUp?', a: 'PHIGuard removes the enterprise gate and gives clinics a narrower, purpose-built system for HIPAA operations, audit trails, and patient-adjacent tasks.' },
+  ],
+  'jira-alternative': [
+    { q: 'Why is Jira a poor fit for clinic task management?', a: 'Because Jira was built for engineering workflows. Clinics usually end up adapting issue-tracking concepts to operational and compliance work that needs different safeguards and terminology.' },
+    { q: 'Can a healthcare organization use Jira under HIPAA?', a: 'That depends on the exact Atlassian product, plan, and contractual setup. Even where enterprise contractual coverage exists, the workflow still starts from a software-development tool, not a clinic-operations product.' },
+    { q: 'What does PHIGuard replace in a Jira-based process?', a: 'It replaces the need to model HIPAA tasks, incident response, and evidence trails inside an engineering-first system that clinic staff were never meant to operate.' },
+  ],
+  'microsoft-planner-alternative': [
+    { q: 'Is Microsoft Planner automatically HIPAA-ready because it is in Microsoft 365?', a: 'No. Bundling inside Microsoft 365 does not by itself make a workflow HIPAA-native. Clinics still need to confirm contractual coverage and whether Planner supports the operational controls they actually need.' },
+    { q: 'Why do small clinics move off Planner?', a: 'Planner is convenient when you already pay for Microsoft 365, but convenience is different from having a purpose-built compliance system with audit-oriented workflows and clearer guardrails.' },
+    { q: 'Should a clinic keep Microsoft 365 if it adopts PHIGuard?', a: 'Yes. PHIGuard is not a replacement for email, documents, or collaboration. It replaces the risky practice of handling PHI-related tasks and compliance operations inside generic productivity tools.' },
+  ],
+  'monday-alternative': [
+    { q: 'Does Monday.com include a BAA on standard plans?', a: 'No. Monday.com\'s HIPAA support is associated with its Enterprise offering, which means a clinic usually has to move into a custom contract before it can use the product for PHI-related work.' },
+    { q: 'Why is Monday.com expensive for small clinics under HIPAA?', a: 'Because the clinic is paying enterprise-style pricing and still working inside a general work-management tool that was not purpose-built for covered-entity operations.' },
+    { q: 'What changes after moving from Monday.com to PHIGuard?', a: 'The clinic shifts from a configurable generic tool to a narrower system with a BAA at every tier, an immutable audit trail, and workflows shaped around compliance and patient-adjacent tasks.' },
+  ],
+  'notion-alternative': [
+    { q: 'Can a clinic use Notion for PHI-related operations?', a: 'Only with caution and the right plan configuration. Notion\'s HIPAA support is tied to enterprise controls, and most small clinics still need stronger workflow guardrails than a general notes-and-docs workspace provides.' },
+    { q: 'Why do clinics move patient-adjacent work out of Notion?', a: 'Because Notion makes it easy to type sensitive details into docs, databases, and task pages that were not designed as a HIPAA-first operational system.' },
+    { q: 'What should Notion still be used for?', a: 'Internal SOPs, knowledge bases, and other non-PHI documentation can stay in Notion while PHI-related tasks, incident logs, and compliance work move into PHIGuard.' },
+  ],
+  'smartsheet-alternative': [
+    { q: 'Is Smartsheet a HIPAA-native clinic workflow tool?', a: 'No. Smartsheet is a flexible work platform that may support healthcare use under the right contract, but it is not narrowly designed around clinic compliance operations.' },
+    { q: 'Why do clinics compare Smartsheet to PHIGuard?', a: 'Because Smartsheet often starts as a spreadsheet replacement for operational tracking, then grows into PHI-related workflows that need stronger contractual and audit protections.' },
+    { q: 'What is the biggest difference in day-to-day use?', a: 'PHIGuard trades spreadsheet-style flexibility for clearer guardrails, built-in audit evidence, and a product model that fits how small clinics actually manage HIPAA work.' },
+  ],
+  'todoist-alternative': [
+    { q: 'Why is Todoist not enough for a medical clinic?', a: 'Because personal-task simplicity does not cover HIPAA obligations. Clinics need contractual coverage, auditability, access discipline, and workflows designed around compliance evidence.' },
+    { q: 'Can a team keep Todoist for personal productivity?', a: 'Yes. Staff can still use Todoist for non-PHI personal task management while the clinic keeps patient-adjacent and compliance-sensitive work in PHIGuard.' },
+    { q: 'What is the practical upgrade path from Todoist?', a: 'Most clinics start by moving incident tracking, training, access reviews, and any task referencing a patient into PHIGuard first, then expand from there.' },
+  ],
+  'trello-alternative': [
+    { q: 'Can Trello be used for HIPAA-sensitive workflows?', a: 'Not as a straightforward small-clinic default. Trello is designed for generic board-based collaboration, and clinics still need to solve contractual coverage and audit defensibility before using it for PHI-related work.' },
+    { q: 'Why do clinics outgrow Trello?', a: 'Because cards and boards are easy to start with, but they do not automatically provide the access, evidence, and incident-handling structure a regulated clinic eventually needs.' },
+    { q: 'What does PHIGuard do that Trello does not?', a: 'PHIGuard gives clinics a BAA at every tier, an immutable audit trail, and workflows built around compliance operations instead of generic kanban collaboration.' },
+  ],
+  'wrike-alternative': [
+    { q: 'Is Wrike a realistic HIPAA option for a small clinic?', a: 'Wrike is primarily an enterprise work-management product, so a small clinic usually has to evaluate it through a larger-sales, higher-complexity lens than it actually needs.' },
+    { q: 'Why switch from Wrike to PHIGuard?', a: 'Because PHIGuard is narrower and easier to defend. Clinics get a BAA at every tier and workflow features that map directly to compliance operations rather than generic enterprise project management.' },
+    { q: 'What kind of team usually prefers PHIGuard over Wrike?', a: 'Small and mid-sized clinics that want a lower-overhead system for HIPAA tasks, training, incidents, and accountability without carrying enterprise-style software weight.' },
+  ],
+  'hive-alternative': [
+    { q: 'Does Hive sign a BAA on standard plans?', a: 'Hive\'s public pricing and product pages do not describe a BAA attached to self-serve tiers. A clinic would need to confirm BAA scope and data handling in writing before storing any PHI in Hive.' },
+    { q: 'Why would a clinic pick PHIGuard over Hive?', a: 'Because PHIGuard is built for covered entities. The BAA is included at every tier and the product ships a clinic compliance program, not a generic productivity platform to be adapted.' },
+    { q: 'Can we keep Hive for non-clinical work?', a: 'Yes. Many teams keep Hive or similar tools for marketing and internal project work, and move patient-adjacent tasks, compliance workflows, and incident tracking into PHIGuard.' },
+  ],
+  'teamwork-alternative': [
+    { q: 'Is Teamwork a HIPAA-ready platform for clinics?', a: 'Teamwork is designed for agencies and client-service firms. Public materials do not describe a standard BAA offering or clinic-specific compliance program.' },
+    { q: 'What changes when a clinic moves to PHIGuard?', a: 'Clinics get a BAA on every tier, an immutable audit trail, clinic-role access, and pre-built HIPAA content: risk analysis, training, policy review, incident response, and vendor management.' },
+    { q: 'Is PHIGuard cheaper than Teamwork for a small practice?', a: `PHIGuard uses per-clinic flat pricing across ${publicPlanSummary}, so total cost does not scale with headcount. Teamwork uses per-user pricing, which typically grows as the clinic grows.` },
+  ],
+  'process-street-alternative': [
+    { q: 'Is Process Street enough for HIPAA compliance?', a: 'Process Street handles SOP checklists well, but a HIPAA compliance program is more than a checklist. Clinics also need a BAA, audit trail, access controls, and incident handling tied together as a program.' },
+    { q: 'Where does Process Street fall short for a clinic?', a: 'Public materials do not describe a BAA on standard plans, and the product does not ship clinic-specific compliance content. The clinic has to build the HIPAA substance on top.' },
+    { q: 'Should we move all SOPs to PHIGuard?', a: 'Anything that touches PHI or compliance evidence should live in PHIGuard. Non-PHI operational SOPs can stay wherever they already work for the team.' },
+  ],
+  'pipefy-alternative': [
+    { q: 'Why is Pipefy a weak fit for a small clinic under HIPAA?', a: 'Pipefy is a generic BPMN tool. It gives the clinic a blank canvas but no clinic compliance content. Public materials do not describe a BAA on standard self-serve plans.' },
+    { q: 'What does PHIGuard ship out of the box?', a: 'A signed BAA, an immutable audit trail, PHI-aware task fields, clinic-role access, and pre-built content for risk analysis, training, policy review, incident response, and vendor management.' },
+    { q: 'Can a clinic migrate off Pipefy gradually?', a: 'Yes. Most teams move PHI-related and compliance work to PHIGuard first, then decide whether to keep Pipefy for any remaining non-clinical process work.' },
+  ],
+  'workfront-alternative': [
+    { q: 'Is Adobe Workfront sized for a small clinic?', a: 'No. Workfront is an enterprise program-management platform sold through Adobe\'s sales motion. The buying shape, minimums, and feature surface are built for a very different buyer.' },
+    { q: 'What does a clinic get from PHIGuard instead?', a: `Self-serve signup, a BAA at every public tier, per-clinic flat pricing across ${publicPlanSummary}, and a ready-built clinic compliance program that does not require enterprise implementation.` },
+    { q: 'Is PHIGuard powerful enough for a 40-person practice?', a: 'Yes. PHIGuard is designed for clinics of 3–50 staff, with role-based access, audit trails, and compliance content that scales with the clinic without scaling cost per user.' },
+  ],
+}
+
+export const prerender = true
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('alternatives')
+  return entries.map((entry: CollectionEntry<'alternatives'>) => ({
+    params: { slug: entry.id.replace(/\.md$/, '') },
+    props: { entry },
+  }))
+}) satisfies GetStaticPaths
+
+type Props = { entry: CollectionEntry<'alternatives'> }
+
+const { entry } = Astro.props as Props
+const entrySlug = entry.id.replace(/\.md$/, '')
+const { Content } = await render(entry)
+const author = getContributor(entry.data.author)
+const reviewer = getContributor(entry.data.reviewer)
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Compare', url: '/compare' },
+  { name: 'Alternatives', url: '/alternatives' },
+  { name: entry.data.title, url: `/alternatives/${entrySlug}` },
+])
+const articleSchema = buildArticleSchema({
+  headline: entry.data.title,
+  description: entry.data.metaDescription,
+  url: `/alternatives/${entrySlug}`,
+  datePublished: entry.data.publishedAt,
+  dateModified: entry.data.updatedAt,
+  authorName: author.name,
+  authorUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${author.slug}`,
+  authorSameAs: author.sameAs,
+  reviewerName: reviewer.name,
+  reviewerUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${reviewer.slug}`,
+  citations: entry.data.sources,
+})
+const pageFaqs = alternativeFaqs[entrySlug] ?? entry.data.faq
+if (!pageFaqs?.length) {
+  throw new Error(`Missing FAQ data for alternative page: ${entrySlug}`)
+}
+const faqItems = pageFaqs.map((item) => ({
+  question: item.q,
+  answer: resolveCanonicalContentCopy(item.a),
+}))
+const faqSchema = faqItems.length > 0
+  ? buildFAQSchema(faqItems.map((item) => ({ q: item.question, a: item.answer })))
+  : null
+---
+
+<MarketingLayout
+  title={`${entry.data.seoTitle ?? `${entry.data.competitor} HIPAA Alternative`} | PHIGuard`}
+  description={entry.data.metaDescription}
+  jsonLd={faqSchema ? [breadcrumbs, articleSchema, faqSchema] : [breadcrumbs, articleSchema]}
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/alternatives/${entrySlug}`}
+  ogType="article"
+  ogImage="https://phiguard.app/og/alternatives.png"
+  publishedTime={entry.data.publishedAt.toISOString()}
+  modifiedTime={entry.data.updatedAt.toISOString()}
+>
+  <section class="article-frame">
+    <div class="shell-md">
+      <div style="margin-bottom: 1.25rem;">
+        <Breadcrumbs crumbs={[
+          { label: "Home", href: "/" },
+          { label: "Compare", href: "/compare" },
+          { label: "Alternatives", href: "/alternatives" },
+          { label: `${entry.data.competitor} alternative` },
+        ]} />
+      </div>
+      <h1 class="article-hero-title text-balance">{entry.data.title}</h1>
+      <p class="article-lead">{entry.data.description}</p>
+      <div class="editorial-card" style="margin-top: 1.5rem;">
+        <p class="panel-label">Short answer</p>
+        <p style="margin: 0;">{entry.data.summary}</p>
+      </div>
+    </div>
+  </section>
+
+  <ComparisonWinnerPositioning variant="alternative" />
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-md">
+      <article class="article-prose max-w-none">
+        <Content />
+      </article>
+      <CanonicalCommercialNote />
+      <div class="editorial-card" style="margin-top: 1.5rem;">
+        <p class="panel-label">Verified by PHIGuard</p>
+        <p><strong>Written by:</strong> <a href={`/contributors/${author.slug}`}>{author.name}</a></p>
+        <p><strong>Reviewed by:</strong> <a href={`/contributors/${reviewer.slug}`}>{reviewer.name}</a></p>
+        <p><strong>Updated:</strong> {entry.data.updatedAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+        {entry.data.verificationDate && <p><strong>Vendor posture reviewed:</strong> {entry.data.verificationDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>}
+      </div>
+      <div class="editorial-card" style="margin-top: 1rem;">
+        <p class="panel-label">Sources</p>
+        <ul class="list-clean">
+          {entry.data.sources.map((source: SourceItem) => (
+            <li>
+              <a href={source.url}>{source.title}</a>
+              {source.publisher && <span> | {source.publisher}</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-md">
+      <LeadCapturePanel magnetSlug="vendor-baa-tracker" />
+    </div>
+  </section>
+
+  {faqItems.length > 0 && (
+    <FAQ items={faqItems} heading={`Questions clinics ask before leaving ${entry.data.competitor}`} />
+  )}
+
+  <RelatedContent
+    cluster="alternatives"
+    currentSlug={entrySlug}
+    eyebrow="Move into a decision"
+    heading={`Use ${entry.data.competitor} research to move into pricing, product fit, and the next workflow.`}
+    items={[
+      entry.data.relatedResource
+        ? {
+            href: `/resources/${entry.data.relatedResource}`,
+            title: 'Download the supporting worksheet',
+            description: 'Use the matching resource to pressure-test vendor claims and tighten the clinic decision process.',
+            eyebrow: 'Downloadable resource',
+          }
+        : null,
+      {
+        href: '/alternatives',
+        title: 'Browse every HIPAA software alternative',
+        description: 'Return to the alternatives hub when the clinic is comparing replacement paths for multiple generic tools.',
+        eyebrow: 'Parent hub',
+      },
+      entry.data.relatedLearnPath
+        ? {
+            href: entry.data.relatedLearnPath,
+            title: 'Read the supporting explainer',
+            description: 'Open the educational page that clarifies the operational rule behind this vendor decision.',
+            eyebrow: 'Background guide',
+          }
+        : null,
+      entry.data.relatedCommercialPath
+        ? {
+            href: entry.data.relatedCommercialPath,
+            title: 'Open the next PHIGuard path',
+            description: 'Move directly into the product, pricing, or comparison path that matches this evaluation.',
+            eyebrow: 'Commercial path',
+          }
+        : {
+            href: '/pricing',
+            title: 'See PHIGuard pricing',
+            description: 'Compare per-clinic pricing with the enterprise or per-seat model behind this alternative.',
+            eyebrow: 'Commercial path',
+          },
+    ].filter(Boolean)}
+  />
+
+  <CTA />
+
+<style>
+  .article-prose :global(table) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .article-prose :global(pre) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .article-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+</MarketingLayout>

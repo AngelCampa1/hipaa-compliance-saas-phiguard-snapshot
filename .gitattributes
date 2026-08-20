@@ -1,0 +1,11 @@
+# The knowledge drift checker (packages/knowledge/scripts/check.ts) compares
+# these generated artifacts byte for byte against freshly rendered content. The
+# generator always writes LF, so a CRLF checkout on Windows makes them look
+# stale and turns `pnpm test` red on a clean clone. Pin them to LF regardless of
+# the cloner's core.autocrlf setting.
+apps/marketing/public/llms.txt text eol=lf
+apps/marketing/public/pricing.txt text eol=lf
+packages/knowledge/dist/**/*.json text eol=lf
+
+# Screenshots are compared and served as-is; never run them through any filter.
+portfolio/screenshots/**/*.png binary

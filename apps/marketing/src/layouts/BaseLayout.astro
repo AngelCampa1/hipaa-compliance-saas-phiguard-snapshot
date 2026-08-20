@@ -1,0 +1,360 @@
+---
+import '../styles/global.css'
+import '@fontsource/public-sans/400.css'
+import '@fontsource/public-sans/500.css'
+import '@fontsource/public-sans/600.css'
+import '@fontsource/public-sans/700.css'
+import '@fontsource/besley/600.css'
+import '@fontsource/besley/700.css'
+import '@fontsource/besley/800.css'
+import '@fontsource/geist-mono/400.css'
+import besley800Url from '@fontsource/besley/files/besley-latin-800-normal.woff2?url'
+import publicSans400Url from '@fontsource/public-sans/files/public-sans-latin-400-normal.woff2?url'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import { CONSENT_STORAGE_KEY } from '../lib/marketing-analytics'
+
+interface Props {
+  title?: string
+  description?: string
+  ogImage?: string
+  canonicalUrl?: string
+  jsonLd?: object | object[]
+  noindex?: boolean
+  ogType?: string
+  publishedTime?: string
+  modifiedTime?: string
+}
+
+const {
+  title = 'PHIGuard | HIPAA-Native Task Management',
+  description = 'HIPAA-compliant task management and compliance for small medical clinics. BAA included at every plan. Per-clinic flat pricing.',
+  ogImage = `${PHIGUARD_PUBLIC_SITE_ORIGIN}/og/default.png`,
+  canonicalUrl,
+  jsonLd,
+  noindex = false,
+  ogType = 'website',
+  publishedTime,
+  modifiedTime,
+} = Astro.props
+
+const canonical = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site).href
+const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
+const sentryMarketingDsn = import.meta.env.PUBLIC_SENTRY_MARKETING_DSN ?? import.meta.env.PUBLIC_SENTRY_DSN
+const shouldLoadSentryMarketing = import.meta.env.PROD || sentryMarketingDsn
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Preload critical fonts: hero display (Besley 800) + body (Public Sans 400) -->
+    <link rel="preload" href={publicSans400Url} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={besley800Url} as="font" type="font/woff2" crossorigin="anonymous" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="PHIGuard" />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <title>{title}</title>
+
+    {shouldLoadSentryMarketing && (
+      <script>
+        import '../lib/sentry-marketing'
+      </script>
+    )}
+
+    <!-- JSON-LD structured data -->
+    {jsonLdArray.map((schema) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
+
+    <!-- Marketing analytics: env-gated and initialized from a shared browser helper. -->
+    {import.meta.env.PUBLIC_POSTHOG_KEY && (
+      <script is:inline define:vars={{ phKey: import.meta.env.PUBLIC_POSTHOG_KEY }}>
+        window.__PHIGUARD_MARKETING_ANALYTICS_CONFIG__ = { posthogKey: phKey };
+      </script>
+    )}
+
+    {import.meta.env.PUBLIC_POSTHOG_KEY && (
+      <script>
+        import { initMarketingAnalytics } from '../lib/marketing-analytics'
+
+        initMarketingAnalytics()
+      </script>
+    )}
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <slot />
+
+    <!-- Cookie consent banner - opt-in gate for marketing analytics -->
+    {import.meta.env.PUBLIC_POSTHOG_KEY && (
+      <div id="cookie-banner" style="display:none;" class="safe-bottom fixed inset-x-0 bottom-0 z-[9999] flex flex-col gap-3 bg-surface-900 px-6 py-4 text-sm text-text-inverse sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <p class="m-0">We use analytics to improve phiguard.app. No PHI is collected. <a href="/privacy" class="inline-flex min-h-11 items-center text-text-link">Privacy policy</a>.</p>
+        <div class="flex gap-3">
+          <button id="cookie-decline" class="touch-target grow cursor-pointer rounded-md border border-border-strong bg-transparent px-3.5 text-text-inverse sm:grow-0">Decline</button>
+          <button id="cookie-accept" class="touch-target grow cursor-pointer rounded-md border-0 bg-brand-600 px-3.5 font-semibold text-text-inverse sm:grow-0">Accept</button>
+        </div>
+      </div>
+      <script is:inline define:vars={{ consentStorageKey: CONSENT_STORAGE_KEY }}>
+        (function () {
+          var CONSENT_KEY = consentStorageKey;
+          var banner = document.getElementById('cookie-banner');
+          var stored = localStorage.getItem(CONSENT_KEY);
+          if (stored === 'accepted') {
+            window.posthog && window.posthog.opt_in_capturing && window.posthog.opt_in_capturing();
+          } else if (stored === 'declined') {
+            window.posthog && window.posthog.opt_out_capturing && window.posthog.opt_out_capturing();
+          } else if (!stored) {
+            banner && (banner.style.display = 'flex');
+          }
+          document.getElementById('cookie-accept') && document.getElementById('cookie-accept').addEventListener('click', function () {
+            localStorage.setItem(CONSENT_KEY, 'accepted');
+            banner && (banner.style.display = 'none');
+            window.posthog && window.posthog.opt_in_capturing && window.posthog.opt_in_capturing();
+            window.phiguardAnalytics && window.phiguardAnalytics.registerPageContext && window.phiguardAnalytics.registerPageContext();
+            window.phiguardAnalytics && window.phiguardAnalytics.track && window.phiguardAnalytics.track('analytics_consent_updated', { status: 'accepted' });
+          });
+          document.getElementById('cookie-decline') && document.getElementById('cookie-decline').addEventListener('click', function () {
+            localStorage.setItem(CONSENT_KEY, 'declined');
+            banner && (banner.style.display = 'none');
+            document.body.classList.remove('cookie-banner-open');
+            window.posthog && window.posthog.opt_out_capturing && window.posthog.opt_out_capturing();
+          });
+          // Show cookie banner: add body class so chat widget can clear it
+          if (!stored) {
+            document.body.classList.add('cookie-banner-open');
+          }
+          // Accept also removes the class
+          document.getElementById('cookie-accept') && document.getElementById('cookie-accept').addEventListener('click', function () {
+            document.body.classList.remove('cookie-banner-open');
+          });
+        })();
+      </script>
+    )}
+    <!-- Lift chat widget above cookie banner when banner is visible -->
+    <style>
+      body.cookie-banner-open #ventora-ai-sdr-root {
+        bottom: calc(20px + var(--cookie-banner-h, 140px));
+      }
+      @media (max-width: 480px) {
+        body.cookie-banner-open #ventora-ai-sdr-root {
+          bottom: calc(12px + var(--cookie-banner-h, 140px));
+        }
+      }
+    </style>
+    <script is:inline>
+      (function () {
+        function analytics() {
+          return window.phiguardAnalytics;
+        }
+        function track(event, props) {
+          analytics() && analytics().track && analytics().track(event, props || {});
+        }
+        function getFirstTouchAttribution() {
+          try {
+            return JSON.parse(
+              window.sessionStorage.getItem('phiguard_analytics_first_touch') ||
+                window.localStorage.getItem('phiguard_analytics_first_touch') ||
+                '{}'
+            );
+          } catch {
+            return {};
+          }
+        }
+        function setSafeSignupParam(url, key, value) {
+          if (!value || /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(value)) return;
+          url.searchParams.set(key, value);
+        }
+        function appendSignupAttribution(anchor) {
+          var firstTouch = getFirstTouchAttribution();
+          var url = new URL(anchor.href, window.location.href);
+          if (url.pathname !== '/signup') return;
+
+          setSafeSignupParam(url, 'landing_path', firstTouch.landing_path || window.location.pathname);
+          setSafeSignupParam(url, 'first_touch_id', firstTouch.first_touch_id);
+          setSafeSignupParam(url, 'initial_referrer_host', firstTouch.initial_referrer_host);
+          setSafeSignupParam(url, 'initial_utm_source', firstTouch.initial_utm_source);
+          setSafeSignupParam(url, 'initial_utm_medium', firstTouch.initial_utm_medium);
+          setSafeSignupParam(url, 'initial_utm_campaign', firstTouch.initial_utm_campaign);
+          setSafeSignupParam(url, 'initial_utm_content', firstTouch.initial_utm_content);
+          setSafeSignupParam(url, 'initial_utm_term', firstTouch.initial_utm_term);
+          if (anchor.hasAttribute('data-ph-pricing-cta')) {
+            setSafeSignupParam(url, 'cta_location', 'pricing-card');
+            setSafeSignupParam(url, 'pricing_plan', url.searchParams.get('plan'));
+          } else {
+            setSafeSignupParam(url, 'cta_location', anchor.getAttribute('data-ph-location') || 'marketing-link');
+          }
+          anchor.href = url.toString();
+        }
+        function pageCategory() {
+          var path = window.location.pathname;
+          if (path.indexOf('/resources') === 0) return 'resource';
+          if (path.indexOf('/learn') === 0) return 'learn';
+          if (path.indexOf('/glossary') === 0) return 'glossary';
+          if (path.indexOf('/compare') === 0 || path.indexOf('/alternatives') === 0) return 'comparison';
+          if (path.indexOf('/locations') === 0) return 'location';
+          if (path.indexOf('/hipaa-software') === 0) return 'hipaa_software';
+          return 'other';
+        }
+        var contentCategories = {
+          resource: true,
+          learn: true,
+          glossary: true,
+          comparison: true,
+          location: true,
+          hipaa_software: true
+        };
+        var category = pageCategory();
+        var readMilestones = [25, 50, 75, 100];
+        var reachedMilestones = {};
+        function trackReadProgress() {
+          if (!contentCategories[category]) return;
+          var scrollable = document.documentElement.scrollHeight - window.innerHeight;
+          if (scrollable <= 0) return;
+          var progress = Math.min(100, Math.round((window.scrollY / scrollable) * 100));
+          readMilestones.forEach(function (milestone) {
+            if (progress >= milestone && !reachedMilestones[milestone]) {
+              reachedMilestones[milestone] = true;
+              track('article_read_progressed', {
+                page_category: category,
+                progress_percent: milestone
+              });
+            }
+          });
+        }
+        window.addEventListener('scroll', trackReadProgress, { passive: true });
+        window.addEventListener('load', trackReadProgress, { once: true });
+        document.querySelectorAll('a[href*="/signup"]').forEach(function (anchor) {
+          appendSignupAttribution(anchor);
+        });
+
+        document.addEventListener('toggle', function (event) {
+          var detail = event.target;
+          if (!(detail instanceof HTMLDetailsElement) || !detail.open || !detail.hasAttribute('data-ph-faq-item')) return;
+          track('faq_opened', {
+            page_category: category,
+            faq_index: Number(detail.getAttribute('data-ph-faq-index') || '0')
+          });
+        }, true);
+
+        var recentClicks = [];
+        var lastDeadClickAt = 0;
+        document.addEventListener('click', function (event) {
+          var target = event.target instanceof Element ? event.target : null;
+          if (!target) return;
+          var now = Date.now();
+          var signupLink = target.closest('a[href*="/signup"]');
+          if (signupLink) appendSignupAttribution(signupLink);
+          recentClicks = recentClicks.filter(function (clickAt) { return now - clickAt < 1500; });
+          recentClicks.push(now);
+          if (recentClicks.length >= 4) {
+            recentClicks = [];
+            track('rapid_click_detected', {
+              page_category: category,
+              click_count: 4
+            });
+          }
+          var interactive = target.closest('a, button, input, select, textarea, summary, details, [role="button"], [data-ph-cta], [data-ph-pricing-cta]');
+          if (!interactive && now - lastDeadClickAt > 5000) {
+            lastDeadClickAt = now;
+            track('dead_click_detected', {
+              page_category: category,
+              target_type: target.tagName.toLowerCase()
+            });
+          }
+        }, true);
+      })();
+    </script>
+    <div id="ventora-ai-sdr-root" data-product-id="phiguard"></div>
+    <script is:inline src="https://ai-sdr-worker.example.workers.dev/client/ai-sdr.global.js" defer></script>
+    <script is:inline>
+      (function () {
+        var root = document.getElementById("ventora-ai-sdr-root");
+        if (!root) return;
+        var css = "#ventora-ai-sdr-root{--ai-shell-accent:#0f766e;--ai-shell-ink:#10201e;--ai-shell-muted:#5a706d;--ai-shell-line:#d8e8e6;--ai-shell-wash:#f5fbfa;position:fixed;right:20px;bottom:20px;z-index:2147483000;font-family:Public Sans,system-ui,sans-serif}#ventora-ai-sdr-root button,#ventora-ai-sdr-root textarea{font:inherit}#ventora-ai-sdr-toggle{border:1px solid rgba(15,118,110,.22);border-radius:999px;background:var(--ai-shell-accent);color:#fff;box-shadow:0 18px 40px rgba(15,118,110,.25);padding:13px 17px;font-weight:800;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease}#ventora-ai-sdr-toggle:hover{transform:translateY(-1px);box-shadow:0 20px 46px rgba(15,118,110,.31)}#ventora-ai-sdr-toggle:focus-visible,#ventora-ai-sdr-close:focus-visible,#ventora-ai-sdr-target textarea:focus-visible,#ventora-ai-sdr-target [data-ai-sdr-send]:focus-visible{outline:3px solid rgba(15,118,110,.28);outline-offset:2px}#ventora-ai-sdr-panel{display:none;width:min(420px,calc(100vw - 32px));max-height:min(680px,calc(100vh - 96px));overflow:hidden;border:1px solid var(--ai-shell-line);border-radius:10px;background:#fff;box-shadow:0 24px 70px rgba(16,32,30,.22)}#ventora-ai-sdr-panel[data-open=true]{display:block}#ventora-ai-sdr-head{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--ai-shell-line);background:var(--ai-shell-wash);padding:14px 16px;color:var(--ai-shell-ink);font-size:14px;font-weight:850}#ventora-ai-sdr-close{min-width:36px;min-height:36px;border:1px solid transparent;border-radius:999px;background:transparent;color:var(--ai-shell-muted);font-size:22px;line-height:1;cursor:pointer}#ventora-ai-sdr-close:hover{background:#fff;color:var(--ai-shell-ink)}#ventora-ai-sdr-target{padding:14px;background:#fff}#ventora-ai-sdr-target [data-ai-sdr-widget]{display:grid;gap:12px;color:var(--ai-shell-ink)}#ventora-ai-sdr-target [data-ai-sdr-transcript]{display:grid;gap:10px;max-height:min(390px,calc(100vh - 290px));overflow:auto;padding:2px 2px 4px}#ventora-ai-sdr-target [data-ai-sdr-empty]{border:1px solid var(--ai-shell-line);border-radius:8px;background:var(--ai-shell-wash);padding:11px 12px;color:var(--ai-shell-muted);font-size:13px;line-height:1.45}#ventora-ai-sdr-target [data-ai-sdr-role]{max-width:88%;margin:0;border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.5;white-space:pre-wrap}#ventora-ai-sdr-target [data-ai-sdr-role=user]{justify-self:end;background:var(--ai-shell-accent);color:#fff}#ventora-ai-sdr-target [data-ai-sdr-role=assistant]{justify-self:start;border:1px solid var(--ai-shell-line);background:#fbfdfc;color:var(--ai-shell-ink)}#ventora-ai-sdr-target [data-ai-sdr-pending]{color:var(--ai-shell-muted)}#ventora-ai-sdr-target textarea{width:100%;min-height:82px;resize:vertical;border:1px solid var(--ai-shell-line);border-radius:8px;padding:11px 12px;color:var(--ai-shell-ink);background:#fff;line-height:1.45}#ventora-ai-sdr-target textarea::placeholder{color:#798b89}#ventora-ai-sdr-target [data-ai-sdr-send]{justify-self:end;min-height:42px;border:0;border-radius:8px;background:var(--ai-shell-accent);color:#fff;padding:10px 15px;font-weight:800;cursor:pointer}#ventora-ai-sdr-target [data-ai-sdr-send]:disabled{cursor:not-allowed;opacity:.48}@media(max-width:480px){#ventora-ai-sdr-root{right:12px;bottom:12px}#ventora-ai-sdr-panel{width:calc(100vw - 24px);max-height:calc(100vh - 72px)}}";
+        var style = document.createElement("style");
+        style.textContent = css;
+        document.head.appendChild(style);
+        root.innerHTML = '<button id="ventora-ai-sdr-toggle" type="button" aria-expanded="false">Need help with PHIGuard?</button><section id="ventora-ai-sdr-panel" aria-label="PHIGuard assistant"><div id="ventora-ai-sdr-head"><span>PHIGuard assistant</span><button id="ventora-ai-sdr-close" type="button" aria-label="Close">x</button></div><div id="ventora-ai-sdr-target"></div></section>';
+        var toggle = document.getElementById("ventora-ai-sdr-toggle");
+        var close = document.getElementById("ventora-ai-sdr-close");
+        var panel = document.getElementById("ventora-ai-sdr-panel");
+        var target = document.getElementById("ventora-ai-sdr-target");
+        var widgetPromise = null;
+        var waitTimer = null;
+        var loadingHtml = '<div role="status" style="font-size:14px;line-height:1.45;color:#475569">Loading assistant...</div>';
+        var errorHtml = '<div role="alert" style="font-size:14px;line-height:1.45;color:#b91c1c">Assistant failed to load. Refresh and try again.</div>';
+        function createWidget() {
+          if (widgetPromise) {
+            widgetPromise.open();
+            return true;
+          }
+          if (!target || !window.VentoraAiSdr) return false;
+          target.innerHTML = "";
+          widgetPromise = window.VentoraAiSdr.createAiSdrWidget({
+            target: target,
+            api: { baseUrl: "https://ai-sdr-worker.example.workers.dev" },
+            session: { productId: "phiguard", metadata: { surface: "marketing-site" } }
+          });
+          widgetPromise.open();
+          return true;
+        }
+        function waitForWidget() {
+          if (createWidget()) return;
+          if (target) target.innerHTML = loadingHtml;
+          if (waitTimer) return;
+          var attempts = 0;
+          waitTimer = window.setInterval(function () {
+            attempts += 1;
+            if (createWidget()) {
+              window.clearInterval(waitTimer);
+              waitTimer = null;
+              return;
+            }
+            if (attempts >= 100) {
+              window.clearInterval(waitTimer);
+              waitTimer = null;
+              if (target && !widgetPromise) target.innerHTML = errorHtml;
+              window.phiguardAnalytics && window.phiguardAnalytics.track && window.phiguardAnalytics.track('assistant_load_failed', { surface: 'marketing_site' });
+            }
+          }, 100);
+        }
+        function openPanel() {
+          panel.setAttribute("data-open", "true");
+          toggle.setAttribute("aria-expanded", "true");
+          window.phiguardAnalytics && window.phiguardAnalytics.track && window.phiguardAnalytics.track('assistant_opened', { surface: 'marketing_site' });
+          waitForWidget();
+        }
+        function closePanel() {
+          panel.removeAttribute("data-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+        toggle.addEventListener("click", openPanel);
+        close.addEventListener("click", closePanel);
+        window.addEventListener("load", function () {
+          if (panel && panel.getAttribute("data-open") === "true") waitForWidget();
+        }, { once: true });
+      })();
+    </script>
+  </body>
+</html>

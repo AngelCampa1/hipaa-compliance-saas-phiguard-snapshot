@@ -1,0 +1,260 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import type { GetStaticPaths } from 'astro'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../../layouts/MarketingLayout.astro'
+import CTA from '../../../components/CTA.astro'
+import FAQ from '../../../components/FAQ.astro'
+import LeadCapturePanel from '../../../components/LeadCapturePanel.astro'
+import RelatedContent from '../../../components/RelatedContent.astro'
+import { commercialKnowledgeCopy } from '@phiguard/knowledge/commercial'
+import { getContributor } from '../../../lib/contributors'
+import { resolveCanonicalContentCopy } from '../../../lib/canonical-content-copy'
+import { buildArticleSchema, buildBreadcrumbSchema, buildFAQSchema } from '../../../lib/seo'
+import Breadcrumbs from '../../../components/Breadcrumbs.astro'
+
+type CityGuideEntry = CollectionEntry<'city-guides'>
+type LearnEntry = CollectionEntry<'learn'>
+type SourceItem = CityGuideEntry['data']['sources'][number]
+type FaqItem = CityGuideEntry['data']['faq'][number]
+type ResolvedFaqItem = { q: string; a: string }
+
+export const prerender = true
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('city-guides')
+  return entries.map((entry: CityGuideEntry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }))
+}) satisfies GetStaticPaths
+
+function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
+const { entry } = Astro.props as { entry: CityGuideEntry }
+const data = entry.data
+const author = getContributor(data.author)
+const reviewer = getContributor(data.reviewer)
+const allGuides = await getCollection('city-guides')
+const guideBySlug = new Map(allGuides.map((guide: CityGuideEntry) => [guide.id, guide]))
+const nearbyGuides = data.nearbyCitySlugs
+  .map((slug: string) => guideBySlug.get(slug))
+  .filter(Boolean) as CityGuideEntry[]
+const learnEntries = await getCollection('learn')
+const stateGuidePath = `/learn/compliance-operations/hipaa-compliance-${slugify(data.state)}-clinics`
+const stateGuide = learnEntries.find((learnEntry: LearnEntry) => {
+  const path = `/learn/${learnEntry.id.replace(/\.md$/, '').replace(/\/index$/, '')}`
+  return path === stateGuidePath
+})
+const stateGuideLink = stateGuide ? stateGuidePath : data.relatedLearnPath
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'HIPAA compliance locations', url: '/locations/hipaa-compliance' },
+  { name: `${data.city}, ${data.stateAbbreviation}`, url: `/locations/hipaa-compliance/${entry.id}` },
+])
+
+const articleSchema = buildArticleSchema({
+  headline: data.title,
+  description: data.metaDescription,
+  url: `/locations/hipaa-compliance/${entry.id}`,
+  datePublished: data.publishedAt,
+  dateModified: data.updatedAt,
+  authorName: author.name,
+  authorUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${author.slug}`,
+  authorSameAs: author.sameAs,
+  reviewerName: reviewer.name,
+  reviewerUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${reviewer.slug}`,
+  schemaType: 'BlogPosting',
+  citations: data.sources,
+})
+
+const resolvedFaq = data.faq.map((item: FaqItem) => ({
+  q: item.q,
+  a: resolveCanonicalContentCopy(item.a),
+})) satisfies ResolvedFaqItem[]
+const faqSchema = buildFAQSchema(resolvedFaq)
+const faqItems = resolvedFaq.map((item: ResolvedFaqItem) => ({ question: item.q, answer: item.a }))
+---
+
+<MarketingLayout
+  title={`${data.seoTitle} | PHIGuard`}
+  description={data.metaDescription}
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/locations/hipaa-compliance/${entry.id}`}
+  jsonLd={[breadcrumbs, articleSchema, faqSchema]}
+  ogType="article"
+  publishedTime={data.publishedAt.toISOString()}
+  modifiedTime={data.updatedAt.toISOString()}
+>
+  <article class="article-frame">
+    <div class="shell-lg">
+      <div style="margin-bottom: 1.25rem;">
+        <Breadcrumbs crumbs={[
+          { label: "Home", href: "/" },
+          { label: "Locations", href: "/locations/hipaa-compliance" },
+          { label: `${data.city}, ${data.stateAbbreviation}` },
+        ]} />
+      </div>
+
+      <div class="section-grid" style="align-items: start;">
+        <div>
+          <p class="panel-label">{data.primaryKeyword}</p>
+          <h1 class="article-hero-title text-balance">{data.title}</h1>
+          <p class="article-lead">{data.description}</p>
+        </div>
+        <aside class="sidebar-card">
+          <p class="panel-label">Reviewed and verified</p>
+          <p><strong>Written by:</strong> <a href={`/contributors/${author.slug}`}>{author.name}</a></p>
+          <p><strong>Reviewed by:</strong> <a href={`/contributors/${reviewer.slug}`}>{reviewer.name}</a></p>
+          <p><strong>Verified:</strong> {data.verificationDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          <p><strong>Updated:</strong> {data.updatedAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          <p><strong>Product fit:</strong> PHIGuard serves US clinics through software; no local office is claimed for {data.city}.</p>
+        </aside>
+      </div>
+
+      <div class="article-grid" style="margin-top: 2rem;">
+        <div class="article-main">
+          <div class="editorial-card" style="margin-bottom: 1.5rem;">
+            <p class="panel-label">Short answer</p>
+            <p style="margin: 0;">{data.summary}</p>
+          </div>
+
+          <section class="article-prose max-w-none">
+            <h2>{data.city} clinic operating context</h2>
+            <p>{data.cityContext}</p>
+            <ul>
+              {data.localOperationalNotes.map((item: string) => <li>{item}</li>)}
+            </ul>
+
+            <h2>Local HIPAA risk map for {data.city} clinics</h2>
+            <ul>
+              {data.localRiskMap.map((item: string) => <li>{item}</li>)}
+            </ul>
+
+            <h2>{data.state} law and oversight overlay</h2>
+            <p>{data.stateOverlay}</p>
+            <p>
+              For a broader state view, read the <a href={stateGuideLink}>{data.state} HIPAA clinic guide</a>, then use the <a href="/resources/hipaa-state-law-overlay-matrix">state-law overlay matrix</a> to document what changed.
+            </p>
+
+            <h2>Operating priorities for {data.city} administrators</h2>
+            <ul>
+              {data.operatingPriorities.map((item: string) => <li>{item}</li>)}
+            </ul>
+
+            <h2>Evidence cadence for {data.city} HIPAA operations</h2>
+            <ul>
+              {data.evidenceCadence.map((item: string) => <li>{item}</li>)}
+            </ul>
+
+            <h2>HIPAA software buying criteria for {data.city} clinics</h2>
+            <ul>
+              {data.softwareBuyingCriteria.map((item: string) => <li>{item}</li>)}
+            </ul>
+
+            <h2>Practical HIPAA checklist for {data.city} clinics</h2>
+            <ol>
+              {data.checklist.map((item: string) => <li>{item}</li>)}
+            </ol>
+
+            <h2>Where PHIGuard fits</h2>
+            <p>
+              PHIGuard is built for clinic compliance operations: recurring task evidence, vendor and BAA tracking, workforce follow-through, and safer patient-adjacent work. Review the <a href="/hipaa">HIPAA product overview</a> and <a href="/pricing">PHIGuard pricing</a> when your team is ready to compare software support. {commercialKnowledgeCopy.pricingModel}
+            </p>
+
+            <h2>Sources</h2>
+            <ul>
+              {data.sources.map((source: SourceItem) => (
+                <li>
+                  <a href={source.url}>{source.title}</a>
+                  {source.publisher && <span> | {source.publisher}</span>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        <aside class="resource-sidebar">
+          <section class="sidebar-card">
+            <h3>Key takeaways</h3>
+            <ul class="m-0 pl-4">
+              {data.keyTakeaways.map((takeaway: string) => <li>{takeaway}</li>)}
+            </ul>
+          </section>
+
+          <LeadCapturePanel
+            variant="sidebar"
+            magnetSlug={data.relatedResource}
+            ctaContext="inline-content-upgrade"
+            eyebrow="Recommended resource"
+          />
+
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  <FAQ items={faqItems} heading={`HIPAA compliance questions ${data.city} clinics ask`} />
+
+  <RelatedContent
+    cluster="city-guides"
+    currentSlug={entry.id}
+    eyebrow="Nearby clinic guides"
+    heading={`Continue with nearby ${data.stateAbbreviation} HIPAA compliance guides or the core PHIGuard paths.`}
+    items={[
+      ...nearbyGuides.slice(0, 3).map((guide: CityGuideEntry) => ({
+        href: `/locations/hipaa-compliance/${guide.id}`,
+        title: `${guide.data.city}, ${guide.data.stateAbbreviation} HIPAA compliance guide`,
+        description: guide.data.metaDescription,
+        eyebrow: 'Nearby city',
+      })),
+      {
+        href: '/locations/hipaa-compliance',
+        title: 'Browse all HIPAA compliance city guides',
+        description: 'Return to the city hub to compare state groups and nearby clinic markets.',
+        eyebrow: 'Parent hub',
+      },
+      {
+        href: '/hipaa',
+        title: 'Review PHIGuard for HIPAA operations',
+        description: 'See how PHIGuard supports compliance work for US clinics without claiming local consulting offices.',
+        eyebrow: 'Product path',
+      },
+      {
+        href: '/pricing',
+        title: 'Review PHIGuard pricing',
+        description: 'Compare transparent PHIGuard plans with a BAA included at every tier.',
+        eyebrow: 'Pricing',
+      },
+    ]}
+  />
+
+  <CTA
+    heading={`Give your ${data.city} clinic a repeatable HIPAA operating layer.`}
+    subheading="PHIGuard helps US clinics organize recurring compliance tasks, vendor evidence, and workforce follow-through with a BAA included at every tier."
+  />
+
+<style>
+  .article-prose :global(table) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .article-prose :global(pre) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .article-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+</MarketingLayout>

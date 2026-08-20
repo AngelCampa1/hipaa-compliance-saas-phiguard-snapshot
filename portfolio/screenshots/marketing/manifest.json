@@ -1,0 +1,318 @@
+{
+  "generatedBy": "apps/marketing/scripts/capture-portfolio-screenshots.mjs",
+  "baseUrl": "http://127.0.0.1:4399",
+  "shots": [
+    {
+      "file": "home.png",
+      "path": "/",
+      "caption": "Marketing home",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 522795
+    },
+    {
+      "file": "product.png",
+      "path": "/product",
+      "caption": "Product overview",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 557079
+    },
+    {
+      "file": "features-index.png",
+      "path": "/product/features",
+      "caption": "Feature index",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 323853
+    },
+    {
+      "file": "pricing.png",
+      "path": "/pricing",
+      "caption": "Per-clinic flat pricing",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 400769
+    },
+    {
+      "file": "security.png",
+      "path": "/security",
+      "caption": "Security posture",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 239970
+    },
+    {
+      "file": "trust.png",
+      "path": "/trust",
+      "caption": "Trust centre",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 174583
+    },
+    {
+      "file": "hipaa.png",
+      "path": "/hipaa",
+      "caption": "HIPAA overview",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 269550
+    },
+    {
+      "file": "baa.png",
+      "path": "/baa",
+      "caption": "Business Associate Agreement",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 151566
+    },
+    {
+      "file": "subprocessors.png",
+      "path": "/subprocessors",
+      "caption": "Subprocessor register",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 126966
+    },
+    {
+      "file": "compare-index.png",
+      "path": "/compare",
+      "caption": "Comparison index",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 766821
+    },
+    {
+      "file": "alternatives-index.png",
+      "path": "/alternatives",
+      "caption": "Alternatives index",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 557420
+    },
+    {
+      "file": "personas-index.png",
+      "path": "/personas",
+      "caption": "Persona index",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 184808
+    },
+    {
+      "file": "practice-types-index.png",
+      "path": "/practice-types",
+      "caption": "Practice-type index",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 563059
+    },
+    {
+      "file": "hipaa-software-index.png",
+      "path": "/hipaa-software",
+      "caption": "HIPAA software index",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 227934
+    },
+    {
+      "file": "resources-index.png",
+      "path": "/resources",
+      "caption": "Resource library",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 943356
+    },
+    {
+      "file": "resources-tools.png",
+      "path": "/resources/tools",
+      "caption": "Free tools",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 822631
+    },
+    {
+      "file": "guides-index.png",
+      "path": "/resources/guides",
+      "caption": "Guide index",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 330380
+    },
+    {
+      "file": "learn-index.png",
+      "path": "/learn",
+      "caption": "Learn hub",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 450105
+    },
+    {
+      "file": "glossary.png",
+      "path": "/glossary",
+      "caption": "Compliance glossary",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 364587
+    },
+    {
+      "file": "about.png",
+      "path": "/about",
+      "caption": "About",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 86799
+    },
+    {
+      "file": "partners.png",
+      "path": "/partners",
+      "caption": "Partner programme",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 215485
+    },
+    {
+      "file": "privacy.png",
+      "path": "/privacy",
+      "caption": "Privacy policy",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 169111
+    },
+    {
+      "file": "terms.png",
+      "path": "/terms",
+      "caption": "Terms of service",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 156348
+    },
+    {
+      "file": "404.png",
+      "path": "/404",
+      "caption": "Not-found page",
+      "viewport": "desktop",
+      "kind": "page",
+      "bytes": 50133
+    },
+    {
+      "file": "collection-learn.png",
+      "path": "/learn/phi-tools-vendors",
+      "caption": "Learn article (302 entries)",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 342476
+    },
+    {
+      "file": "collection-guide.png",
+      "path": "/resources/guides/google-drive",
+      "caption": "Integration guide (91 entries)",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 414345
+    },
+    {
+      "file": "collection-best.png",
+      "path": "/resources/best/best-affordable-hipaa-tools-small-clinics",
+      "caption": "Best-of roundup (55 entries)",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 447499
+    },
+    {
+      "file": "collection-comparison.png",
+      "path": "/compare/abyde-vs-compliancy-group",
+      "caption": "Competitor comparison (41 entries)",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 397915
+    },
+    {
+      "file": "collection-alternative.png",
+      "path": "/alternatives/airtable-alternative",
+      "caption": "Alternative page (41 entries)",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 611436
+    },
+    {
+      "file": "collection-practice-type.png",
+      "path": "/practice-types/addiction-medicine-practice",
+      "caption": "Practice-type page (39 entries)",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 426359
+    },
+    {
+      "file": "collection-hipaa-software.png",
+      "path": "/hipaa-software/allergy-immunology-clinics",
+      "caption": "Vertical software page (32 entries)",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 351338
+    },
+    {
+      "file": "collection-persona.png",
+      "path": "/personas/compliance-officer",
+      "caption": "Persona page (5 entries)",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 350770
+    },
+    {
+      "file": "collection-state-guide.png",
+      "path": "/locations/hipaa-compliance/albuquerque-nm",
+      "caption": "State compliance guide (100 entries)",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 388259
+    },
+    {
+      "file": "collection-city-guide.png",
+      "path": "/locations/hipaa-compliance-software/alabama",
+      "caption": "City guide (100 entries)",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 401353
+    },
+    {
+      "file": "collection-breach-guide.png",
+      "path": "/locations/hipaa-breach-notification/alabama",
+      "caption": "Breach-notification guide",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 387225
+    },
+    {
+      "file": "collection-resource.png",
+      "path": "/resources/access-matrix-starter-template",
+      "caption": "Lead-magnet resource page (63 entries)",
+      "viewport": "desktop",
+      "kind": "collection",
+      "bytes": 586991
+    },
+    {
+      "file": "home.mobile.png",
+      "path": "/",
+      "caption": "Marketing home",
+      "viewport": "mobile",
+      "kind": "page",
+      "bytes": 234033
+    },
+    {
+      "file": "pricing.mobile.png",
+      "path": "/pricing",
+      "caption": "Per-clinic flat pricing",
+      "viewport": "mobile",
+      "kind": "page",
+      "bytes": 221398
+    },
+    {
+      "file": "collection-learn.mobile.png",
+      "path": "/learn/phi-tools-vendors",
+      "caption": "Learn article (302 entries)",
+      "viewport": "mobile",
+      "kind": "collection",
+      "bytes": 240520
+    }
+  ]
+}

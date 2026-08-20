@@ -1,0 +1,62 @@
+{
+  "name": "phiguard",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "deploy": "pnpm deploy:touched",
+    "deploy:all": "pnpm deploy:web && pnpm deploy:marketing && pnpm deploy:pdfs",
+    "deploy:touched": "node scripts/deploy-touched.mjs",
+    "deploy:web": "pnpm --filter @phiguard/web run deploy",
+    "deploy:api": "pnpm deploy:web",
+    "deploy:marketing": "pnpm --filter @phiguard/marketing run deploy",
+    "deploy:pdfs": "pnpm --filter @phiguard/pdf run build:pdfs",
+    "smoke:prod": "node scripts/prod-smoke.mjs",
+    "billing:env-checklist": "tsx scripts/print-billing-env-checklist.ts",
+    "stripe:limited-offer:check": "node scripts/verify-limited-offer-stripe-coupons.mjs",
+    "posthog:dashboards:validate": "node scripts/validate-posthog-dashboard-manifest.mjs",
+    "posthog:dashboards:validate:live": "node scripts/validate-posthog-dashboard-manifest.mjs --live",
+    "posthog:dashboards:sync:dry-run": "node scripts/sync-posthog-dashboard-manifest.mjs --dry-run",
+    "posthog:dashboards:sync": "node scripts/sync-posthog-dashboard-manifest.mjs --execute",
+    "sentry:deploy-check": "node scripts/check-sentry-deploy-regression.mjs",
+    "postiz:linkedin:schedule": "node scripts/schedule-postiz-linkedin.mjs",
+    "cf:pages:list": "wrangler pages project list",
+    "cf:pages:cleanup:phiguard": "node scripts/cleanup-old-cloudflare-pages.mjs",
+    "typecheck": "turbo typecheck",
+    "lint": "turbo lint && pnpm lint:ds",
+    "lint:ds": "node scripts/lint-design-system.mjs",
+    "test": "turbo test",
+    "test:coverage": "node scripts/run-coverage.mjs",
+    "portfolio:metrics": "node scripts/portfolio-metrics.mjs",
+    "portfolio:metrics:check": "node scripts/portfolio-metrics.mjs --check",
+    "portfolio:screenshots": "node scripts/build-screenshot-index.mjs",
+    "portfolio:screenshots:check": "node scripts/build-screenshot-index.mjs --check",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@sentry/vite-plugin": "^4.6.1",
+    "eslint": "^9",
+    "postgres": "3.4.9",
+    "prettier": "^3",
+    "tsx": "^4.20.6",
+    "turbo": "^2",
+    "typescript": "^5.7",
+    "typescript-eslint": "^8",
+    "wrangler": "^4.77.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "devalue": "5.8.1",
+      "fast-uri": "3.1.2",
+      "fast-xml-builder": "1.2.0",
+      "kysely": "0.28.17",
+      "nodemailer": "8.0.7",
+      "protobufjs": "7.6.1"
+    }
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": "9.15.4"
+  },
+  "packageManager": "pnpm@9.15.4"
+}

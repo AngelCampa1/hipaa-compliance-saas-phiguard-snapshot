@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm:*)",
+      "Bash(turbo:*)",
+      "Bash(docker:*)",
+      "Bash(docker compose:*)",
+      "Bash(git:*)",
+      "Bash(drizzle-kit:*)",
+      "Bash(terraform plan:*)",
+      "Bash(terraform init:*)",
+      "Bash(terraform validate:*)",
+      "Bash(aws s3 ls:*)",
+      "Bash(aws ecs describe-*:*)",
+      "Bash(aws rds describe-*:*)",
+      "Bash(node:*)",
+      "Bash(tsx:*)",
+      "Bash(vitest:*)",
+      "Bash(eslint:*)",
+      "Bash(tsc:*)"
+    ],
+    "deny": [
+      "Bash(terraform apply:*)",
+      "Bash(terraform destroy:*)",
+      "Bash(aws iam:*)",
+      "Bash(aws ec2 *:*)",
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git reset --hard:*)"
+    ]
+  }
+}

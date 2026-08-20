@@ -1,0 +1,19 @@
+---
+import type { LeadCaptureCtaContext, LeadMagnetSlug } from '@phiguard/lead-magnets'
+import LeadCapturePanel from './LeadCapturePanel.astro'
+
+interface Props {
+  magnetSlug: LeadMagnetSlug
+  ctaLabel?: string
+  ctaContext?: LeadCaptureCtaContext
+}
+
+const { magnetSlug, ctaLabel = 'Send me the free resource', ctaContext = 'resource-sidebar' } = Astro.props
+---
+
+<LeadCapturePanel
+  variant="sidebar"
+  magnetSlug={magnetSlug}
+  ctaContext={ctaContext}
+  buttonLabel={ctaLabel}
+/>

@@ -1,0 +1,108 @@
+---
+import '../styles/global.css'
+import '@fontsource/public-sans/400.css'
+import '@fontsource/public-sans/500.css'
+import '@fontsource/public-sans/600.css'
+import '@fontsource/public-sans/700.css'
+import '@fontsource/besley/600.css'
+import '@fontsource/besley/700.css'
+import '@fontsource/besley/800.css'
+import '@fontsource/geist-mono/400.css'
+import { PHIGUARD_APP_ORIGIN, PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import { SUPPORT_EMAIL } from '@phiguard/knowledge/support'
+
+const appUrl = import.meta.env.PUBLIC_APP_URL ?? PHIGUARD_APP_ORIGIN
+const apiUrl = `${appUrl}/api/marketing/unsubscribe`
+const title = 'Unsubscribe | PHIGuard'
+const description = 'Unsubscribe from PHIGuard emails.'
+const canonical = `${PHIGUARD_PUBLIC_SITE_ORIGIN}/unsubscribe`
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="PHIGuard" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <main id="main-content">
+      <section class="utility-page">
+        <div class="utility-shell">
+          <div id="unsub-loading" class="unsub-state">
+            <div class="utility-card">
+              <h1 class="utility-heading">Unsubscribe from PHIGuard emails</h1>
+              <p class="utility-body">Updating your email preferences...</p>
+            </div>
+          </div>
+          <div id="unsub-success" class="unsub-state" hidden>
+            <div class="utility-card">
+              <div class="utility-icon utility-icon--success" aria-hidden="true">&#10003;</div>
+              <h2 class="utility-heading">You're unsubscribed.</h2>
+              <p class="utility-body">You will not receive more marketing emails from PHIGuard at this address.</p>
+              <a href="/" class="button-secondary">Back to PHIGuard.app</a>
+            </div>
+          </div>
+          <div id="unsub-error" class="unsub-state" hidden>
+            <div class="utility-card">
+              <div class="utility-icon utility-icon--error" aria-hidden="true">!</div>
+              <h2 class="utility-heading">This link has expired.</h2>
+              <p class="utility-body">
+                The unsubscribe link was already used or is no longer valid. If you still need help, email <a href={`mailto:${SUPPORT_EMAIL}`} class="utility-link">{SUPPORT_EMAIL}</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script is:inline define:vars={{ apiUrl }}>
+      ;(function () {
+        const params = new URLSearchParams(window.location.search)
+        const token = params.get('token') ?? ''
+        if (window.history && window.history.replaceState && window.location.search) {
+          window.history.replaceState(null, document.title, window.location.pathname)
+        }
+
+        const show = (id) => {
+          ;['unsub-loading', 'unsub-success', 'unsub-error'].forEach((stateId) => {
+            const el = document.getElementById(stateId)
+            if (el) el.hidden = stateId !== id
+          })
+        }
+
+        if (!token) {
+          show('unsub-error')
+          return
+        }
+
+        fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          referrerPolicy: 'no-referrer',
+          body: JSON.stringify({ token }),
+        })
+          .then((res) => {
+            show(res.ok ? 'unsub-success' : 'unsub-error')
+          })
+          .catch(() => {
+            show('unsub-error')
+          })
+      })()
+    </script>
+  </body>
+</html>

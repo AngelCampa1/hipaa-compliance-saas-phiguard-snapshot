@@ -1,0 +1,52 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://us-assets.i.posthog.com https://static.cloudflareinsights.com https://widgets.example.com https://ai-sdr-worker.example.workers.dev https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://my.phiguard.app https://us.i.posthog.com https://us-assets.i.posthog.com https://cloudflareinsights.com https://static.cloudflareinsights.com https://widgets.example.com https://ai-sdr-worker.example.workers.dev https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://my.phiguard.app
+
+/unsubscribe
+  Referrer-Policy: no-referrer
+
+/unsubscribe/*
+  Referrer-Policy: no-referrer
+
+/*.html
+  Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400
+
+/
+  Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/og/*
+  Cache-Control: public, max-age=604800
+
+/sitemap-index.xml
+  Cache-Control: public, max-age=3600
+  Content-Type: application/xml; charset=utf-8
+
+/sitemap-content.xml
+  Cache-Control: public, max-age=3600
+  Content-Type: application/xml; charset=utf-8
+
+/sitemap-root-files.xml
+  Cache-Control: public, max-age=3600
+  Content-Type: application/xml; charset=utf-8
+
+/robots.txt
+  Cache-Control: public, max-age=86400
+  Content-Type: text/plain; charset=utf-8
+
+/llms.txt
+  Cache-Control: public, max-age=86400
+  Content-Type: text/plain; charset=utf-8
+
+/pricing.txt
+  Cache-Control: public, max-age=86400
+  Content-Type: text/plain; charset=utf-8

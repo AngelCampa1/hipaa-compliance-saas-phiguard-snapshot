@@ -1,0 +1,218 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+import type { GetStaticPaths } from 'astro'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../../layouts/MarketingLayout.astro'
+import CTA from '../../../components/CTA.astro'
+import CanonicalCommercialNote from '../../../components/CanonicalCommercialNote.astro'
+import FAQ from '../../../components/FAQ.astro'
+import LeadCapturePanel from '../../../components/LeadCapturePanel.astro'
+import RelatedContent from '../../../components/RelatedContent.astro'
+import { getContributor } from '../../../lib/contributors'
+import { buildArticleSchema, buildBreadcrumbSchema, buildFAQSchema } from '../../../lib/seo'
+
+type GuideEntry = CollectionEntry<'guides'>
+
+export const prerender = true
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('guides')
+  return entries.map((entry: GuideEntry) => ({
+    params: { slug: entry.id.replace(/\.md$/, '') },
+    props: { entry },
+  }))
+}) satisfies GetStaticPaths
+
+const { entry } = Astro.props as { entry: GuideEntry }
+const { Content, headings } = await render(entry)
+const author = getContributor(entry.data.author)
+const reviewer = getContributor(entry.data.reviewer)
+type GuideFaqItem = NonNullable<GuideEntry['data']['faq']>[number]
+type GuideSource = GuideEntry['data']['sources'][number]
+type ResourceEntry = CollectionEntry<'resources'>
+type TocHeading = (typeof headings)[number]
+
+const faqItems =
+  entry.data.faq?.map((item: GuideFaqItem) => ({ question: item.q, answer: item.a })) ?? []
+const resourceEntries = await getCollection('resources')
+const relatedResource = resourceEntries.find(
+  (candidate: ResourceEntry) => candidate.data.magnetSlug === entry.data.relatedResource,
+)
+const tocHeadings = headings.filter((heading: TocHeading) => heading.depth <= 2)
+const slug = entry.id.replace(/\.md$/, '')
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Resources', url: '/resources' },
+  { name: 'Guides', url: '/resources/guides' },
+  { name: entry.data.title, url: `/resources/guides/${slug}` },
+])
+
+const articleSchema = buildArticleSchema({
+  headline: entry.data.title,
+  description: entry.data.metaDescription,
+  url: `/resources/guides/${slug}`,
+  datePublished: entry.data.publishedAt,
+  dateModified: entry.data.updatedAt,
+  authorName: author.name,
+  authorUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${author.slug}`,
+  authorSameAs: author.sameAs,
+  reviewerName: reviewer.name,
+  reviewerUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${reviewer.slug}`,
+  schemaType: 'BlogPosting',
+  citations: entry.data.sources,
+})
+
+const faqSchema = entry.data.faq?.length ? buildFAQSchema(entry.data.faq) : null
+const jsonLd = faqSchema ? [breadcrumbs, articleSchema, faqSchema] : [breadcrumbs, articleSchema]
+---
+
+<MarketingLayout
+  title={`${entry.data.seoTitle ?? entry.data.title} | PHIGuard`}
+  description={entry.data.metaDescription}
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/resources/guides/${slug}`}
+  jsonLd={jsonLd}
+  ogType="article"
+  publishedTime={entry.data.publishedAt.toISOString()}
+  modifiedTime={entry.data.updatedAt.toISOString()}
+>
+  <article class="article-frame">
+    <div class="shell-lg">
+      <nav class="kicker" aria-label="Breadcrumb" style="margin-bottom: 1.25rem;">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href="/resources">Resources</a>
+        <span>/</span>
+        <a href="/resources/guides">Guides</a>
+      </nav>
+
+      <div class="section-grid" style="align-items: start;">
+        <div>
+          <p class="panel-label">{entry.data.vendor ?? 'Vendor guide'}</p>
+          <h1 class="article-hero-title text-balance">{entry.data.title}</h1>
+          <p class="article-lead">{entry.data.description}</p>
+        </div>
+        <aside class="sidebar-card">
+          <p class="panel-label">Reviewed and verified</p>
+          <p><strong>Written by:</strong> <a href={`/contributors/${author.slug}`}>{author.name}</a></p>
+          <p><strong>Reviewed by:</strong> <a href={`/contributors/${reviewer.slug}`}>{reviewer.name}</a></p>
+          <p><strong>Verified:</strong> {entry.data.verificationDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          <p><strong>Updated:</strong> {entry.data.updatedAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          {entry.data.relatedCommercialPath && <p><strong>Next step:</strong> <a href={entry.data.relatedCommercialPath}>Open the recommended next page</a></p>}
+        </aside>
+      </div>
+
+      <div class="article-grid" style="margin-top: 2rem;">
+        <div class="article-main">
+          <div class="editorial-card" style="margin-bottom: 1.5rem;">
+            <p class="panel-label">Short answer</p>
+            <p style="margin: 0;">{entry.data.summary}</p>
+          </div>
+
+          <div class="article-prose">
+            <Content />
+          </div>
+
+          <CanonicalCommercialNote />
+
+          <section class="page-surface page-surface--tight" style="padding-left: 0; padding-right: 0;">
+            <div class="editorial-card">
+              <p class="panel-label">Sources</p>
+              <ul class="m-0 pl-4">
+                {entry.data.sources.map((source: GuideSource, index: number) => (
+                  <li>
+                    <a href={source.url} data-ph-source-link={index}>{source.title}</a>
+                    {source.publisher && <span> | {source.publisher}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        </div>
+
+        <aside class="resource-sidebar">
+          {tocHeadings.length > 1 && (
+            <section class="sidebar-card">
+              <h3>On this page</h3>
+              <ol class="m-0 pl-4">
+                {tocHeadings.map((heading: TocHeading) => (
+                  <li><a href={`#${heading.slug}`} data-ph-toc-link={heading.slug}>{heading.text}</a></li>
+                ))}
+              </ol>
+            </section>
+          )}
+
+          <section class="sidebar-card">
+            <h3>Key takeaways</h3>
+            <ul class="m-0 pl-4">
+              {entry.data.keyTakeaways.map((takeaway: string) => (
+                <li>{takeaway}</li>
+              ))}
+            </ul>
+          </section>
+
+          {relatedResource && (
+            <LeadCapturePanel
+              variant="sidebar"
+              magnetSlug={relatedResource.data.magnetSlug}
+              ctaContext="inline-content-upgrade"
+              eyebrow="Recommended resource"
+            />
+          )}
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  {faqItems.length > 0 && <FAQ items={faqItems} heading="Questions clinics ask before using this software with PHI" />}
+
+  <RelatedContent
+    cluster="guides"
+    currentSlug={slug}
+    eyebrow="Next step"
+    heading="Use this verification page to move into the worksheet, buying path, or supporting explainer."
+    items={[
+      relatedResource
+        ? {
+            href: `/resources/${relatedResource.data.magnetSlug}`,
+            title: relatedResource.data.title,
+            description: relatedResource.data.description,
+            eyebrow: 'Downloadable resource',
+          }
+        : null,
+      {
+        href: '/resources/guides',
+        title: 'Browse every vendor HIPAA guide',
+        description: 'Return to the vendor guide hub when the clinic needs to compare more than one tool.',
+        eyebrow: 'Parent hub',
+      },
+      entry.data.relatedCommercialPath
+        ? {
+            href: entry.data.relatedCommercialPath,
+            title: 'Open the recommended next page',
+            description: 'Move from vendor verification into the next comparison, product, pricing, or supporting decision page.',
+            eyebrow: 'Next page',
+          }
+        : null,
+      {
+        href: '/compare',
+        title: 'Open the comparison hub',
+        description: 'Use the decision center if the clinic is comparing multiple options rather than evaluating one vendor in isolation.',
+        eyebrow: 'Decision center',
+      },
+      entry.data.relatedLearnPath
+        ? {
+            href: entry.data.relatedLearnPath,
+            title: 'Read the supporting PHI explainer',
+            description: 'Open the related educational page before deciding whether this workflow belongs in a vendor tool at all.',
+            eyebrow: 'Supporting explainer',
+          }
+        : null,
+    ].filter(Boolean)}
+  />
+
+  <CTA
+    heading="Turn vendor research into a system your clinic can actually run."
+    subheading="PHIGuard gives small clinics a BAA-ready operating layer, recurring compliance work, and a safer home for patient-adjacent tasks."
+  />
+</MarketingLayout>

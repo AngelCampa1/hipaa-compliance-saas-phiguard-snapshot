@@ -1,0 +1,5 @@
+{
+  "extends": "@phiguard/config/tsconfig/astro",
+  "include": ["src", "functions", ".astro/types.d.ts"],
+  "exclude": ["node_modules", "dist"]
+}

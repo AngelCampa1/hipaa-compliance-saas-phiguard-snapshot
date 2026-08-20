@@ -1,0 +1,208 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+import type { GetStaticPaths } from 'astro'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import CTA from '../../components/CTA.astro'
+import CanonicalCommercialNote from '../../components/CanonicalCommercialNote.astro'
+import FAQ from '../../components/FAQ.astro'
+import LeadCapturePanel from '../../components/LeadCapturePanel.astro'
+import RelatedContent from '../../components/RelatedContent.astro'
+import { getContributor } from '../../lib/contributors'
+import { buildArticleSchema, buildBreadcrumbSchema, buildFAQSchema } from '../../lib/seo'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+
+type HipaaSoftwareEntry = CollectionEntry<'hipaa-software'>
+
+export const prerender = true
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('hipaa-software')
+  return entries.map((entry: HipaaSoftwareEntry) => ({
+    params: { slug: entry.id.replace(/\.md$/, '') },
+    props: { entry },
+  }))
+}) satisfies GetStaticPaths
+
+const { entry } = Astro.props as { entry: HipaaSoftwareEntry }
+const { Content } = await render(entry)
+const author = getContributor(entry.data.author)
+const reviewer = getContributor(entry.data.reviewer)
+type HipaaSoftwareFaqItem = NonNullable<HipaaSoftwareEntry['data']['faq']>[number]
+type HipaaSoftwareSource = HipaaSoftwareEntry['data']['sources'][number]
+type ResourceEntry = CollectionEntry<'resources'>
+
+const faqItems =
+  entry.data.faq?.map((item: HipaaSoftwareFaqItem) => ({ question: item.q, answer: item.a })) ?? []
+const resourceEntries = await getCollection('resources')
+const relatedResource = resourceEntries.find(
+  (candidate: ResourceEntry) => candidate.data.magnetSlug === entry.data.relatedResource,
+)
+const slug = entry.id.replace(/\.md$/, '')
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'HIPAA Software', url: '/hipaa-software' },
+  { name: entry.data.title, url: `/hipaa-software/${slug}` },
+])
+
+const articleSchema = buildArticleSchema({
+  headline: entry.data.title,
+  description: entry.data.metaDescription,
+  url: `/hipaa-software/${slug}`,
+  datePublished: entry.data.publishedAt,
+  dateModified: entry.data.updatedAt,
+  authorName: author.name,
+  authorUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${author.slug}`,
+  authorSameAs: author.sameAs,
+  reviewerName: reviewer.name,
+  reviewerUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${reviewer.slug}`,
+  schemaType: 'BlogPosting',
+  citations: entry.data.sources,
+})
+
+const faqSchema = entry.data.faq?.length ? buildFAQSchema(entry.data.faq) : null
+const jsonLd = faqSchema ? [breadcrumbs, articleSchema, faqSchema] : [breadcrumbs, articleSchema]
+---
+
+<MarketingLayout
+  title={`${entry.data.seoTitle ?? entry.data.title} | PHIGuard`}
+  description={entry.data.metaDescription}
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/hipaa-software/${slug}`}
+  jsonLd={jsonLd}
+  ogType="article"
+  publishedTime={entry.data.publishedAt.toISOString()}
+  modifiedTime={entry.data.updatedAt.toISOString()}
+>
+  <article class="article-frame">
+    <div class="shell-lg">
+      <div style="margin-bottom: 1.25rem;">
+        <Breadcrumbs crumbs={[
+          { label: "Home", href: "/" },
+          { label: "HIPAA Software", href: "/hipaa-software" },
+          { label: entry.data.title },
+        ]} />
+      </div>
+
+      <div class="section-grid" style="align-items: start;">
+        <div>
+          <p class="panel-label">{entry.data.audience}</p>
+          <h1 class="article-hero-title text-balance">{entry.data.title}</h1>
+          <p class="article-lead">{entry.data.description}</p>
+        </div>
+        <aside class="sidebar-card">
+          <p class="panel-label">Page details</p>
+          <p><strong>Written by:</strong> <a href={`/contributors/${author.slug}`}>{author.name}</a></p>
+          <p><strong>Reviewed by:</strong> <a href={`/contributors/${reviewer.slug}`}>{reviewer.name}</a></p>
+          <p><strong>Updated:</strong> {entry.data.updatedAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          {entry.data.relatedCommercialPath && <p><strong>Product path:</strong> <a href={entry.data.relatedCommercialPath}>See recommended next step</a></p>}
+        </aside>
+      </div>
+
+      <div class="article-grid" style="margin-top: 2rem;">
+        <div class="article-main">
+          <div class="editorial-card" style="margin-bottom: 1.5rem;">
+            <p class="panel-label">What matters for this use case</p>
+            <p style="margin: 0;">{entry.data.summary}</p>
+          </div>
+
+          <div class="article-prose max-w-none">
+            <Content />
+          </div>
+
+          <CanonicalCommercialNote />
+
+          <section class="page-surface page-surface--tight" style="padding-left: 0; padding-right: 0;">
+            <div class="editorial-card">
+              <p class="panel-label">Sources</p>
+              <ul class="m-0 pl-4">
+                {entry.data.sources.map((source: HipaaSoftwareSource) => (
+                  <li>
+                    <a href={source.url}>{source.title}</a>
+                    {source.publisher && <span> | {source.publisher}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        </div>
+
+        <aside class="resource-sidebar">
+          <section class="sidebar-card">
+            <h3>Key takeaways</h3>
+            <ul class="m-0 pl-4">
+              {entry.data.keyTakeaways.map((takeaway: string) => (
+                <li>{takeaway}</li>
+              ))}
+            </ul>
+          </section>
+
+          {relatedResource && (
+            <LeadCapturePanel
+              variant="sidebar"
+              magnetSlug={relatedResource.data.magnetSlug}
+              ctaContext="inline-content-upgrade"
+              eyebrow="Clinic worksheet"
+            />
+          )}
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  {faqItems.length > 0 && <FAQ items={faqItems} heading="Questions teams in this segment ask before switching" />}
+
+  <RelatedContent
+    cluster="hipaa-software"
+    currentSlug={slug}
+    eyebrow="Next step"
+    heading="Move from this use case into the full software hub, worksheet, or buying path."
+    items={[
+      {
+        href: '/hipaa-software',
+        title: 'Browse every HIPAA software use-case page',
+        description: 'Return to the hub that lists every clinic-type and workflow software page.',
+        eyebrow: 'Parent hub',
+      },
+      relatedResource
+        ? {
+            href: `/resources/${relatedResource.data.magnetSlug}`,
+            title: relatedResource.data.title,
+            description: relatedResource.data.description,
+            eyebrow: 'Downloadable resource',
+          }
+        : null,
+      entry.data.relatedCommercialPath
+        ? {
+            href: entry.data.relatedCommercialPath,
+            title: 'Open the recommended next step',
+            description: 'Move into the product, pricing, or comparison page that matches this software use case.',
+            eyebrow: 'Commercial path',
+          }
+        : null,
+    ].filter(Boolean)}
+  />
+
+  <CTA
+    heading="Give this workflow a calmer operating system."
+    subheading="PHIGuard is built for clinics that need task accountability, audit evidence, and a BAA-ready home for recurring HIPAA work."
+  />
+
+<style>
+  .article-prose :global(table) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .article-prose :global(pre) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .article-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+</MarketingLayout>

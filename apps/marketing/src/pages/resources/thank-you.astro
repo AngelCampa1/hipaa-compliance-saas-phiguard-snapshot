@@ -1,0 +1,185 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import { PHIGUARD_APP_ORIGIN, PHIGUARD_SIGNUP_URL } from '@phiguard/brand/identity'
+import { NEWSLETTER_SLUG } from '@phiguard/lead-magnets'
+import { commercialKnowledgeCopy, commercialPageCopy } from '@phiguard/knowledge/commercial'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+
+type ResourceEntry = CollectionEntry<'resources'>
+
+const resourceEntries = await getCollection('resources')
+const titles: Record<string, string> = Object.fromEntries(
+  resourceEntries.map((entry: ResourceEntry) => [entry.data.magnetSlug, entry.data.title]),
+)
+const appUrl = import.meta.env.PUBLIC_APP_URL ?? PHIGUARD_APP_ORIGIN
+const slug = Astro.url.searchParams.get('slug') ?? ''
+const validSlug = /^[a-z0-9-]{1,100}$/.test(slug) ? slug : ''
+const title = validSlug ? titles[validSlug] : undefined
+const retryHref = validSlug && validSlug !== NEWSLETTER_SLUG ? `/resources/${validSlug}` : '/resources'
+const downloadHref = validSlug && validSlug !== NEWSLETTER_SLUG
+  ? `${appUrl}/api/marketing/lead-magnets/${validSlug}`
+  : '/resources'
+// Without a real resource slug (direct navigation or a malformed link), the
+// "download" target is just the resources library, so the label should say so
+// rather than promising a download that won't happen.
+const downloadLabel = !validSlug || validSlug === NEWSLETTER_SLUG ? 'Browse resources' : 'Download now'
+---
+
+<MarketingLayout
+  title="Resource ready | PHIGuard"
+  description="Download your resource now and see the next best step in PHIGuard."
+  noindex={true}
+>
+  <section class="utility-page">
+    <div class="utility-shell">
+      <div class="utility-card">
+        <div class="utility-icon utility-icon--success" aria-hidden="true">&#10003;</div>
+        <h1 class="utility-heading">Your resource is ready</h1>
+        <p class="utility-body">
+          <strong id="ty-resource-title">{title ?? 'Your free resource'}</strong> is ready now. We also sent a copy to your inbox so you can reopen it later.
+        </p>
+
+        <div class="ty-actions">
+          <a id="ty-download-link" href={downloadHref} class="button-primary">{downloadLabel}</a>
+          <a id="ty-retry-link" href={retryHref} class="button-secondary">Resend or request again</a>
+        </div>
+
+        <div class="ty-next">
+          <p class="ty-next-label">Next useful step</p>
+          <p class="utility-body" style="margin-top: 0;">
+            If the worksheet surfaced gaps or follow-up work, PHIGuard gives your clinic one place to assign owners, track recurring obligations, and keep the audit trail attached.
+          </p>
+          <ul class="ty-next-list">
+            <li>{commercialKnowledgeCopy.baaIncluded} Review and sign it during onboarding without an enterprise contract.</li>
+            <li>Risk analysis, review cycles, and recurring HIPAA work in one operating system</li>
+            <li>Incident tracking with breach determination support and audit evidence attached</li>
+            <li>{commercialKnowledgeCopy.pricingModel} {commercialKnowledgeCopy.trial} {commercialPageCopy.trialNoCard}</li>
+          </ul>
+          <a href={PHIGUARD_SIGNUP_URL} class="button-primary">Start free trial</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</MarketingLayout>
+
+<script is:inline define:vars={{ titles, appUrl, newsletterSlug: NEWSLETTER_SLUG }}>
+  // @ts-nocheck
+  const params = new URLSearchParams(window.location.search)
+  const slug = params.get('slug') ?? ''
+  const title = titles[slug]
+
+  if (title) {
+    const el = document.getElementById('ty-resource-title')
+    if (el) el.textContent = title
+  }
+
+  const validSlug = /^[a-z0-9-]{1,100}$/
+  if (slug && validSlug.test(slug)) {
+    const retryLink = document.getElementById('ty-retry-link')
+    if (retryLink) {
+      retryLink.setAttribute('href', slug === newsletterSlug ? '/resources' : `/resources/${slug}`)
+    }
+
+    const downloadLink = document.getElementById('ty-download-link')
+    if (downloadLink) {
+      if (slug === newsletterSlug) {
+        downloadLink.setAttribute('href', '/resources')
+        downloadLink.textContent = 'Browse resources'
+      } else {
+        // The page is statically rendered, so the server can't see the slug and
+        // falls back to a "Browse resources" → /resources button. Now that we
+        // have a real resource slug client-side, restore the actual download.
+        downloadLink.setAttribute('href', `${appUrl}/api/marketing/lead-magnets/${slug}`)
+        downloadLink.textContent = 'Download now'
+      }
+    }
+  }
+</script>
+
+<style>
+  .ty-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  @media (min-width: 480px) {
+    .ty-actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  .ty-actions .button-primary {
+    min-height: 44px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  @media (min-width: 480px) {
+    .ty-actions .button-primary {
+      width: auto;
+    }
+  }
+
+  .button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.8rem 1.2rem;
+    border-radius: 999px;
+    border: 1px solid var(--phig-color-border-strong);
+    color: var(--phig-color-text-primary);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  @media (min-width: 480px) {
+    .button-secondary {
+      width: auto;
+    }
+  }
+
+  .ty-next {
+    margin-top: 2.5rem;
+    background: color-mix(in oklch, var(--phig-color-surface-0) 72%, var(--phig-color-brand-50));
+    border: 1px solid var(--phig-color-border-default);
+    border-radius: 1.2rem;
+    padding: 1.75rem;
+  }
+
+  .ty-next-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--phig-color-text-muted);
+    margin: 0 0 1rem;
+  }
+
+  .ty-next-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .ty-next-list li {
+    font-size: 0.9375rem;
+    color: var(--phig-color-text-secondary);
+    padding-left: 1.375rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .ty-next-list li::before {
+    content: '\2713';
+    position: absolute;
+    left: 0;
+    color: var(--phig-color-success-600);
+    font-weight: 700;
+  }
+</style>

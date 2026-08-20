@@ -1,0 +1,34 @@
+---
+const siteKey = import.meta.env.PUBLIC_CAPTCHA_SITE_KEY ?? ''
+const scriptUrl =
+  import.meta.env.PUBLIC_CAPTCHA_SCRIPT_URL ??
+  'https://challenges.cloudflare.com/turnstile/v0/api.js'
+---
+
+{
+  siteKey && scriptUrl && (
+    <>
+      <div
+        class="cf-turnstile"
+        data-sitekey={siteKey}
+        data-response-field-name="captcha-response"
+        data-theme="auto"
+        data-size="flexible"
+      />
+      <script is:inline define:vars={{ scriptUrl }}>
+        const CAPTCHA_SRC = scriptUrl
+        if (
+          CAPTCHA_SRC &&
+          document.querySelector('.cf-turnstile') &&
+          !document.querySelector(`script[src="${CAPTCHA_SRC}"]`)
+        ) {
+          const script = document.createElement('script')
+          script.src = CAPTCHA_SRC
+          script.async = true
+          script.defer = true
+          document.head.appendChild(script)
+        }
+      </script>
+    </>
+  )
+}

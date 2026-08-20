@@ -1,0 +1,75 @@
+---
+interface Props {
+  message: string
+  ctaLabel?: string
+  ctaHref?: string
+  expiresLabel?: string
+  expiresAt?: string
+}
+
+const { message, ctaLabel, ctaHref, expiresLabel, expiresAt } = Astro.props
+
+const expired = expiresAt ? Date.now() >= new Date(expiresAt).getTime() : false
+---
+
+{!expired && (
+  <div class="promo-banner" role="region" aria-label="Promotional offer">
+    <div class="promo-banner__inner">
+      <span class="promo-banner__message">{message}</span>
+      {expiresLabel && <span class="promo-banner__expires">{expiresLabel}</span>}
+      {ctaLabel && ctaHref && (
+        <a class="promo-banner__cta" href={ctaHref}>{ctaLabel}<span aria-hidden="true"> →</span></a>
+      )}
+    </div>
+  </div>
+)}
+
+<style>
+  .promo-banner {
+    background: var(--phig-color-brand-600, #1d4ed8);
+    color: var(--phig-color-text-inverse, #ffffff);
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+  .promo-banner__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.625rem 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+    text-align: center;
+  }
+  .promo-banner__message {
+    font-weight: 600;
+  }
+  .promo-banner__expires {
+    opacity: 0.85;
+  }
+  .promo-banner__cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: inherit;
+    text-decoration: underline;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .promo-banner__cta:hover {
+    text-decoration: none;
+  }
+  @media (max-width: 480px) {
+    .promo-banner__inner {
+      padding: 0.5rem 0.875rem;
+      font-size: 0.8125rem;
+    }
+  }
+  @media (max-width: 359px) {
+    .promo-banner {
+      font-size: clamp(0.75rem, 2vw, 0.875rem);
+      line-height: 1.3;
+    }
+  }
+</style>

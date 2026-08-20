@@ -1,0 +1,64 @@
+---
+import { PHIGUARD_SIGNUP_URL } from '@phiguard/brand/identity'
+import { commercialPageCopy } from '@phiguard/knowledge/commercial'
+
+interface Props {
+  heading?: string
+  subheading?: string
+  ctaLabel?: string
+  ctaHref?: string
+  secondaryLabel?: string
+  secondaryHref?: string
+}
+
+const {
+  heading = commercialPageCopy.cta.heading,
+  subheading = commercialPageCopy.cta.subheading,
+  ctaLabel = 'Start free trial',
+  ctaHref = PHIGUARD_SIGNUP_URL,
+  secondaryLabel,
+  secondaryHref,
+} = Astro.props
+---
+
+<section class="cta-band">
+  <div class="cta-shell">
+    <p class="kicker">Operational assurance</p>
+    <h2 class="cta-title text-balance">{heading}</h2>
+    <p class="cta-body">{subheading}</p>
+
+    <div class="cta-proof-grid" aria-label="Trial assurances">
+      {commercialPageCopy.cta.proof.map((item) => (
+        <div class="cta-proof">
+          <strong>{item.title}</strong>
+          <span>{item.body}</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="cta-actions">
+      <a href={ctaHref} class="button-secondary touch-target cta-primary-btn"
+         data-ph-cta={ctaLabel} data-ph-location="cta-band">
+        {ctaLabel}
+      </a>
+      {secondaryLabel && secondaryHref && (
+        <a href={secondaryHref} class="button-tertiary touch-target"
+           data-ph-cta={secondaryLabel} data-ph-location="cta-band-secondary">
+          {secondaryLabel}
+        </a>
+      )}
+    </div>
+
+    <p class="fine-print">
+      {commercialPageCopy.trialNoCard}
+    </p>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 720px) {
+    .cta-primary-btn {
+      width: 100%;
+    }
+  }
+</style>

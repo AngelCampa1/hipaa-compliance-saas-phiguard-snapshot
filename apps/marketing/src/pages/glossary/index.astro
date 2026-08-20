@@ -1,0 +1,105 @@
+---
+import { getCollection } from 'astro:content'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import CTA from '../../components/CTA.astro'
+import { buildLearnPath, type LearnEntry } from '../../lib/learn'
+import { buildBreadcrumbSchema, buildCollectionPageSchema } from '../../lib/seo'
+import { commercialKnowledgeCopy } from '@phiguard/knowledge/commercial'
+
+const allLearn = (await getCollection('learn')) as LearnEntry[]
+const terms = allLearn
+  .filter((entry) => entry.data.schemaType === 'defined-term' && entry.data.term)
+  .sort((a, b) => (a.data.term ?? '').localeCompare(b.data.term ?? ''))
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'HIPAA Glossary', url: '/glossary' },
+])
+
+const collectionSchema = buildCollectionPageSchema({
+  name: 'PHIGuard HIPAA Glossary',
+  description: 'Plain-language definitions of HIPAA, PHI, and healthcare compliance terms for small medical clinics.',
+  url: '/glossary',
+  items: terms.map((entry) => ({
+    name: entry.data.term ?? entry.data.title,
+    url: buildLearnPath(entry),
+    description: entry.data.summary,
+  })),
+})
+---
+
+<MarketingLayout
+  title="HIPAA Glossary | PHIGuard"
+  description="Plain-language definitions of HIPAA, PHI, ePHI, BAA, covered entity, and other healthcare compliance terms for small medical clinics."
+  canonicalUrl="https://phiguard.app/glossary"
+  jsonLd={[breadcrumbs, collectionSchema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg">
+      <p class="kicker">HIPAA Glossary</p>
+      <h1 class="hero-title text-balance" style="font-size: clamp(2.35rem, 4.4vw, 3.75rem);">Plain-language HIPAA and PHI definitions.</h1>
+      <p class="hero-summary" style="max-width: 52ch;">
+        Short definitions for the compliance terms small clinic teams encounter most. Each entry links to the full explainer where the concept matters operationally.
+      </p>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <dl class="glossary-list">
+        {terms.map((entry) => (
+          <div class="glossary-entry">
+            <dt>
+              <a href={buildLearnPath(entry)}>{entry.data.term ?? entry.data.title}</a>
+            </dt>
+            <dd>{entry.data.summary}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <CTA
+    heading="Compliance programs need more than definitions."
+    subheading={`PHIGuard turns HIPAA requirements into daily tasks with audit trails. ${commercialKnowledgeCopy.baaIncluded}`}
+    secondaryLabel="Explore the product"
+    secondaryHref="/product"
+  />
+</MarketingLayout>
+
+<style>
+  .glossary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 1.75rem;
+  }
+  .glossary-entry {
+    border-top: 1px solid var(--phig-color-border-default);
+    padding-top: 1.5rem;
+  }
+  .glossary-entry:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+  .glossary-entry dt {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--phig-color-text-primary);
+    margin-bottom: 0.5rem;
+  }
+  .glossary-entry dt a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .glossary-entry dt a:hover {
+    color: var(--phig-color-text-link);
+    text-decoration: underline;
+  }
+  .glossary-entry dd {
+    margin: 0;
+    color: var(--phig-color-text-secondary);
+    line-height: 1.75;
+    max-width: 72ch;
+  }
+</style>

@@ -1,0 +1,138 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import { buildBreadcrumbSchema, buildCollectionPageSchema } from '../../lib/seo'
+
+type HipaaSoftwareEntry = CollectionEntry<'hipaa-software'>
+
+const pages = (await getCollection('hipaa-software')).sort(
+  (a: HipaaSoftwareEntry, b: HipaaSoftwareEntry) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime(),
+)
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'HIPAA Software', url: '/hipaa-software' },
+])
+const collectionSchema = buildCollectionPageSchema({
+  name: 'HIPAA software by clinic type and workflow',
+  description: 'HIPAA software pages by specialty, workflow, and operating model for clinic administrators evaluating where regulated work should live.',
+  url: '/hipaa-software',
+  items: pages.map((entry: HipaaSoftwareEntry) => ({
+    name: entry.data.title,
+    url: `/hipaa-software/${entry.id.replace(/\.md$/, '')}`,
+    description: entry.data.metaDescription,
+  })),
+})
+---
+
+<MarketingLayout
+  title="HIPAA Software for Clinics and Healthcare Teams | PHIGuard"
+  description="HIPAA software pages by specialty, workflow, and operating model for clinic administrators evaluating where regulated work should actually live."
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/hipaa-software`}
+  jsonLd={[breadcrumbs, collectionSchema]}
+>
+  <section class="hub-hero">
+    <div class="hub-inner">
+      <p class="hub-eyebrow">Use-case pages</p>
+      <h1 class="hub-heading">HIPAA software pages by clinic type and workflow</h1>
+      <p class="hub-subheading">
+        Not every clinic searches the same way. These pages connect broad HIPAA software demand to the day-to-day operational needs of actual medical offices.
+      </p>
+    </div>
+  </section>
+
+  <section class="hub-section">
+    <div class="hub-inner">
+      <ul class="hub-list" role="list">
+        {pages.map((entry: HipaaSoftwareEntry) => (
+          <li class="hub-list-item">
+            <a href={`/hipaa-software/${entry.id.replace(/\.md$/, '')}`} class="hub-list-link">
+              <span class="hub-item-label">{entry.data.audience}</span>
+              <span class="hub-list-title">{entry.data.title}</span>
+              <span class="hub-list-desc">{entry.data.metaDescription}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</MarketingLayout>
+
+<style is:global>
+  .hub-hero {
+    background: var(--phig-color-surface-50);
+    border-bottom: 1px solid var(--phig-color-border-default);
+    padding: 4rem 1.5rem 3rem;
+    text-align: center;
+  }
+  .hub-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .hub-eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--phig-color-text-link);
+    margin: 0 0 0.75rem;
+  }
+  .hub-heading {
+    font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--phig-color-text-primary);
+    margin: 0 0 1rem;
+    line-height: 1.15;
+  }
+  .hub-subheading {
+    font-size: 1.0625rem;
+    color: var(--phig-color-text-secondary);
+    line-height: 1.7;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .hub-section {
+    padding: 3rem 1.5rem;
+  }
+  .hub-list {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .hub-list-item {
+    margin: 0;
+  }
+  .hub-list-link {
+    display: block;
+    text-decoration: none;
+    border: 1px solid var(--phig-color-border-default);
+    border-radius: 1rem;
+    background: var(--phig-color-surface-0);
+    padding: 1.15rem 1.2rem;
+  }
+  .hub-item-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--phig-color-text-link);
+    margin-bottom: 0.45rem;
+  }
+  .hub-list-title {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--phig-color-text-primary);
+    margin-bottom: 0.35rem;
+  }
+  .hub-list-desc {
+    display: block;
+    color: var(--phig-color-text-secondary);
+    line-height: 1.6;
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+import { footerLinkGroups } from '../lib/internal-links'
+import BrandLogo from './BrandLogo.astro'
+import { PHIGUARD_EMAIL_FOOTER_ENTITY } from '@phiguard/brand/identity'
+import { SUPPORT_EMAIL } from '@phiguard/knowledge/support'
+
+const currentYear = new Date().getFullYear()
+---
+
+<footer class="mt-20 border-t border-border-default bg-surface-900 text-surface-300">
+  <div class="shell-xl grid grid-cols-1 gap-12 px-6 py-14 sm:grid-cols-2 md:grid-cols-5">
+    <div class="sm:col-span-2 md:col-span-1">
+      <a href="/" class="inline-flex min-h-11 items-center gap-3 no-underline" aria-label="PHIGuard home" data-ph-footer-link data-ph-location="footer-brand">
+        <BrandLogo variant="inverse" class="h-8 w-auto" />
+      </a>
+      <p class="mt-4 max-w-sm text-sm leading-relaxed text-surface-400">
+        A quieter, more auditable way for small clinics to run HIPAA tasks, evidence, and operational follow-through.
+      </p>
+    </div>
+
+    {footerLinkGroups.map((group) => (
+      <div>
+        <p class="panel-label text-brand-200">{group.title}</p>
+        <ul role="list" class="m-0 flex list-none flex-col p-0">
+          {group.links.map((l) => (
+            <li>
+              <a href={l.href} class="flex min-h-11 items-center text-sm text-surface-300 no-underline transition-colors duration-150 hover:text-text-inverse" data-ph-footer-link data-ph-location={`footer-${group.title.toLowerCase()}`}>{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <div class="shell-xl flex flex-col gap-2 border-t border-surface-800 px-6 py-5 text-sm text-surface-400 md:flex-row md:items-center md:justify-between">
+    <p class="m-0">&copy; {currentYear} {PHIGUARD_EMAIL_FOOTER_ENTITY}. All rights reserved.</p>
+    <p class="m-0">
+      Security concerns? <a href={`mailto:${SUPPORT_EMAIL}`} class="inline-flex min-h-11 items-center text-brand-200 no-underline hover:underline" data-ph-footer-link data-ph-location="footer-security">{SUPPORT_EMAIL}</a>
+    </p>
+  </div>
+</footer>

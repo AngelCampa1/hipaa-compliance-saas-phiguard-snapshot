@@ -1,0 +1,39 @@
+---
+interface Props {
+  variant?: 'light' | 'inverse' | 'dark' | 'mark'
+  showWordmark?: boolean
+  class?: string
+  title?: string
+}
+
+const {
+  variant = 'light',
+  showWordmark = true,
+  class: className = '',
+  title,
+} = Astro.props
+
+const markOnly = variant === 'mark' || !showWordmark
+const inverse = variant === 'inverse' || variant === 'dark'
+const src = markOnly
+  ? inverse
+    ? '/logo-mark-inverse.png'
+    : '/logo-mark.png'
+  : inverse
+    ? '/logo-horizontal-inverse.png'
+    : '/logo-horizontal.png'
+const width = markOnly ? 512 : 910
+const height = markOnly ? 512 : 200
+---
+
+<img
+  src={src}
+  alt={title ?? ''}
+  aria-hidden={title ? undefined : 'true'}
+  title={title}
+  width={width}
+  height={height}
+  loading="eager"
+  decoding="async"
+  class:list={['brand-logo', className]}
+/>

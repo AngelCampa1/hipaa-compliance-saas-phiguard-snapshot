@@ -1,0 +1,244 @@
+/**
+ * PHIGuard shared Tailwind v4 @theme block
+ *
+ * This file is imported by both apps/web/src/styles/globals.css and
+ * apps/marketing/src/styles/global.css. Edit here once; both apps update.
+ *
+ * Maps --phig-* tokens (defined in tokens.css) to Tailwind utility names.
+ * Using an intermediate mapping avoids the self-referential var() bug that
+ * occurs when the @theme property name and the var() name are identical.
+ *
+ * After this block:
+ *   bg-brand-600    → --color-brand-600 (#0f766e, primary teal)
+ *   text-blue-600   → --color-blue-600  (#2563eb, informational accent)
+ *   text-phi-warn   → --color-phi-warn  (#ea580c, PHI field cue)
+ *   font-sans / font-mono / font-display → Public Sans / Geist Mono / Besley
+ */
+@theme {
+  /* ── Reset conflicting Tailwind built-in namespaces ─────────────────────── */
+  /* Every color palette outside our design system is reset so that authors   */
+  /* cannot accidentally reach for a non-token class like `bg-slate-100`.     */
+  --color-brand-*: initial;
+  --color-blue-*: initial;
+  --color-green-*: initial;
+  --color-red-*: initial;
+  --color-amber-*: initial;
+  --color-orange-*: initial;
+  --color-gray-*: initial;
+  --color-slate-*: initial;
+  --color-zinc-*: initial;
+  --color-neutral-*: initial;
+  --color-stone-*: initial;
+  --color-yellow-*: initial;
+  --color-lime-*: initial;
+  --color-emerald-*: initial;
+  --color-cyan-*: initial;
+  --color-sky-*: initial;
+  --color-indigo-*: initial;
+  --color-violet-*: initial;
+  --color-purple-*: initial;
+  --color-fuchsia-*: initial;
+  --color-pink-*: initial;
+  --color-rose-*: initial;
+
+  /* ── Brand (Teal) ────────────────────────────────────────────────────────── */
+  --color-brand-50: var(--phig-color-brand-50);
+  --color-brand-100: var(--phig-color-brand-100);
+  --color-brand-200: var(--phig-color-brand-200);
+  --color-brand-300: var(--phig-color-brand-300);
+  --color-brand-400: var(--phig-color-brand-400);
+  --color-brand-500: var(--phig-color-brand-500);
+  --color-brand-600: var(--phig-color-brand-600);
+  --color-brand-700: var(--phig-color-brand-700);
+  --color-brand-800: var(--phig-color-brand-800);
+  --color-brand-900: var(--phig-color-brand-900);
+
+  /* ── Blue (Informational accent) ─────────────────────────────────────────── */
+  --color-blue-50: var(--phig-color-blue-50);
+  --color-blue-100: var(--phig-color-blue-100);
+  --color-blue-200: var(--phig-color-blue-200);
+  --color-blue-300: var(--phig-color-blue-300);
+  --color-blue-400: var(--phig-color-blue-400);
+  --color-blue-500: var(--phig-color-blue-500);
+  --color-blue-600: var(--phig-color-blue-600);
+  --color-blue-700: var(--phig-color-blue-700);
+  --color-blue-800: var(--phig-color-blue-800);
+  --color-blue-900: var(--phig-color-blue-900);
+
+  /* ── Success ─────────────────────────────────────────────────────────────── */
+  --color-success-50: var(--phig-color-success-50);
+  --color-success-100: var(--phig-color-success-100);
+  --color-success-200: var(--phig-color-success-200);
+  --color-success-300: var(--phig-color-success-300);
+  --color-success-400: var(--phig-color-success-400);
+  --color-success-500: var(--phig-color-success-500);
+  --color-success-600: var(--phig-color-success-600);
+  --color-success-700: var(--phig-color-success-700);
+  --color-success-800: var(--phig-color-success-800);
+  --color-success-900: var(--phig-color-success-900);
+
+  /* ── Warning ─────────────────────────────────────────────────────────────── */
+  --color-warning-50: var(--phig-color-warning-50);
+  --color-warning-100: var(--phig-color-warning-100);
+  --color-warning-200: var(--phig-color-warning-200);
+  --color-warning-300: var(--phig-color-warning-300);
+  --color-warning-400: var(--phig-color-warning-400);
+  --color-warning-500: var(--phig-color-warning-500);
+  --color-warning-600: var(--phig-color-warning-600);
+  --color-warning-700: var(--phig-color-warning-700);
+  --color-warning-800: var(--phig-color-warning-800);
+  --color-warning-900: var(--phig-color-warning-900);
+
+  /* ── Danger ──────────────────────────────────────────────────────────────── */
+  --color-danger-50: var(--phig-color-danger-50);
+  --color-danger-100: var(--phig-color-danger-100);
+  --color-danger-200: var(--phig-color-danger-200);
+  --color-danger-300: var(--phig-color-danger-300);
+  --color-danger-400: var(--phig-color-danger-400);
+  --color-danger-500: var(--phig-color-danger-500);
+  --color-danger-600: var(--phig-color-danger-600);
+  --color-danger-700: var(--phig-color-danger-700);
+  --color-danger-800: var(--phig-color-danger-800);
+  --color-danger-900: var(--phig-color-danger-900);
+
+  /* ── PHI-Warn ────────────────────────────────────────────────────────────── */
+  --color-phi-warn: var(--phig-color-phi-warn);
+  --color-phi-warn-surface: var(--phig-color-phi-warn-surface);
+  --color-phi-warn-border: var(--phig-color-phi-warn-border);
+  --color-phi-warn-text: var(--phig-color-phi-warn-text);
+
+  /* ── Surface ─────────────────────────────────────────────────────────────── */
+  --color-surface-0: var(--phig-color-surface-0);
+  --color-surface-50: var(--phig-color-surface-50);
+  --color-surface-100: var(--phig-color-surface-100);
+  --color-surface-200: var(--phig-color-surface-200);
+  --color-surface-300: var(--phig-color-surface-300);
+  --color-surface-400: var(--phig-color-surface-400);
+  --color-surface-500: var(--phig-color-surface-500);
+  --color-surface-600: var(--phig-color-surface-600);
+  --color-surface-700: var(--phig-color-surface-700);
+  --color-surface-800: var(--phig-color-surface-800);
+  --color-surface-900: var(--phig-color-surface-900);
+
+  /* ── Semantic Text ───────────────────────────────────────────────────────── */
+  --color-text-primary: var(--phig-color-text-primary);
+  --color-text-secondary: var(--phig-color-text-secondary);
+  --color-text-muted: var(--phig-color-text-muted);
+  --color-text-disabled: var(--phig-color-text-disabled);
+  --color-text-inverse: var(--phig-color-text-inverse);
+  --color-text-brand: var(--phig-color-text-brand);
+  --color-text-link: var(--phig-color-text-link);
+  --color-text-danger: var(--phig-color-text-danger);
+
+  /* ── Semantic Border ─────────────────────────────────────────────────────── */
+  --color-border-default: var(--phig-color-border-default);
+  --color-border-muted: var(--phig-color-border-muted);
+  --color-border-strong: var(--phig-color-border-strong);
+  --color-border-focus: var(--phig-color-border-focus);
+  --color-border-danger: var(--phig-color-border-danger);
+
+  /* ── Semantic Background (page-level) ────────────────────────────────────── */
+  --color-background: var(--phig-color-background);
+  --color-background-subtle: var(--phig-color-background-subtle);
+  --color-background-muted: var(--phig-color-background-muted);
+
+  /* ── Typography — families ───────────────────────────────────────────────── */
+  --font-family-sans: var(--phig-font-sans);
+  --font-family-mono: var(--phig-font-mono);
+  --font-family-display: var(--phig-font-display);
+
+  /* ── Typography — sizes (utility: text-*) ────────────────────────────────── */
+  --text-2xs: var(--phig-font-size-2xs);
+  --text-xs: var(--phig-font-size-xs);
+  --text-sm: var(--phig-font-size-sm);
+  --text-base: var(--phig-font-size-base);
+  --text-lg: var(--phig-font-size-lg);
+  --text-xl: var(--phig-font-size-xl);
+  --text-2xl: var(--phig-font-size-2xl);
+  --text-3xl: var(--phig-font-size-3xl);
+  --text-4xl: var(--phig-font-size-4xl);
+  --text-5xl: var(--phig-font-size-5xl);
+  --text-body-sm: var(--phig-font-size-body-sm);
+  --text-body: var(--phig-font-size-body);
+  --text-body-lg: var(--phig-font-size-body-lg);
+  --text-price: var(--phig-font-size-price);
+  --text-display-xs: var(--phig-font-size-display-xs);
+  --text-display-sm: var(--phig-font-size-display-sm);
+  --text-display-md: var(--phig-font-size-display-md);
+  --text-display-lg: var(--phig-font-size-display-lg);
+
+  /* ── Typography — weights (utility: font-*) ──────────────────────────────── */
+  --font-weight-normal: var(--phig-font-weight-normal);
+  --font-weight-medium: var(--phig-font-weight-medium);
+  --font-weight-semibold: var(--phig-font-weight-semibold);
+  --font-weight-bold: var(--phig-font-weight-bold);
+
+  /* ── Typography — line-height (utility: leading-*) ───────────────────────── */
+  --leading-none: var(--phig-line-height-none);
+  --leading-display: var(--phig-line-height-display);
+  --leading-tight: var(--phig-line-height-tight);
+  --leading-snug: var(--phig-line-height-snug);
+  --leading-normal: var(--phig-line-height-normal);
+  --leading-relaxed: var(--phig-line-height-relaxed);
+  --leading-loose: var(--phig-line-height-loose);
+
+  /* ── Typography — tracking (utility: tracking-*) ─────────────────────────── */
+  --tracking-tightest: var(--phig-letter-spacing-tightest);
+  --tracking-tighter: var(--phig-letter-spacing-tighter);
+  --tracking-tight: var(--phig-letter-spacing-tight);
+  --tracking-normal: var(--phig-letter-spacing-normal);
+  --tracking-wide: var(--phig-letter-spacing-wide);
+  --tracking-wider: var(--phig-letter-spacing-wider);
+  --tracking-caps: var(--phig-letter-spacing-caps);
+  --tracking-widest: var(--phig-letter-spacing-widest);
+
+  /* ── Spacing scale (utility: p/m/gap/w/h-*) ──────────────────────────────── */
+  /* Tailwind v4 multiplies the base --spacing value by the utility's numeric  */
+  /* token (e.g. `p-4` = calc(var(--spacing) * 4)). Setting it to 0.25rem     */
+  /* matches our --phig-space-* 4px scale exactly.                             */
+  --spacing: 0.25rem;
+
+  /* ── Border widths (utility: border-*) ───────────────────────────────────── */
+  --border-thin: var(--phig-border-thin);
+  --border-emphasis: var(--phig-border-emphasis);
+  --border-thick: var(--phig-border-thick);
+  --border-accent: var(--phig-border-accent);
+
+  /* ── Radii ───────────────────────────────────────────────────────────────── */
+  --radius-sm: var(--phig-radius-sm);
+  --radius-md: var(--phig-radius-md);
+  --radius-lg: var(--phig-radius-lg);
+  --radius-container: var(--phig-radius-container);
+  --radius-xl: var(--phig-radius-xl);
+  --radius-2xl: var(--phig-radius-2xl);
+  --radius-full: var(--phig-radius-full);
+
+  /* ── Container max-widths (utility: max-w-container*, max-w-content*) ────── */
+  --container-content-narrow: var(--phig-container-content-narrow);
+  --container-content: var(--phig-container-content);
+  --container-lg: var(--phig-container-lg);
+  --container-xl: var(--phig-container-xl);
+  --container-breadcrumb-link: var(--phig-container-breadcrumb-link);
+  --container-breadcrumb-current: var(--phig-container-breadcrumb-current);
+
+  /* ── Grid templates ──────────────────────────────────────────────────────── */
+  --grid-template-columns-plan-selection: var(--phig-grid-template-columns-plan-selection);
+  --grid-template-columns-manual-evidence-form: var(
+    --phig-grid-template-columns-manual-evidence-form
+  );
+  --grid-template-columns-policy-form: var(--phig-grid-template-columns-policy-form);
+  --grid-template-columns-training-course-form: var(
+    --phig-grid-template-columns-training-course-form
+  );
+
+  /* ── Shadows ─────────────────────────────────────────────────────────────── */
+  --shadow-sm: var(--phig-shadow-sm);
+  --shadow-md: var(--phig-shadow-md);
+  --shadow-lg: var(--phig-shadow-lg);
+  --shadow-xl: var(--phig-shadow-xl);
+  --shadow-2xl: var(--phig-shadow-2xl);
+  --shadow-inner: var(--phig-shadow-inner);
+  --shadow-elevated: var(--phig-shadow-elevated);
+  --shadow-focus-brand: var(--phig-shadow-focus-brand);
+  --shadow-focus-blue: var(--phig-shadow-focus-blue);
+}

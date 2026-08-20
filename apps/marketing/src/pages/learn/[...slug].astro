@@ -1,0 +1,320 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import CTA from '../../components/CTA.astro'
+import CanonicalCommercialNote from '../../components/CanonicalCommercialNote.astro'
+import FAQ from '../../components/FAQ.astro'
+import LeadCapturePanel from '../../components/LeadCapturePanel.astro'
+import RelatedContent from '../../components/RelatedContent.astro'
+import { getContributor } from '../../lib/contributors'
+import {
+  assertLearnIntegrity,
+  buildLearnPath,
+  formatIntentLabel,
+  getPillarArticles,
+  getPillarMeta,
+  type LearnEntry,
+} from '../../lib/learn'
+import {
+  buildArticleSchema,
+  buildBreadcrumbSchema,
+  buildCollectionPageSchema,
+  buildDefinedTermSchema,
+  buildFAQSchema,
+  buildHowToSchema,
+} from '../../lib/seo'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+
+export async function getStaticPaths() {
+  const [entries, resources] = await Promise.all([getCollection('learn'), getCollection('resources')])
+  assertLearnIntegrity(entries, resources)
+
+  return entries.map((entry: LearnEntry) => ({
+    params: {
+      slug: entry.id.replace(/\.md$/, '').replace(/\/index$/, ''),
+    },
+    props: { entry, entries },
+  }))
+}
+
+const { entry, entries } = Astro.props as {
+  entry: LearnEntry
+  entries: LearnEntry[]
+}
+
+const { Content, headings } = await render(entry)
+const author = getContributor(entry.data.author)
+const reviewer = getContributor(entry.data.reviewer)
+const pillar = getPillarMeta(entry.data.pillar)
+const isHub = entry.data.kind === 'hub'
+const pillarArticles = getPillarArticles(entries, entry.data.pillar)
+const siblingArticles = pillarArticles.filter((candidate) => candidate.id !== entry.id).slice(0, 2)
+const resourceEntries = await getCollection('resources')
+const resource = resourceEntries.find((candidate: CollectionEntry<'resources'>) =>
+  candidate.data.magnetSlug === (entry.data.relatedResource ?? pillar.relatedResource),
+)
+const tocHeadings: Array<{ depth: number; slug: string; text: string }> = headings.filter(
+  (heading: { depth: number; slug: string; text: string }) => heading.depth <= 2,
+)
+const relatedEntries = isHub ? pillarArticles : siblingArticles
+const faqItems: Array<{ question: string; answer: string }> =
+  entry.data.faq?.map((item: { q: string; a: string }) => ({ question: item.q, answer: item.a })) ?? []
+const takeaways: string[] = entry.data.keyTakeaways
+const sourceItems: Array<{ title: string; url: string; publisher?: string }> = entry.data.sources
+const commercialPath = entry.data.relatedCommercialPath ?? pillar.relatedCommercialPath
+const commercialLabel = entry.data.relatedCommercialPath ? 'Recommended next step' : pillar.commercialLabel
+
+const breadcrumbs = buildBreadcrumbSchema(
+  isHub
+    ? [
+        { name: 'Home', url: '/' },
+        { name: 'Learn', url: '/learn' },
+        { name: entry.data.title, url: buildLearnPath(entry) },
+      ]
+    : [
+        { name: 'Home', url: '/' },
+        { name: 'Learn', url: '/learn' },
+        { name: pillar.title, url: pillar.href },
+        { name: entry.data.title, url: buildLearnPath(entry) },
+      ],
+)
+
+const articleSchema = isHub
+  ? null
+  : buildArticleSchema({
+      headline: entry.data.title,
+      description: entry.data.metaDescription,
+      url: buildLearnPath(entry),
+      datePublished: entry.data.publishedAt,
+      dateModified: entry.data.updatedAt,
+      authorName: author.name,
+      authorUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${author.slug}`,
+      authorSameAs: author.sameAs,
+      reviewerName: reviewer.name,
+      reviewerUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${reviewer.slug}`,
+      schemaType: 'BlogPosting',
+      citations: entry.data.sources,
+    })
+
+const faqSchema = entry.data.faq?.length ? buildFAQSchema(entry.data.faq) : null
+const collectionSchema = isHub
+  ? buildCollectionPageSchema({
+      name: entry.data.title,
+      description: entry.data.metaDescription,
+      url: buildLearnPath(entry),
+      items: pillarArticles.map((article) => ({
+        name: article.data.title,
+        url: buildLearnPath(article),
+        description: article.data.metaDescription,
+      })),
+    })
+  : null
+const definedTermSchema = entry.data.schemaType === 'defined-term' && entry.data.term
+  ? buildDefinedTermSchema({
+      name: entry.data.term,
+      description: entry.data.summary,
+      url: buildLearnPath(entry),
+      inDefinedTermSet: {
+        name: getPillarMeta(entry.data.pillar).title,
+        url: getPillarMeta(entry.data.pillar).href,
+      },
+    })
+  : null
+const howToSchema = entry.data.schemaType === 'how-to' && entry.data.howToSteps
+  ? buildHowToSchema({
+      name: entry.data.title,
+      description: entry.data.summary,
+      steps: entry.data.howToSteps,
+    })
+  : null
+const jsonLd = [breadcrumbs, articleSchema, faqSchema, collectionSchema, definedTermSchema, howToSchema].filter(Boolean)
+---
+
+<MarketingLayout
+  title={`${entry.data.seoTitle ?? entry.data.title} | PHIGuard`}
+  description={entry.data.metaDescription}
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}${buildLearnPath(entry)}`}
+  jsonLd={jsonLd}
+  ogType="article"
+  publishedTime={entry.data.publishedAt.toISOString()}
+  modifiedTime={entry.data.updatedAt.toISOString()}
+>
+  <article class="article-frame">
+    <div class="shell-lg">
+      <div style="margin-bottom: 1.25rem;">
+        <Breadcrumbs crumbs={isHub ? [
+          { label: "Home", href: "/" },
+          { label: "Learn", href: "/learn" },
+          { label: entry.data.title },
+        ] : [
+          { label: "Home", href: "/" },
+          { label: "Learn", href: "/learn" },
+          { label: pillar.title, href: pillar.href },
+          { label: entry.data.title },
+        ]} />
+      </div>
+
+      <div class="section-grid" style="align-items: start;">
+        <div>
+          <p class="panel-label">{isHub ? 'Topic hub' : `${formatIntentLabel(entry.data.intent)} article`}</p>
+          <h1 class="article-hero-title text-balance">{entry.data.title}</h1>
+          <p class="article-lead">{entry.data.description}</p>
+        </div>
+        <aside class="sidebar-card">
+          <p class="panel-label">Article details</p>
+          <p><strong>Written by:</strong> <a href={`/contributors/${author.slug}`}>{author.name}</a></p>
+          <p><strong>Reviewed by:</strong> <a href={`/contributors/${reviewer.slug}`}>{reviewer.name}</a></p>
+          <p><strong>Updated:</strong> {entry.data.updatedAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+        </aside>
+      </div>
+
+      <div class="article-grid" style="margin-top: 2rem;">
+        <div class="article-main">
+          <div class="editorial-card" style="margin-bottom: 1.5rem;">
+            <p class="panel-label">Short answer</p>
+            <p style="margin: 0;">{entry.data.summary}</p>
+          </div>
+
+          <div class="article-prose max-w-none">
+            <Content />
+          </div>
+
+          <CanonicalCommercialNote />
+
+          <section class="page-surface page-surface--tight" style="padding-left: 0; padding-right: 0;">
+            <div class="feature-grid">
+              {!isHub && (
+                <a class="resource-card" href={pillar.href} style="display: block; text-decoration: none;">
+                  <h3>{pillar.title}</h3>
+                  <p>{pillar.description}</p>
+                </a>
+              )}
+              {relatedEntries.map((related) => (
+                <a class="resource-card" href={buildLearnPath(related)} style="display: block; text-decoration: none;">
+                  <h3>{related.data.title}</h3>
+                  <p>{related.data.metaDescription}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          <section class="page-surface page-surface--tight" style="padding-left: 0; padding-right: 0;">
+            <div class="editorial-card">
+              <p class="panel-label">Sources</p>
+              <ul class="m-0 pl-4">
+                {sourceItems.map((source: { title: string; url: string; publisher?: string }, index: number) => (
+                  <li>
+                    <a href={source.url} data-ph-source-link={index}>{source.title}</a>
+                    {source.publisher && <span> · {source.publisher}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        </div>
+
+        <aside class="resource-sidebar">
+          {tocHeadings.length > 1 && (
+            <section class="sidebar-card toc-sidebar-card">
+              <h3>On this page</h3>
+              <ol class="m-0 pl-4">
+                {tocHeadings.map((heading: { slug: string; text: string }) => (
+                  <li><a href={`#${heading.slug}`} data-ph-toc-link={heading.slug}>{heading.text}</a></li>
+                ))}
+              </ol>
+            </section>
+          )}
+
+          <section class="sidebar-card">
+            <h3>Key takeaways</h3>
+            <ul class="m-0 pl-4">
+              {takeaways.map((takeaway: string) => (
+                <li>{takeaway}</li>
+              ))}
+            </ul>
+          </section>
+
+          {resource && (
+            <LeadCapturePanel
+              variant="sidebar"
+              magnetSlug={resource.data.magnetSlug}
+              ctaContext="inline-content-upgrade"
+              eyebrow="Downloadable resource"
+            />
+          )}
+
+          <section class="sidebar-card">
+            <h3>Next step</h3>
+            <p class="m-0">
+              <a href={commercialPath}>{commercialLabel}</a>
+            </p>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  {faqItems.length ? (
+    <FAQ
+      items={faqItems}
+      heading={isHub ? `${pillar.title} questions small clinics ask` : 'Questions related to this topic'}
+    />
+  ) : null}
+
+  <RelatedContent
+    cluster="resources"
+    eyebrow="Move down-funnel"
+    heading="Use this topic to move into a worksheet, vendor evaluation, or commercial path."
+    items={[
+      resource
+        ? {
+            href: `/resources/${resource.data.magnetSlug}`,
+            title: resource.data.title,
+            description: resource.data.description,
+            eyebrow: 'Downloadable resource',
+          }
+        : null,
+      {
+        href: commercialPath,
+        title: commercialLabel,
+        description: 'Inspect the product or commercial page that matches this workflow once the problem is clear.',
+        eyebrow: 'Commercial path',
+      },
+      {
+        href: '/resources/guides',
+        title: 'Review HIPAA readiness of common tools',
+        description: 'Use the vendor guides when the clinic is trying to decide whether a familiar tool is safe enough for PHI-adjacent work.',
+        eyebrow: 'Vendor evaluation',
+      },
+    ].filter(Boolean)}
+  />
+
+  <CTA
+    heading="Move from policy documents to a working compliance program."
+    subheading="PHIGuard turns these workflows into repeatable tasks, audit evidence, and role-based processes for small clinics."
+  />
+
+<style>
+  .article-prose :global(table) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .article-prose :global(pre) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .article-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+  @media (max-width: 767px) {
+    .toc-sidebar-card {
+      display: none;
+    }
+  }
+</style>
+</MarketingLayout>

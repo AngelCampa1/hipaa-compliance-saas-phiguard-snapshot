@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@import "../../../../packages/ui/src/tokens.css";
+@import "../../../../packages/ui/src/web-theme.css";
+@plugin "tailwindcss-animate";
+
+/* Onboarding & plan-selection gradient background */
+.onboarding-bg {
+  background:
+    radial-gradient(circle at top, color-mix(in oklch, var(--phig-color-brand-600) 16%, transparent), transparent 30%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--phig-color-warning-50) 45%, var(--phig-color-surface-50)) 0%,
+      var(--phig-color-surface-50) 48%,
+      var(--phig-color-surface-0) 100%
+    );
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--phig-font-sans);
+  margin: 0;
+  padding: 0;
+  color: var(--phig-color-text-primary);
+  background: var(--phig-color-surface-0);
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+}

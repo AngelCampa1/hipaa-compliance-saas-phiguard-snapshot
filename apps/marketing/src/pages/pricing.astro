@@ -1,0 +1,163 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro'
+import PricingTable from '../components/PricingTable.astro'
+import PromoGuarantee from '../components/PromoGuarantee.astro'
+import FAQ from '../components/FAQ.astro'
+import CTA from '../components/CTA.astro'
+import LeadCapturePanel from '../components/LeadCapturePanel.astro'
+import { customPricingPath, marketingPlans, siteSecondaryCtas } from '../data/product'
+import { buildBreadcrumbSchema, buildFAQSchema, buildSoftwareApplicationSchema } from '../lib/seo'
+import { commercialKnowledgeCopy, commercialPageCopy } from '@phiguard/knowledge/commercial'
+
+const schemas = [
+  buildBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Pricing', url: '/pricing' },
+  ]),
+  buildSoftwareApplicationSchema(),
+  buildFAQSchema([...commercialPageCopy.pricingPage.schemaFaqs]),
+]
+
+const comparisonTable = [
+  {
+    label: 'Best fit',
+    values: marketingPlans.map((plan) => plan.audienceShort),
+  },
+  {
+    label: 'Staff included',
+    values: marketingPlans.map((plan) => `Up to ${plan.maxMembers}`),
+  },
+  {
+    label: 'Annual default',
+    values: marketingPlans.map((plan) => `${plan.priceAnnualMonthly}/month equivalent with the limited first-year offer. ${plan.priceAnnual}/year paid upfront annually. List price ${plan.priceAnnualMonthlyList}/month equivalent, ${plan.priceAnnualList}/year.`),
+  },
+  {
+    label: 'Monthly option',
+    values: marketingPlans.map((plan) => `${plan.priceMonthly}/month paid monthly with the limited first-year offer. List price ${plan.priceMonthlyList}/month.`),
+  },
+  {
+    label: 'Included baseline',
+    values: marketingPlans.map((plan) => plan.comparisonIncludedBaseline),
+  },
+  {
+    label: 'Operational step-up',
+    values: marketingPlans.map((plan) => plan.comparisonOperationalStepUp),
+  },
+]
+---
+
+<MarketingLayout
+  title="Pricing | PHIGuard HIPAA Task Management"
+  description={`PHIGuard pricing for Essentials, Clinic, and Group. Annual pricing is the default. ${commercialKnowledgeCopy.baaIncluded}`}
+  jsonLd={schemas}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Pricing</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.4rem, 4.6vw, 4rem);">{commercialPageCopy.pricingPage.heroHeading}</h1>
+        <p class="hero-summary">
+          {commercialPageCopy.pricingPage.heroSummary}
+        </p>
+        <PromoGuarantee />
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">{commercialPageCopy.pricingPage.assuranceHeading}</p>
+        <div class="assurance-list">
+          {commercialPageCopy.pricingPage.assurances.map((assurance) => (
+            <div class="assurance-row">
+              <span class="assurance-bullet"></span>
+              <span class="assurance-title">{assurance.title}</span>
+              <span class="assurance-meta">{assurance.meta}</span>
+            </div>
+          ))}
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <PricingTable>
+    <Fragment slot="header">
+      <p class="kicker">Plans</p>
+      <h2 class="section-title text-balance">{commercialPageCopy.pricingPage.planHeaderHeading}</h2>
+      <p class="section-body">
+        {commercialPageCopy.pricingPage.planHeaderBody}
+      </p>
+    </Fragment>
+  </PricingTable>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="fine-print">
+        {customPricingPath.summary} {customPricingPath.detail}
+      </p>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">At a glance</p>
+      <h2 class="section-title text-balance">{commercialPageCopy.pricingPage.comparisonHeading}</h2>
+      <div class="table-shell compact-table" style="margin-top: 1.75rem;">
+        <div class="table-scroll">
+          <table aria-label="PHIGuard plan comparison">
+            <thead>
+              <tr>
+                <th>Question</th>
+                {marketingPlans.map((plan) => (
+                  <th>{plan.name}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {comparisonTable.map((row) => (
+                <tr>
+                  <td>{row.label}</td>
+                  {row.values.map((value) => (
+                    <td>{value}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg clinic-fit-grid">
+      {marketingPlans.map((plan) => (
+        <div class="clinic-fit-card">
+          <h3>{plan.name}</h3>
+          <p>{plan.fit}</p>
+          <p class="fine-print" style="margin-top: 0.85rem;">Advanced coverage: {plan.capabilities.slice(-1)[0]}</p>
+          <a href={plan.ctaHref} class="button-tertiary">Start {plan.name} free trial</a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <LeadCapturePanel
+        magnetSlug="hipaa-pm-tool-comparison-guide"
+        eyebrow="Free buyer resource"
+        heading="Download the HIPAA PM tool comparison guide before the shortlist hardens."
+        body="Compare pricing structure, BAA access, auditability, and clinic operating overhead before a generic platform decision creates more cleanup work."
+      />
+    </div>
+  </section>
+
+  <FAQ
+    heading={commercialPageCopy.pricingPage.faqHeading}
+    items={[...commercialPageCopy.pricingPage.faqs]}
+  />
+
+  <CTA
+    heading="Pick the plan that matches how your clinic runs HIPAA work today."
+    subheading="Start with the baseline if you need one accountable system. Move up when integrations, policy work, training, risk, vendor BAAs, or multi-location visibility are part of the job."
+    secondaryLabel={siteSecondaryCtas.product.label}
+    secondaryHref={siteSecondaryCtas.product.href}
+  />
+</MarketingLayout>

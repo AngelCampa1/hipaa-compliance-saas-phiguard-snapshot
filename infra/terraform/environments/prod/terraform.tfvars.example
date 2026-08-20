@@ -1,0 +1,37 @@
+# terraform.tfvars.example — prod environment
+# Copy this file to terraform.tfvars and replace every REPLACE_ME value before
+# running terraform plan / apply. Never commit terraform.tfvars to source control.
+#
+# NOTE: rds_db_password and cloudflare_account_id are intentionally excluded.
+# Set them as TF_VAR_rds_db_password and TF_VAR_cloudflare_account_id
+# environment variables in CI; never write them to a .tfvars file.
+
+environment  = "prod"           # REPLACE_ME: deployment environment label
+project_name = "phiguard"       # REPLACE_ME: project name prefix for all resources
+aws_region   = "us-east-1"      # REPLACE_ME: AWS region (CloudFront ACM cert must be us-east-1)
+
+rds_instance_class = "db.t3.medium"  # REPLACE_ME: RDS instance class
+ecs_desired_count  = 2               # REPLACE_ME: number of ECS task replicas
+
+# ACM certificate for phiguard.app — must be provisioned in us-east-1 for CloudFront
+acm_certificate_arn = "arn:aws:acm:us-east-1:REPLACE_ME:certificate/REPLACE_ME"
+
+# Route53 hosted zone for phiguard.app
+route53_zone_id = "REPLACE_ME"
+
+# GitHub OIDC trust policy — scoped to the repo that runs Terraform in CI
+github_org  = "REPLACE_ME"
+github_repo = "phiguard"          # REPLACE_ME: GitHub repository name
+
+# Optional: email address to receive CloudWatch security alarm notifications
+sns_alert_email = ""              # REPLACE_ME: e.g. "ops-alerts@example.com", or leave empty
+
+# Initial Secrets Manager values. Replace before first apply, then rotate the
+# created secrets immediately through Secrets Manager or CI-managed TF_VAR_*.
+database_url_placeholder       = "REPLACE_ME_DATABASE_URL"
+better_auth_secret_placeholder = "REPLACE_ME_32_BYTE_HEX_SECRET"
+better_auth_url_placeholder    = "https://my.phiguard.app"
+resend_api_key_placeholder     = "REPLACE_ME_RESEND_API_KEY"
+resend_webhook_secret_placeholder = "REPLACE_ME_RESEND_WEBHOOK_SECRET"
+r2_access_key_id_placeholder      = "REPLACE_ME_R2_ACCESS_KEY_ID"
+r2_secret_access_key_placeholder  = "REPLACE_ME_R2_SECRET_ACCESS_KEY"

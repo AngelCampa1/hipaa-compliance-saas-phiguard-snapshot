@@ -1,0 +1,440 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1776188242980,
+      "tag": "0000_first_karnak",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1776200000000,
+      "tag": "0001_rename_tenant_id",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776210000000,
+      "tag": "0002_audit_events",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1776220000000,
+      "tag": "0003_tasks",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1776230000000,
+      "tag": "0003b_task_assignments_tenant_id",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1776240000000,
+      "tag": "0003c_timestamps_tz",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1776250000000,
+      "tag": "0004_compliance",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1776300000000,
+      "tag": "0005_org_lifecycle",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1776350000000,
+      "tag": "0006_multilocation_foundation",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1776400000000,
+      "tag": "0007_baa_envelopes",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1776450000000,
+      "tag": "0008_compliance_program",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1776455000000,
+      "tag": "0008_integration_connections",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1776460000000,
+      "tag": "0008_partners",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1776500000000,
+      "tag": "0008_sso_and_scim",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1776550000000,
+      "tag": "0009_referral_total_paid_out",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1776600000000,
+      "tag": "0010_auditor_role",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1776700000000,
+      "tag": "0011_soc2_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1776720000000,
+      "tag": "0012_rate_limit_buckets",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1776800000000,
+      "tag": "0013_auth_table_id_defaults",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1776850000000,
+      "tag": "0019_referrals_unique_partner_org",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1776851000000,
+      "tag": "0020_incidents_closed_at",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1776852000000,
+      "tag": "0021_encrypted_account_tokens",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1776853000000,
+      "tag": "0022_stripe_event_idempotency",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1776854000000,
+      "tag": "0014_organization_invitation_id_default",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1776855000000,
+      "tag": "0015_marketing_leads",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1776860000000,
+      "tag": "0016_location_grants_tenant_id",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1776880000000,
+      "tag": "0016_nurture_and_subscriptions",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1776900000000,
+      "tag": "0017_audit_events_tenant_fk",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1776920000000,
+      "tag": "0018_org_invitations_uuid_id",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1776960000000,
+      "tag": "0020_checklist_items_completed_by_fk",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1776970000000,
+      "tag": "0023_webhook_event_idempotency",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1776980000000,
+      "tag": "0024_trial_dates",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1776990000000,
+      "tag": "0025_billing_price_monthly",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1777000000000,
+      "tag": "0026_integration_connections_active_unique",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1777010000000,
+      "tag": "0027_standard_legal_acceptance",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1777020000000,
+      "tag": "0028_remove_workos_sso",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1777100000000,
+      "tag": "0029_legal_acceptance_pdfs",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1777110000000,
+      "tag": "0030_marketing_lead_context",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1777120000000,
+      "tag": "0031_plan_status_paused",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1777150000000,
+      "tag": "0032_pretrial_plan_selection",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1777151000000,
+      "tag": "0033_terms_acceptance_columns",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1777152000000,
+      "tag": "0034_legal_acceptances_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1777153000000,
+      "tag": "0035_marketing_lead_context",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1777160000000,
+      "tag": "0036_training_records_unique_assignment",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1777732500000,
+      "tag": "0037_invitation_member_capacity",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1777732600000,
+      "tag": "0038_compliance_ops_plan",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1778067600000,
+      "tag": "0039_partner_magic_link_tokens",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1779197000000,
+      "tag": "0040_feature_usage_and_interested_plan",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1779197100000,
+      "tag": "0041_partner_application_profile",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1779197200000,
+      "tag": "0042_integration_sync_records",
+      "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1779197300000,
+      "tag": "0043_partner_payout_reference",
+      "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1779197400000,
+      "tag": "0044_task_attachment_av_default",
+      "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1779279000000,
+      "tag": "0045_evidence_file_scans",
+      "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "7",
+      "when": 1779469500000,
+      "tag": "0046_drop_baa_envelopes",
+      "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1779600000000,
+      "tag": "0047_tasks_archived_at",
+      "breakpoints": true
+    },
+    {
+      "idx": 55,
+      "version": "7",
+      "when": 1779600100000,
+      "tag": "0048_incident_updates",
+      "breakpoints": true
+    },
+    {
+      "idx": 56,
+      "version": "7",
+      "when": 1779600200000,
+      "tag": "0049_referral_revenue_events",
+      "breakpoints": true
+    },
+    {
+      "idx": 57,
+      "version": "7",
+      "when": 1779600300000,
+      "tag": "0050_integration_install_started_at",
+      "breakpoints": true
+    },
+    {
+      "idx": 58,
+      "version": "7",
+      "when": 1779600400000,
+      "tag": "0051_policy_acknowledgements_unique",
+      "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1779600500000,
+      "tag": "0052_access_reviews_fks",
+      "breakpoints": true
+    },
+    {
+      "idx": 60,
+      "version": "7",
+      "when": 1779600600000,
+      "tag": "0053_incident_updates_author_fk",
+      "breakpoints": true
+    },
+    {
+      "idx": 61,
+      "version": "7",
+      "when": 1780339265515,
+      "tag": "0061_amazing_machine_man",
+      "breakpoints": true
+    }
+  ]
+}

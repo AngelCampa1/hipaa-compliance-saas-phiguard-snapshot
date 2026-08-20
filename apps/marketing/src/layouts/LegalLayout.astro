@@ -1,0 +1,60 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import Nav from '../components/Nav.astro'
+import Footer from '../components/Footer.astro'
+import LaunchBanner from '../components/LaunchBanner.astro'
+
+interface Props {
+  title?: string
+  description?: string
+  ogImage?: string
+  canonicalUrl?: string
+  jsonLd?: object | object[]
+  noindex?: boolean
+  ogType?: string
+  publishedTime?: string
+  modifiedTime?: string
+}
+
+const props = Astro.props
+---
+
+<BaseLayout {...props}>
+  <div class="site-sticky-header sticky top-0 z-50">
+    <LaunchBanner />
+    <Nav />
+  </div>
+  <main id="main-content" class="legal-prose">
+    <slot />
+  </main>
+  <Footer />
+  <style>
+    .legal-prose {
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1rem 4rem;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    @media (min-width: 640px) {
+      .legal-prose {
+        padding: 3rem 1.5rem 6rem;
+      }
+    }
+    .legal-prose h1 { font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700; margin-bottom: 0.5rem; line-height: 1.2; }
+    .legal-prose h2 { font-size: clamp(1.1rem, 3.5vw, 1.25rem); font-weight: 600; margin-top: 2rem; margin-bottom: 0.5rem; }
+    .legal-prose p, .legal-prose li { color: #374151; line-height: 1.75; }
+    .legal-prose ul, .legal-prose ol { padding-left: 1.5rem; }
+    .legal-prose a { color: #2563eb; text-decoration: underline; overflow-wrap: anywhere; }
+    .draft-notice {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      font-weight: 600;
+      color: #92400e;
+    }
+  </style>
+</BaseLayout>

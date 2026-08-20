@@ -1,0 +1,194 @@
+---
+import { getCollection, render } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+import type { GetStaticPaths } from 'astro'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import CTA from '../../components/CTA.astro'
+import CanonicalCommercialNote from '../../components/CanonicalCommercialNote.astro'
+import FAQ from '../../components/FAQ.astro'
+import LeadCapturePanel from '../../components/LeadCapturePanel.astro'
+import RelatedContent from '../../components/RelatedContent.astro'
+import PracticePricingSummary from '../../components/PracticePricingSummary.astro'
+import { getContributor } from '../../lib/contributors'
+import { buildBreadcrumbSchema, buildArticleSchema, buildFAQSchema } from '../../lib/seo'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+
+export const prerender = true
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('personas')
+  return entries.map((entry: CollectionEntry<'personas'>) => ({
+    params: { slug: entry.id.replace(/\.md$/, '') },
+    props: { entry },
+  }))
+}) satisfies GetStaticPaths
+
+type Props = { entry: CollectionEntry<'personas'> }
+type PersonaFaq = { q: string; a: string }
+type SourceItem = { title: string; url: string; publisher?: string }
+
+const { entry } = Astro.props as Props
+const entrySlug = entry.id.replace(/\.md$/, '')
+const { Content } = await render(entry)
+const author = getContributor(entry.data.author)
+const reviewer = getContributor(entry.data.reviewer)
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Roles', url: '/personas' },
+  { name: entry.data.persona, url: `/personas/${entrySlug}` },
+])
+const articleSchema = buildArticleSchema({
+  headline: entry.data.title,
+  description: entry.data.metaDescription,
+  url: `/personas/${entrySlug}`,
+  datePublished: entry.data.publishedAt,
+  dateModified: entry.data.updatedAt,
+  authorName: author.name,
+  authorUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${author.slug}`,
+  authorSameAs: author.sameAs,
+  reviewerName: reviewer.name,
+  reviewerUrl: `${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${reviewer.slug}`,
+  citations: entry.data.sources,
+})
+const faqItems =
+  entry.data.faq?.map((item: PersonaFaq) => ({ question: item.q, answer: item.a })) ?? []
+const faqSchema = entry.data.faq?.length ? buildFAQSchema(entry.data.faq) : null
+---
+
+<MarketingLayout
+  title={`${entry.data.seoTitle ?? entry.data.title} | PHIGuard`}
+  description={entry.data.metaDescription}
+  jsonLd={faqSchema ? [breadcrumbs, articleSchema, faqSchema] : [breadcrumbs, articleSchema]}
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/personas/${entrySlug}`}
+  ogType="article"
+  ogImage="https://phiguard.app/og/practice-types.png"
+  publishedTime={entry.data.publishedAt.toISOString()}
+  modifiedTime={entry.data.updatedAt.toISOString()}
+>
+  <section class="article-frame">
+    <div class="shell-md">
+      <div style="margin-bottom: 1.25rem;">
+        <Breadcrumbs crumbs={[
+          { label: "Home", href: "/" },
+          { label: "Roles", href: "/personas" },
+          { label: entry.data.persona },
+        ]} />
+      </div>
+      <h1 class="article-hero-title text-balance">{entry.data.title}</h1>
+      <p class="article-lead">{entry.data.description}</p>
+      <div class="editorial-card" style="margin-top: 1.5rem;">
+        <p class="panel-label">What this role gets</p>
+        <p style="margin: 0;">{entry.data.summary}</p>
+      </div>
+      <div class="editorial-card" style="margin-top: 1rem;">
+        <p class="panel-label">Key takeaways</p>
+        <ul class="list-clean">
+          {entry.data.keyTakeaways.map((takeaway: string) => (
+            <li>{takeaway}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-md">
+      <article class="article-prose max-w-none">
+        <Content />
+      </article>
+      <CanonicalCommercialNote />
+      <div class="editorial-card" style="margin-top: 1.5rem;">
+        <p class="panel-label">Editorial details</p>
+        <p><strong>Written by:</strong> <a href={`/contributors/${author.slug}`}>{author.name}</a></p>
+        <p><strong>Reviewed by:</strong> <a href={`/contributors/${reviewer.slug}`}>{reviewer.name}</a></p>
+        <p><strong>Updated:</strong> {entry.data.updatedAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+      </div>
+      <div class="editorial-card" style="margin-top: 1rem;">
+        <p class="panel-label">Sources</p>
+        <ul class="list-clean">
+          {entry.data.sources.map((source: SourceItem) => (
+            <li>
+              <a href={source.url}>{source.title}</a>
+              {source.publisher && <span> | {source.publisher}</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <PracticePricingSummary />
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-md">
+      <LeadCapturePanel magnetSlug={entry.data.relatedResource ?? 'vendor-baa-tracker'} />
+    </div>
+  </section>
+
+  {faqItems.length > 0 && <FAQ items={faqItems} heading={`Questions ${entry.data.persona.toLowerCase()}s ask about PHIGuard`} />}
+
+  <RelatedContent
+    cluster="personas"
+    currentSlug={entrySlug}
+    eyebrow="Choose the next step"
+    heading="Move from role fit into a worksheet, a supporting explainer, or the product path."
+    items={[
+      entry.data.relatedResource
+        ? {
+            href: `/resources/${entry.data.relatedResource}`,
+            title: 'Download the matching worksheet',
+            description: 'Use the resource that helps this role pressure-test the work before rollout.',
+            eyebrow: 'Downloadable resource',
+          }
+        : null,
+      {
+        href: '/personas',
+        title: 'Browse every role guide',
+        description: 'Return to the roles hub when the clinic needs to compare HIPAA work across job titles.',
+        eyebrow: 'Parent hub',
+      },
+      entry.data.relatedLearnPath
+        ? {
+            href: entry.data.relatedLearnPath,
+            title: 'Read the supporting explainer',
+            description: 'Open the educational page behind the operational rule this role keeps running into.',
+            eyebrow: 'Background guide',
+          }
+        : null,
+      entry.data.relatedCommercialPath
+        ? {
+            href: entry.data.relatedCommercialPath,
+            title: 'Open the recommended PHIGuard path',
+            description: 'Go directly to the product or pricing path that best matches this role.',
+            eyebrow: 'Commercial path',
+          }
+        : {
+            href: '/product',
+            title: 'Explore the product',
+            description: 'See how PHIGuard handles recurring HIPAA work for this role.',
+            eyebrow: 'Commercial path',
+          },
+    ].filter(Boolean)}
+  />
+
+  <CTA />
+
+<style>
+  .article-prose :global(table) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .article-prose :global(pre) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .article-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+</MarketingLayout>

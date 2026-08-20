@@ -1,0 +1,31 @@
+---
+// Cloudflare Turnstile widget. Renders inside a lead-capture form so its
+// implicit-mode token is injected as a `cf-turnstile-response` input and picked
+// up by the form's existing FormData submit. When no site key is configured
+// (local dev), nothing renders and the server-side verifier bypasses in kind.
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''
+---
+
+{
+  siteKey && (
+    <>
+      <div class="cf-turnstile" data-sitekey={siteKey} data-theme="auto" data-size="flexible" />
+      <script>
+        // Load the Turnstile API once per page. Astro hoists this bundled script
+        // for every page that uses the component, so first confirm a widget
+        // actually rendered, then avoid a duplicate tag.
+        const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
+        if (
+          document.querySelector('.cf-turnstile') &&
+          !document.querySelector(`script[src="${TURNSTILE_SRC}"]`)
+        ) {
+          const script = document.createElement('script')
+          script.src = TURNSTILE_SRC
+          script.async = true
+          script.defer = true
+          document.head.appendChild(script)
+        }
+      </script>
+    </>
+  )
+}

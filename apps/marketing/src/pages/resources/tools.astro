@@ -1,0 +1,86 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import CTA from '../../components/CTA.astro'
+import { buildBreadcrumbSchema, buildCollectionPageSchema } from '../../lib/seo'
+
+type ResourceEntry = CollectionEntry<'resources'>
+
+const stageLabel: Record<string, string> = {
+  awareness: 'Quick reference',
+  consideration: 'Assessment tool',
+  decision: 'Template',
+}
+
+const resources = (await getCollection('resources')).sort(
+  (a: ResourceEntry, b: ResourceEntry) => a.data.title.localeCompare(b.data.title),
+)
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Resources', url: '/resources' },
+  { name: 'Free Tools', url: '/resources/tools' },
+])
+
+const collectionSchema = buildCollectionPageSchema({
+  name: 'HIPAA free tools and templates',
+  description: 'Downloadable templates, checklists, worksheets, logs, and decision tools for small clinic HIPAA operations.',
+  url: '/resources/tools',
+  items: resources.map((entry: ResourceEntry) => ({
+    name: entry.data.title,
+    url: `/resources/${entry.data.magnetSlug}`,
+    description: entry.data.metaDescription,
+  })),
+})
+---
+
+<MarketingLayout
+  title="HIPAA Free Tools and Templates | PHIGuard"
+  description="Browse every PHIGuard downloadable template, worksheet, checklist, log, and decision tool for clinic HIPAA operations."
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/resources/tools`}
+  jsonLd={[breadcrumbs, collectionSchema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Free tools</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.35rem, 4.6vw, 4rem);">HIPAA templates, worksheets, and logs for clinic operations.</h1>
+        <p class="hero-summary">
+          This hub lists every downloadable resource in the library so templates are reachable from one crawlable page and can connect back into the right learning or buying path.
+        </p>
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">Related hubs</p>
+        <div class="assurance-list">
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Need background?</span><span class="assurance-meta"><a href="/learn">Learn</a></span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Need vendor checks?</span><span class="assurance-meta"><a href="/resources/guides">Guides</a></span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Need a shortlist?</span><span class="assurance-meta"><a href="/resources/best">Best-of</a></span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">All downloadable resources</p>
+      <h2 class="section-title text-balance">Choose the template or worksheet that matches the clinic task.</h2>
+      <div class="detail-grid" style="margin-top: 1.75rem;">
+        {resources.map((entry: ResourceEntry) => (
+          <a class="link-card" href={`/resources/${entry.data.magnetSlug}`}>
+            <small>{stageLabel[entry.data.stage] ?? entry.data.stage}</small>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    heading="Use the template, then move the workflow into a system."
+    subheading="Templates help clarify the job. PHIGuard helps clinics run the recurring tasks, evidence, and accountability that follow."
+    secondaryLabel="Explore the product"
+    secondaryHref="/product"
+  />
+</MarketingLayout>

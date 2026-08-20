@@ -1,0 +1,137 @@
+---
+import MarketingLayout from '../../../layouts/MarketingLayout.astro'
+import CTA from '../../../components/CTA.astro'
+import {
+  productPillars,
+  sitePrimaryCta,
+  siteSecondaryCtas,
+} from '../../../data/product'
+import { PLANS, getMinimumPlanForFeatures } from '@phiguard/billing'
+import {
+  buildBreadcrumbSchema,
+  buildCollectionPageSchema,
+  buildSoftwareApplicationSchema,
+} from '../../../lib/seo'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+
+const featureItems = productPillars.map((feature) => ({
+  name: feature.name,
+  url: `/product/features/${feature.slug}`,
+  description: feature.summary,
+}))
+const programOperationsPlanName = PLANS[getMinimumPlanForFeatures(['multi_location_rollup'])].name
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Product', url: '/product' },
+  { name: 'Features', url: '/product/features' },
+])
+
+const featureCollectionSchema = buildCollectionPageSchema({
+  name: 'PHIGuard feature landing pages',
+  description:
+    'In-depth PHIGuard feature pages for HIPAA task management, evidence, incident response, program operations, and multi-location controls.',
+  url: '/product/features',
+  items: featureItems,
+})
+---
+
+<MarketingLayout
+  title="PHIGuard Features | HIPAA Operations Pages"
+  description="Explore PHIGuard feature pages for HIPAA task management, evidence, incident response, program operations, and multi-location reporting."
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/product/features`}
+  jsonLd={[breadcrumbs, buildSoftwareApplicationSchema(), featureCollectionSchema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg feature-hero-grid">
+      <div>
+        <p class="kicker">Product features</p>
+        <h1 class="hero-title text-balance">Every PHIGuard feature starts with a clinic operations problem.</h1>
+        <p class="hero-summary">
+          HIPAA work breaks down when tasks, evidence, incidents, vendors, and location reports live in separate tools. These pages show the problem first, then the PHIGuard workflow that keeps the record together.
+        </p>
+        <div class="hero-actions">
+          <a href={sitePrimaryCta.href} class="button-primary">{sitePrimaryCta.label}</a>
+          <a href="/product" class="button-secondary">Back to product</a>
+        </div>
+      </div>
+
+      <aside class="feature-answer-panel" aria-label="Feature page directory">
+        <p class="panel-label">Feature directory</p>
+        <h2 class="preview-title">What to review first</h2>
+        <p>Start with the workflow that is hardest to prove later, then follow the related links into pricing, security, the BAA, and HIPAA education.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Feature pages</p>
+      <h2 class="section-title text-balance">Choose the feature that matches the workflow gap.</h2>
+      <div class="jump-grid">
+        {productPillars.map((feature) => (
+          <a href={`/product/features/${feature.slug}`} class="jump-card">
+            <small>{feature.audience}</small>
+            <h3>{feature.name}</h3>
+            <p>{feature.problem}</p>
+            <span>{feature.bullets.length} included capabilities</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Capability map</p>
+      <h2 class="section-title text-balance">Every named capability rolls into one feature workflow page.</h2>
+      <div class="feature-capability-grid">
+        {productPillars.flatMap((feature) =>
+          feature.bullets.map((capability) => (
+            <a href={`/product/features/${feature.slug}`} class="feature-capability-card">
+              <small>{feature.shortName}</small>
+              <h3>{capability}</h3>
+              <p>Review the problem, solution, workflow, and evidence path for this PHIGuard capability.</p>
+            </a>
+          ))
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Internal paths</p>
+        <h2 class="section-title text-balance">Each feature page connects to the next evaluation question.</h2>
+        <p class="section-body">
+          The feature pages link into HIPAA education, resources, pricing, security, the BAA, and related product areas so buyers can keep moving without guessing where the answer lives.
+        </p>
+      </div>
+      <div class="link-grid">
+        <a href="/pricing" class="link-card">
+          <small>Pricing</small>
+          <strong>Match features to the right plan</strong>
+          <span>Compare the baseline plan fit and {programOperationsPlanName}-plan operations coverage.</span>
+        </a>
+        <a href="/security" class="link-card">
+          <small>Security</small>
+          <strong>Review trust posture</strong>
+          <span>Connect product behavior to current public security claims.</span>
+        </a>
+        <a href="/baa" class="link-card">
+          <small>BAA</small>
+          <strong>Check the legal baseline</strong>
+          <span>Review the Business Associate Agreement path before trial signup.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    heading="Start with the feature that matches the clinic problem."
+    subheading="Use the feature pages to understand the workflow, then move into pricing, security, or the BAA when the next review question is clear."
+    secondaryLabel={siteSecondaryCtas.pricing.label}
+    secondaryHref={siteSecondaryCtas.pricing.href}
+  />
+</MarketingLayout>

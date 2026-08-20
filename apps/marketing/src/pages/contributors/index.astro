@@ -1,0 +1,111 @@
+---
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import { contributorList } from '../../lib/contributors'
+import { buildBreadcrumbSchema } from '../../lib/seo'
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Contributors', url: '/contributors' },
+])
+---
+
+<MarketingLayout
+  title="Contributors | PHIGuard"
+  description="Meet the PHIGuard founder and compliance reviewers behind our HIPAA guidance."
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors`}
+  jsonLd={breadcrumbs}
+>
+  <section class="contributors-page">
+    <div class="contributors-shell">
+      <p class="contributors-label">Editorial standards</p>
+      <h1>Meet the contributors behind PHIGuard guidance</h1>
+      <p class="contributors-intro">
+        PHIGuard guidance is written by founder Angel Campa and reviewed for regulatory references,
+        workflow assumptions, and product claims related to small medical practices.
+      </p>
+
+      <div class="contributors-grid">
+        {contributorList.map((contributor) => (
+          <a class="contributor-card" href={`/contributors/${contributor.slug}`}>
+            <p class="contributor-role">{contributor.role}</p>
+            <h2>{contributor.name}</h2>
+            <p>{contributor.bio}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</MarketingLayout>
+
+<style>
+  .contributors-page {
+    padding: 4rem 1.5rem 5rem;
+    background: linear-gradient(
+      180deg,
+      var(--phig-color-surface-50) 0%,
+      var(--phig-color-surface-0) 22%
+    );
+  }
+  .contributors-shell {
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .contributors-label {
+    margin: 0 0 0.75rem;
+    color: var(--phig-color-text-brand);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+  h1 {
+    margin: 0;
+    max-width: 760px;
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    color: var(--phig-color-text-primary);
+  }
+  .contributors-intro {
+    max-width: 760px;
+    margin: 1rem 0 0;
+    color: var(--phig-color-text-secondary);
+    line-height: 1.8;
+    font-size: 1.02rem;
+  }
+  .contributors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .contributor-card {
+    display: block;
+    padding: 1.4rem;
+    background: var(--phig-color-surface-0);
+    border: 1px solid var(--phig-color-border-default);
+    border-radius: 20px;
+    text-decoration: none;
+    /* one-off - tuned contributor card shadow; not a brand token */
+    box-shadow: 0 18px 40px rgb(15 23 42 / 0.05);
+  }
+  .contributor-role {
+    margin: 0 0 0.6rem;
+    color: var(--phig-color-text-brand);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+  .contributor-card h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--phig-color-text-primary);
+  }
+  .contributor-card p:last-child {
+    margin: 0.9rem 0 0;
+    color: var(--phig-color-text-secondary);
+    line-height: 1.7;
+  }
+</style>

@@ -1,0 +1,131 @@
+---
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import { contributors } from '../../lib/contributors'
+import { buildBreadcrumbSchema, buildPersonSchema } from '../../lib/seo'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+
+export function getStaticPaths() {
+  return Object.values(contributors).map((contributor) => ({
+    params: { slug: contributor.slug },
+    props: { contributor },
+  }))
+}
+
+const { contributor } = Astro.props as {
+  contributor: (typeof contributors)[keyof typeof contributors]
+}
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Contributors', url: '/contributors' },
+  { name: contributor.name, url: `/contributors/${contributor.slug}` },
+])
+const personSchema = buildPersonSchema({
+  name: contributor.name,
+  description: contributor.bio,
+  url: `/contributors/${contributor.slug}`,
+  jobTitle: contributor.role,
+  knowsAbout: contributor.expertise,
+  sameAs: contributor.sameAs,
+})
+---
+
+<MarketingLayout
+  title={`${contributor.name} | PHIGuard`}
+  description={contributor.bio}
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/contributors/${contributor.slug}`}
+  jsonLd={[breadcrumbs, personSchema]}
+>
+  <section class="contributor-page">
+    <div class="contributor-shell">
+      <div style="margin-bottom: 1.25rem;">
+        <Breadcrumbs crumbs={[
+          { label: "Home", href: "/" },
+          { label: "Contributors", href: "/contributors" },
+          { label: contributor.name },
+        ]} />
+      </div>
+      <p class="contributor-label">{contributor.role}</p>
+      <h1>{contributor.name}</h1>
+      <p class="contributor-bio">{contributor.bio}</p>
+
+      {contributor.sameAs?.length ? (
+        <p class="contributor-links">
+          {contributor.sameAs.map((url) => (
+            <a href={url}>LinkedIn</a>
+          ))}
+        </p>
+      ) : null}
+
+      <section class="contributor-section">
+        <h2>Focus areas</h2>
+        <ul>
+          {contributor.expertise.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  </section>
+</MarketingLayout>
+
+<style>
+  .contributor-page {
+    padding: clamp(3rem, 6vw, 5rem) 1rem;
+    background: #f8fafc;
+  }
+  .contributor-shell {
+    max-width: 760px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: clamp(1.25rem, 4vw, 2rem);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+  }
+  .contributor-label {
+    margin: 0 0 0.75rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #0f766e;
+    font-weight: 700;
+  }
+  h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(2rem, 3vw, 2.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #0f172a;
+  }
+  .contributor-bio {
+    margin: 0;
+    color: #475569;
+    font-size: 1.02rem;
+    line-height: 1.75;
+  }
+  .contributor-links {
+    margin: 1rem 0 0;
+  }
+  .contributor-links a {
+    color: #0f766e;
+    font-weight: 700;
+  }
+  .contributor-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+  }
+  .contributor-section h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    color: #0f172a;
+  }
+  .contributor-section ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: #334155;
+    line-height: 1.7;
+  }
+</style>

@@ -1,0 +1,155 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro'
+import FAQ from '../components/FAQ.astro'
+import CTA from '../components/CTA.astro'
+import { buildBreadcrumbSchema, buildFAQSchema, buildOrganizationSchema } from '../lib/seo'
+import { commercialKnowledgeCopy } from '@phiguard/knowledge/commercial'
+import { marketingPlans, planNamesSentence, siteSecondaryCtas } from '../data/product'
+
+const faqSchema = buildFAQSchema([
+  { q: 'Does PHIGuard sign a BAA?', a: `Yes. ${commercialKnowledgeCopy.baaIncluded}` },
+  { q: 'What does HIPAA require from a task system?', a: 'Clinics generally need a BAA, access controls, audit controls, encryption, and a process that supports compliant operations.' },
+  { q: 'How does PHIGuard fit that requirement?', a: 'PHIGuard brings HIPAA-oriented tasks, audit history, incidents, and program work into one product built for clinic operations.' },
+])
+
+const hipaaFAQs = [
+  {
+    question: 'What should a small clinic look for first?',
+    answer: 'Ask three things first. Will the vendor sign a BAA? Does the product keep a defensible audit record? And can a small clinic team actually use it day to day?',
+  },
+  {
+    question: 'Does HIPAA compliance stop at technical safeguards?',
+    answer: 'No. Clinics also need a repeatable way to handle training, risk assessment, incident response, and vendor management.',
+  },
+  {
+    question: 'Where can I see the actual product coverage?',
+    answer: 'Start with the product page to see what the app covers. Then go to pricing for fit or security for safeguards.',
+  },
+  {
+    question: 'Can we review the BAA before trial signup?',
+    answer: 'Yes. The BAA page lets your legal team review the agreement directly, without a sales call first.',
+  },
+]
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'HIPAA', url: '/hipaa' },
+])
+---
+
+<MarketingLayout
+  title="HIPAA and PHI Handling | PHIGuard"
+  description="How PHIGuard supports HIPAA and PHI-handling operations with a BAA, audit history, incident tracking, and access controls."
+  jsonLd={[breadcrumbs, buildOrganizationSchema(), faqSchema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">HIPAA</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.35rem, 4.6vw, 4rem);">Built for PHI-bearing healthcare operations from day one.</h1>
+        <p class="hero-summary">
+          Here is how to judge PHI software against HIPAA. What your clinic needs from a vendor, what PHIGuard supports, and where to go next on legal, security, or product fit.
+        </p>
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">Core evaluation points</p>
+        <div class="assurance-list">
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">BAA included</span><span class="assurance-meta">Every plan</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Audit controls</span><span class="assurance-meta">Append-only history</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Incident workflow</span><span class="assurance-meta">In product</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Program growth path</span><span class="assurance-meta">{marketingPlans.find((p) => p.id === 'clinic')!.name} to {marketingPlans.find((p) => p.id === 'group')!.name}</span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg bullet-columns">
+      <div class="bullet-panel">
+        <h3>Privacy Rule</h3>
+        <ul>
+          <li>Your policies and procedures matter as much as the software.</li>
+          <li>Staff training and follow-through are part of compliance too.</li>
+        </ul>
+      </div>
+      <div class="bullet-panel">
+        <h3>Security Rule</h3>
+        <ul>
+          <li>Ask any product that touches ePHI about access controls, audit controls, and encryption.</li>
+          <li>Generic collaboration tools often leave clinics patching the gap elsewhere.</li>
+        </ul>
+      </div>
+      <div class="bullet-panel">
+        <h3>Breach Notification Rule</h3>
+        <ul>
+          <li>Finding, documenting, and tracking an incident has to work in practice.</li>
+          <li>Saving incident history as it happens is far easier than rebuilding it later.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">How PHIGuard fits</p>
+        <h2 class="section-title text-balance">A product built around the work healthcare teams actually manage.</h2>
+        <p class="section-body">
+          PHIGuard helps you turn a broad HIPAA requirement into real work. Assigned tasks, audit history, evidence, incidents, and a clearer program as your clinic grows.
+        </p>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-card">
+          <h3>BAA and legal baseline</h3>
+          <p>{commercialKnowledgeCopy.baaIncluded} It is not held back as an enterprise upgrade.</p>
+        </div>
+        <div class="detail-card">
+          <h3>Audit-oriented task history</h3>
+          <p>Task actions build an append-only record that is easier to review than a generic activity stream.</p>
+        </div>
+        <div class="detail-card">
+          <h3>Incident handling</h3>
+          <p>File and work security incidents in the same product instead of in scattered notes.</p>
+        </div>
+        <div class="detail-card">
+          <h3>Program growth</h3>
+          <p>As clinics grow, the Group tier adds policies, training, vendor management, risk, and multi-location reporting.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg link-grid">
+      <a href="/product" class="link-card">
+        <small>Product</small>
+        <strong>See the capability map</strong>
+        <span>See the exact areas of clinic work the app covers.</span>
+      </a>
+      <a href="/security" class="link-card">
+        <small>Security</small>
+        <strong>Review technical safeguards</strong>
+        <span>Check the security page when access controls, audit posture, or encryption are the question.</span>
+      </a>
+      <a href="/pricing" class="link-card">
+        <small>Pricing</small>
+        <strong>Match the right plan</strong>
+        <span>Pick from {planNamesSentence} based on how complex your operations are.</span>
+      </a>
+      <a href="/baa" class="link-card">
+        <small>BAA</small>
+        <strong>Review the agreement</strong>
+        <span>Go directly to the BAA when legal review is the next blocker.</span>
+      </a>
+    </div>
+  </section>
+
+  <FAQ items={hipaaFAQs} heading="HIPAA questions from practice administrators" />
+
+  <CTA
+    heading="Use HIPAA review to narrow the next step."
+    subheading="If the issue is feature coverage, go to product. If the issue is safeguards, go to security. If the issue is legal review, go to the BAA."
+    secondaryLabel={siteSecondaryCtas.product.label}
+    secondaryHref={siteSecondaryCtas.product.href}
+  />
+</MarketingLayout>

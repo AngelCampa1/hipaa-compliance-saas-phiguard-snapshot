@@ -1,0 +1,244 @@
+---
+import { Image } from 'astro:assets'
+import dashboardImg from '../assets/product-dashboard.png'
+import MarketingLayout from '../layouts/MarketingLayout.astro'
+import PricingTable from '../components/PricingTable.astro'
+import FAQ from '../components/FAQ.astro'
+import CTA from '../components/CTA.astro'
+import LeadCapturePanel from '../components/LeadCapturePanel.astro'
+import { commercialKnowledgeCopy } from '@phiguard/knowledge/commercial'
+import { legalTrustSummaries } from '@phiguard/knowledge/legal-trust'
+import { PLANS, getMinimumPlanForFeatures } from '@phiguard/billing'
+import {
+  comparisonRows,
+  limitedOfferCommercialCopy,
+  marketingPlans,
+  planNamesSentence,
+  productPillars,
+  sitePrimaryCta,
+  siteSecondaryCtas,
+  trustClaims,
+} from '../data/product'
+
+const multiLocationMinimumPlanName = PLANS[getMinimumPlanForFeatures(['multi_location_rollup'])].name
+import { buildFAQSchema, buildOrganizationSchema, buildSoftwareApplicationSchema } from '../lib/seo'
+
+const orgSchema = buildOrganizationSchema()
+const softwareSchema = buildSoftwareApplicationSchema()
+const faqSchema = buildFAQSchema([
+  { q: 'Does PHIGuard include a BAA?', a: legalTrustSummaries.baa.summary },
+  { q: 'Who is PHIGuard built for?', a: 'The product is designed first for small clinics and practice administrators, with clearer support for growing practices and multi-location organizations on higher tiers.' },
+  { q: 'How is pricing structured?', a: commercialKnowledgeCopy.pricingModel },
+  { q: 'What makes the product different from generic task tools?', a: productPillars.map((pillar) => pillar.summary).join(' ') },
+])
+---
+
+<MarketingLayout
+  title="PHIGuard | HIPAA Operations Hub for Small Medical Clinics"
+  description="A HIPAA operations hub for small medical clinics. Run recurring tasks, evidence, incidents, BAA-backed work, and audit history in one place."
+  jsonLd={[orgSchema, softwareSchema, faqSchema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg hero-grid">
+      <div>
+        <p class="kicker">HIPAA operations for clinics</p>
+        <h1 class="hero-title text-balance">Run HIPAA work in one place.</h1>
+        <p class="hero-summary">
+          PHIGuard gives small clinics one place to run HIPAA work every week: tasks, evidence, incidents, BAA-backed work, and audit history. No more guessing what sits in a spreadsheet, a shared folder, or someone else's inbox.
+        </p>
+        <div class="hero-actions">
+          <a href={sitePrimaryCta.href} class="button-primary">{sitePrimaryCta.label}</a>
+          <a href={siteSecondaryCtas.product.href} class="button-secondary">{siteSecondaryCtas.product.label}</a>
+        </div>
+        <div class="trust-proof-band" aria-label="PHIGuard trust assurances">
+          {trustClaims.slice(0, 3).map((claim) => (
+            <div class="trust-proof-item">
+              <span class="trust-proof-label">Included</span>
+              <span class="trust-proof-value">{claim.title}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="hero-screenshot hidden md:block">
+        <Image
+          src={dashboardImg}
+          alt="PHIGuard dashboard showing compliance tasks, BAA signed status, active checklists, and audit log for a medical clinic"
+          width={1200}
+          quality={85}
+          loading="eager"
+          fetchpriority="high"
+          class="hero-screenshot__img"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Clarity first</p>
+      <h2 class="section-title text-balance">A HIPAA work system your clinic can actually keep up with.</h2>
+      <div class="detail-grid">
+        <div class="detail-card">
+          <h3>What we solve</h3>
+          <p>HIPAA work gets split across email, spreadsheets, shared folders, calendars, and task apps. That makes it hard to see what is due, what evidence you have, and which incidents are still open.</p>
+        </div>
+        <div class="detail-card">
+          <h3>How PHIGuard solves it</h3>
+          <p>PHIGuard puts recurring tasks, evidence, incidents, and append-only audit history in one accountable system. {commercialKnowledgeCopy.baaIncluded} {multiLocationMinimumPlanName}-plan modules add policies, training, risk, and vendor BAA tracking.</p>
+        </div>
+        <div class="detail-card">
+          <h3>Who it is for</h3>
+          <p>PHIGuard is built for clinic owners, administrators, compliance leads, and operations teams that want a clear HIPAA work system without per-seat fees.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">How the product works</p>
+        <h2 class="section-title text-balance">Each HIPAA task carries the record a clinic needs later.</h2>
+        <p class="section-body">
+          The product is built around clinic work that needs an owner, proof, and a record: assigned tasks, attached evidence, incident records, and audit events that stay tied to the work. {multiLocationMinimumPlanName}-plan modules add vendor BAA status, policies, training, and risk work.
+        </p>
+      </div>
+      <div class="detail-grid">
+        {productPillars.slice(0, 4).map((pillar) => (
+          <div class="detail-card">
+            <h3>{pillar.name}</h3>
+            <p>{pillar.summary}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Plan fit</p>
+      <h2 class="section-title text-balance">Choose based on how much HIPAA operations structure the clinic needs.</h2>
+      <div class="clinic-fit-grid">
+        {marketingPlans.map((plan) => (
+          <div class="clinic-fit-card">
+            <h3>{plan.name}</h3>
+            <p>{plan.fit}</p>
+            <p class="fine-print" style="margin-top: 0.85rem;">{plan.priceAnnualMonthly}/month equivalent and {plan.priceAnnual}/year paid upfront annually after {limitedOfferCommercialCopy.yearlyPromoCode}. List price {plan.priceAnnualMonthlyList}/month equivalent, {plan.priceAnnualList}/year, or {plan.priceMonthlyList}/month paid monthly. Up to {plan.maxMembers} staff.</p>
+            <a href={plan.ctaHref} class="button-tertiary">Start {plan.name} free trial</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Why generic tools fall short</p>
+        <h2 class="section-title text-balance">Clinics need more than a task list when the work has to be reviewed later.</h2>
+        <p class="section-body">
+          A generic tool can track to-dos, but clinics still have to manage BAA posture, incident history, evidence, and audit records somewhere else. PHIGuard keeps those pieces closer to the work.
+        </p>
+      </div>
+      <div class="table-shell compact-table">
+        <div class="table-scroll">
+          <table aria-label="PHIGuard homepage comparison">
+            <thead>
+              <tr>
+                <th>Requirement</th>
+                <th>Generic tool</th>
+                <th>PHIGuard</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparisonRows.map((row) => (
+                <tr>
+                  <td>{row.requirement}</td>
+                  <td>{row.generic}</td>
+                  <td>{row.phiguard}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Evaluation paths</p>
+        <h2 class="section-title text-balance">Review the product, price, security posture, and BAA from the same story.</h2>
+        <p class="section-body">
+          The product pages keep it concrete: what the app does, what each plan includes, how security works, and where the BAA fits before a clinic starts a trial.
+        </p>
+      </div>
+      <div class="link-grid">
+        <a href="/product" class="link-card">
+          <small>Product</small>
+          <strong>See how it works</strong>
+          <span>Walk through recurring tasks, evidence, incidents, and {multiLocationMinimumPlanName}-tier modules for policies, training, vendor BAAs, and operations.</span>
+        </a>
+        <a href="/pricing" class="link-card">
+          <small>Pricing</small>
+          <strong>Match the right plan</strong>
+          <span>{planNamesSentence} are framed around clinic size, handoffs, locations, and governance needs.</span>
+        </a>
+        <a href="/security" class="link-card">
+          <small>Security</small>
+          <strong>Review the safeguards</strong>
+          <span>Read the controls in plain language, tied to how the product works.</span>
+        </a>
+        <a href="/baa" class="link-card">
+          <small>BAA</small>
+          <strong>Review the legal baseline</strong>
+          <span>Read the agreement before trial signup if legal review is the blocker.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <LeadCapturePanel
+        magnetSlug="hipaa-compliance-self-assessment"
+        eyebrow="Free clinic resource"
+        heading="Get the HIPAA self-assessment teams use to spot the next operations gap."
+        body="Use the worksheet to set a baseline, find what still lives in email or spreadsheets, and turn the gaps into a clear next-step list."
+      />
+    </div>
+  </section>
+
+  <PricingTable />
+
+  <FAQ
+    heading="Questions before a clinic starts a trial"
+    items={[
+      {
+        question: 'Does the product only fit large organizations?',
+        answer: 'No. PHIGuard is built first for small clinics. Group plans add extra operations support for organizations that need it.',
+      },
+      {
+        question: 'What does the product page add beyond pricing?',
+        answer: `Pricing answers which plan fits. The product page answers how the app handles recurring tasks, evidence, incidents, and audit history, plus advanced ${multiLocationMinimumPlanName}-plan modules for policies, training, and vendor BAAs.`,
+      },
+      {
+        question: 'Can a clinic start with a smaller plan and move up later?',
+        answer: 'Yes. The plans share the same baseline. You can move up as your clinic needs more structure and reporting.',
+      },
+      {
+        question: 'What is the primary next step?',
+        answer: `Start the free trial. ${commercialKnowledgeCopy.trial} If you want to look first, you can check the product page, pricing, security, and BAA.`,
+      },
+    ]}
+  />
+
+  <CTA
+    heading="Move HIPAA work into one clinic operations hub."
+    subheading="Start the trial if the fit is clear. Use the product page first if you need to see exactly how tasks, evidence, incidents, and audit history work together."
+    secondaryLabel={siteSecondaryCtas.product.label}
+    secondaryHref={siteSecondaryCtas.product.href}
+  />
+</MarketingLayout>

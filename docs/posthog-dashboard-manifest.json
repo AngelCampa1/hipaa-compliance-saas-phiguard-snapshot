@@ -1,0 +1,632 @@
+{
+  "version": 1,
+  "project": {
+    "name": "Phiguard",
+    "id": 397280
+  },
+  "dashboards": [
+    {
+      "name": "PHIGuard - Founder Weekly Health",
+      "posthogDashboardId": 1690397,
+      "purpose": "Weekly operating review for acquisition, activation, engagement, revenue, support friction, and data quality.",
+      "tiles": [
+        {
+          "title": "Qualified Visitors",
+          "type": "trend",
+          "events": [
+            "marketing_page_viewed"
+          ]
+        },
+        {
+          "title": "CTA To Lead Capture",
+          "type": "funnel",
+          "events": [
+            "cta_clicked",
+            "pricing_cta_clicked",
+            "lead_capture_submitted",
+            "lead_captured"
+          ]
+        },
+        {
+          "title": "Signup To Trial",
+          "type": "funnel",
+          "events": [
+            "signup_started",
+            "signup_completed",
+            "onboarding_continue_clicked",
+            "trial_started"
+          ]
+        },
+        {
+          "title": "Activated Organizations",
+          "type": "trend",
+          "events": [
+            "activation_completed",
+            "task_created",
+            "checklist_item_completed",
+            "policy_acknowledged"
+          ]
+        },
+        {
+          "title": "Revenue And Billing Risk",
+          "type": "trend",
+          "events": [
+            "checkout_completed",
+            "subscription_updated",
+            "payment_failed",
+            "subscription_cancelled"
+          ]
+        },
+        {
+          "title": "Support And Error Friction",
+          "type": "trend",
+          "events": [
+            "app_support_link_clicked",
+            "app_support_error_shown",
+            "app_error_boundary_viewed",
+            "app_error_retry_clicked"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PHIGuard - Acquisition & Conversion",
+      "posthogDashboardId": 1690398,
+      "purpose": "Marketing source, content, pricing, lead magnet, partner, signup, and trial conversion coverage.",
+      "tiles": [
+        {
+          "title": "Landing Page Conversion",
+          "type": "funnel",
+          "events": [
+            "marketing_page_viewed",
+            "cta_clicked",
+            "lead_capture_started",
+            "lead_captured"
+          ]
+        },
+        {
+          "title": "Pricing Demand",
+          "type": "trend",
+          "events": [
+            "pricing_cta_clicked",
+            "pricing_billing_toggled",
+            "signup_started",
+            "trial_started"
+          ]
+        },
+        {
+          "title": "Content Engagement",
+          "type": "trend",
+          "events": [
+            "article_read_progressed",
+            "toc_link_clicked",
+            "source_link_clicked",
+            "resource_download_clicked"
+          ]
+        },
+        {
+          "title": "Lead Capture Friction",
+          "type": "trend",
+          "events": [
+            "lead_capture_validation_failed",
+            "lead_capture_failed",
+            "form_retry_clicked",
+            "lead_capture_abandoned"
+          ]
+        },
+        {
+          "title": "Partner Application Funnel",
+          "type": "trend",
+          "events": [
+            "partner_application_submitted",
+            "partner_application_failed"
+          ]
+        },
+        {
+          "title": "Marketing Journey Detail",
+          "type": "trend",
+          "events": [
+            "analytics_consent_updated",
+            "assistant_load_failed",
+            "assistant_opened",
+            "dead_click_detected",
+            "faq_opened",
+            "footer_link_clicked",
+            "internal_content_link_clicked",
+            "mailto_clicked",
+            "nav_link_clicked",
+            "outbound_link_clicked",
+            "post_capture_trial_cta_clicked",
+            "rapid_click_detected",
+            "resource_link_clicked",
+            "resource_resend_clicked",
+            "routing_card_clicked"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PHIGuard - Activation & Time to Value",
+      "posthogDashboardId": 1690400,
+      "purpose": "Signup, invite, onboarding, legal acceptance, trial start, and first meaningful product action.",
+      "tiles": [
+        {
+          "title": "Public Signup Funnel",
+          "type": "funnel",
+          "events": [
+            "signup_started",
+            "signup_completed",
+            "signup_failed"
+          ]
+        },
+        {
+          "title": "Invite Acceptance",
+          "type": "funnel",
+          "events": [
+            "invite_viewed",
+            "invite_accept_started",
+            "invite_accept_completed",
+            "invite_accept_failed"
+          ]
+        },
+        {
+          "title": "Legal And Trial Activation",
+          "type": "funnel",
+          "events": [
+            "plan_selected",
+            "legal_terms_accepted",
+            "baa_signed",
+            "trial_started"
+          ]
+        },
+        {
+          "title": "First Core Action",
+          "type": "trend",
+          "events": [
+            "task_created",
+            "checklist_assigned",
+            "policy_acknowledged",
+            "training_record_completed"
+          ]
+        },
+        {
+          "title": "Onboarding Friction",
+          "type": "trend",
+          "events": [
+            "onboarding_validation_failed",
+            "onboarding_documents_load_failed",
+            "onboarding_action_failed"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PHIGuard - Product Engagement & Retention",
+      "posthogDashboardId": 1690401,
+      "purpose": "Authenticated app journeys, feature adoption, workflow depth, support use, and retention proxies.",
+      "tiles": [
+        {
+          "title": "App Activity",
+          "type": "trend",
+          "events": [
+            "app_session_started",
+            "app_page_viewed",
+            "app_navigation_clicked",
+            "dashboard_viewed"
+          ]
+        },
+        {
+          "title": "Task And Checklist Work",
+          "type": "trend",
+          "events": [
+            "task_created",
+            "task_completed",
+            "task_bulk_status_changed",
+            "checklist_completed"
+          ]
+        },
+        {
+          "title": "Compliance Program Work",
+          "type": "trend",
+          "events": [
+            "policy_created",
+            "policy_action_failed",
+            "training_assigned",
+            "risk_assessment_created"
+          ]
+        },
+        {
+          "title": "SOC 2 Exploration",
+          "type": "trend",
+          "events": [
+            "soc2_dashboard_viewed",
+            "soc2_controls_viewed",
+            "soc2_controls_search_performed",
+            "soc2_control_evidence_opened",
+            "soc2_evidence_recorded"
+          ]
+        },
+        {
+          "title": "Feature Gate Demand",
+          "type": "trend",
+          "events": [
+            "feature_gate_viewed",
+            "feature_gate_upgrade_clicked"
+          ]
+        },
+        {
+          "title": "Support Journey",
+          "type": "trend",
+          "events": [
+            "app_support_link_clicked",
+            "app_support_session_started",
+            "app_support_message_sent",
+            "app_support_escalated"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PHIGuard - Revenue & Billing Health",
+      "posthogDashboardId": 1690402,
+      "purpose": "Plan demand, checkout, subscription lifecycle, invoices, legal document downloads, and billing friction.",
+      "tiles": [
+        {
+          "title": "Checkout Funnel",
+          "type": "funnel",
+          "events": [
+            "billing_plan_selected",
+            "checkout_started",
+            "checkout_returned",
+            "checkout_completed"
+          ]
+        },
+        {
+          "title": "Plan And Cadence Mix",
+          "type": "trend",
+          "events": [
+            "billing_plan_selected",
+            "billing_cadence_changed",
+            "subscription_started",
+            "subscription_updated"
+          ]
+        },
+        {
+          "title": "Billing Risk",
+          "type": "trend",
+          "events": [
+            "payment_failed",
+            "subscription_past_due",
+            "subscription_cancelled",
+            "billing_action_failed"
+          ]
+        },
+        {
+          "title": "Billing Self Serve",
+          "type": "trend",
+          "events": [
+            "billing_portal_opened",
+            "billing_invoice_opened",
+            "billing_legal_document_downloaded",
+            "billing_legal_document_download_failed"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PHIGuard - Analytics Data Quality",
+      "posthogDashboardId": 1690403,
+      "purpose": "Coverage, last-seen health, capture failures, proxy behavior, integration callbacks, uploads, and data hygiene.",
+      "tiles": [
+    {
+      "title": "Event Volume By Surface",
+      "type": "trend",
+      "events": [
+        "marketing_page_viewed",
+        "app_page_viewed",
+        "checkout_completed",
+        "app_error_boundary_viewed"
+      ]
+    },
+    {
+      "title": "Identity And Group Profile Health",
+      "type": "trend",
+      "events": [
+        "$create_alias",
+        "$set",
+        "$groupidentify"
+      ]
+    },
+    {
+      "title": "Upload Pipeline Health",
+      "type": "trend",
+          "events": [
+            "file_upload_completed",
+            "file_upload_failed"
+          ]
+        },
+        {
+          "title": "Integration Callback Health",
+          "type": "trend",
+          "events": [
+            "integration_callback_completed",
+            "integration_callback_failed"
+          ]
+        },
+        {
+          "title": "Policy Lifecycle Health",
+          "type": "trend",
+          "events": [
+            "policy_created",
+            "policy_published",
+            "policy_acknowledged",
+            "policy_action_failed"
+          ]
+        },
+        {
+          "title": "Support And App Errors",
+          "type": "trend",
+          "events": [
+            "app_support_error_shown",
+            "app_error_boundary_viewed",
+            "app_error_retry_clicked"
+          ]
+        },
+        {
+          "title": "Public Signup, Auth, And Partner Detail",
+          "type": "trend",
+          "events": [
+            "signup_confirmation_resent",
+            "signup_confirmation_resend_failed",
+            "signup_continue_clicked",
+            "login_started",
+            "login_completed",
+            "login_failed",
+            "login_google_started",
+            "login_google_failed",
+            "password_reset_link_clicked",
+            "signup_link_clicked",
+            "password_reset_requested",
+            "password_reset_request_failed",
+            "password_reset_resent",
+            "password_reset_resend_failed",
+            "password_reset_email_changed",
+            "login_link_clicked",
+            "invite_auth_redirect_clicked",
+            "invite_signup_redirect_clicked",
+            "partner_referral_opened",
+            "partner_magic_link_requested",
+            "partner_magic_link_request_failed",
+            "partner_magic_link_check_email_viewed",
+            "partner_magic_link_verified",
+            "partner_magic_link_verify_failed",
+            "partner_login_error_viewed",
+            "partner_dashboard_viewed",
+            "partner_dashboard_empty_state_viewed",
+            "partner_dashboard_error_viewed",
+            "partner_dashboard_retry_clicked",
+            "partner_referral_link_copied"
+          ]
+        },
+        {
+          "title": "Onboarding And App Shell Detail",
+          "type": "trend",
+          "events": [
+            "app_nav_section_toggled",
+            "app_account_menu_opened",
+            "app_account_action_clicked",
+            "app_task_create_opened",
+            "app_help_opened",
+            "app_organization_switched",
+            "app_action_blocked",
+            "app_support_response_received",
+            "onboarding_plan_selected",
+            "dashboard_scope_changed",
+            "dashboard_metric_clicked",
+            "dashboard_action_clicked",
+            "first_run_step_clicked",
+            "first_run_banner_dismissed"
+          ]
+        },
+        {
+          "title": "Task, Checklist, And Upload Detail",
+          "type": "trend",
+          "events": [
+            "task_empty_state_viewed",
+            "task_assigned",
+            "task_comment_added",
+            "task_attachment_added",
+            "task_list_viewed",
+            "task_create_started",
+            "task_filter_changed",
+            "task_search_performed",
+            "task_sort_changed",
+            "task_page_changed",
+            "task_selection_changed",
+            "task_action_failed",
+            "task_bulk_assigned",
+            "task_status_changed",
+            "task_due_date_updated",
+            "task_updated",
+            "task_archived",
+            "checklist_item_reopened",
+            "checklist_evidence_uploaded",
+            "checklist_evidence_downloaded",
+            "checklist_archived",
+            "checklist_location_filter_changed",
+            "checklist_renamed",
+            "checklist_deleted",
+            "checklist_action_failed"
+          ]
+        },
+        {
+          "title": "Compliance Program And Incident Detail",
+          "type": "trend",
+          "events": [
+            "compliance_dashboard_viewed",
+            "compliance_dashboard_section_opened",
+            "compliance_program_dashboard_viewed",
+            "compliance_program_section_opened",
+            "incident_created",
+            "incident_closed",
+            "incident_updated",
+            "incident_status_changed",
+            "incident_update_added",
+            "incident_list_viewed",
+            "incident_report_started",
+            "incident_filter_changed",
+            "incident_search_performed",
+            "incident_sort_changed",
+            "incident_empty_state_viewed",
+            "incident_exported",
+            "policy_published",
+            "policy_draft_updated",
+            "policy_version_created",
+            "policy_archived",
+            "policy_restored",
+            "training_exported",
+            "training_course_created",
+            "training_course_status_changed",
+            "training_certificate_downloaded",
+            "training_unassigned",
+            "training_completion_reopened",
+            "training_due_date_updated",
+            "training_reassigned",
+            "risk_item_created",
+            "risk_item_updated",
+            "risk_item_deleted",
+            "risk_assessment_status_changed",
+            "risk_assessment_reopened",
+            "risk_assessment_renamed",
+            "risk_assessment_deleted",
+            "vendor_added",
+            "vendor_baa_recorded",
+            "vendor_updated",
+            "vendor_status_changed",
+            "vendor_baa_evidence_downloaded",
+            "vendor_baa_history_opened",
+            "vendor_baa_metadata_updated",
+            "vendor_filter_changed",
+            "vendor_sort_changed",
+            "vendor_action_failed"
+          ]
+        },
+        {
+          "title": "Settings And Integration Detail",
+          "type": "trend",
+          "events": [
+            "member_invited",
+            "member_role_changed",
+            "member_removed",
+            "member_action_failed",
+            "member_settings_retry_clicked",
+            "member_role_change_dialog_opened",
+            "member_role_change_cancelled",
+            "member_remove_dialog_opened",
+            "member_remove_cancelled",
+            "invitation_resent",
+            "invitation_cancelled",
+            "invitation_link_opened",
+            "location_created",
+            "location_updated",
+            "location_status_changed",
+            "location_grants_updated",
+            "location_action_failed",
+            "location_settings_retry_clicked",
+            "location_grant_update_blocked",
+            "integration_connect_dialog_opened",
+            "integration_connect_cancelled",
+            "integration_compliance_acknowledged",
+            "integration_connect_started",
+            "integration_connect_completed",
+            "integration_connect_failed",
+            "integration_settings_load_failed",
+            "integration_settings_retry_clicked",
+            "integration_revoke_started",
+            "integration_revoked",
+            "integration_revoke_failed"
+          ]
+        },
+        {
+          "title": "Reports, Audit, SOC 2, Help, Profile, And Admin Detail",
+          "type": "trend",
+          "events": [
+            "report_viewed",
+            "report_exported",
+            "report_export_failed",
+            "report_drilldown_clicked",
+            "report_sort_changed",
+            "report_empty_state_viewed",
+            "audit_search_performed",
+            "audit_events_load_failed",
+            "audit_events_retry_clicked",
+            "audit_export_started",
+            "audit_export_completed",
+            "audit_export_failed",
+            "access_reviews_viewed",
+            "access_review_filter_changed",
+            "access_review_sort_changed",
+            "access_review_empty_state_viewed",
+            "access_review_open_started",
+            "access_review_open_cancelled",
+            "access_review_action_failed",
+            "access_review_feature_gate_viewed",
+            "access_review_opened",
+            "access_review_decision_recorded",
+            "access_review_closed",
+            "soc2_evidence_viewed",
+            "soc2_evidence_filter_changed",
+            "soc2_evidence_sort_changed",
+            "soc2_evidence_empty_state_viewed",
+            "soc2_evidence_action_failed",
+            "soc2_evidence_feature_gate_viewed",
+            "soc2_evidence_bundle_exported",
+            "soc2_audit_evidence_collected",
+            "soc2_evidence_downloaded",
+            "soc2_evidence_recorded",
+            "soc2_controls_filter_changed",
+            "soc2_controls_sort_changed",
+            "soc2_auditor_viewed",
+            "help_search_performed",
+            "help_search_empty",
+            "help_category_selected",
+            "help_topic_opened",
+            "profile_viewed",
+            "profile_section_started",
+            "profile_display_name_updated",
+            "profile_email_change_requested",
+            "profile_password_updated",
+            "profile_action_failed",
+            "account_deletion_started",
+            "account_deletion_requested",
+            "security_keys_viewed",
+            "security_key_enrollment_unavailable_viewed",
+            "partner_admin_viewed",
+            "partner_admin_filter_changed",
+            "partner_admin_search_performed",
+            "partner_admin_sort_changed",
+            "partner_admin_exported",
+            "partner_admin_empty_state_viewed",
+            "partner_admin_payout_run_started",
+            "partner_admin_payout_run_completed",
+            "partner_admin_payout_run_failed",
+            "partner_admin_partner_approved",
+            "partner_admin_partner_approve_failed",
+            "partner_admin_payout_marked_paid",
+            "partner_admin_payout_mark_paid_failed",
+            "partner_admin_access_denied_viewed",
+            "partner_admin_load_retry_clicked"
+          ]
+        },
+        {
+          "title": "Billing Detail",
+          "type": "trend",
+          "events": [
+            "checkout_cancelled",
+            "downgrade_warning_shown"
+          ]
+        }
+      ]
+    }
+  ]
+}

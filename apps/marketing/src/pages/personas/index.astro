@@ -1,0 +1,101 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import CTA from '../../components/CTA.astro'
+import LeadCapturePanel from '../../components/LeadCapturePanel.astro'
+import { buildBreadcrumbSchema, buildCollectionPageSchema } from '../../lib/seo'
+
+type PersonaEntry = CollectionEntry<'personas'>
+
+const personas = (await getCollection('personas')).sort(
+  (a: PersonaEntry, b: PersonaEntry) => a.data.persona.localeCompare(b.data.persona),
+)
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Roles', url: '/personas' },
+])
+
+const collectionSchema = buildCollectionPageSchema({
+  name: 'HIPAA compliance software by role',
+  description: 'Role-specific HIPAA compliance guidance for the people who run small clinics, from practice administrators to compliance officers.',
+  url: '/personas',
+  items: personas.map((entry: PersonaEntry) => {
+    const slug = entry.id.replace(/\.md$/, '')
+
+    return {
+      name: entry.data.title,
+      url: `/personas/${slug}`,
+      description: entry.data.metaDescription,
+    }
+  }),
+})
+---
+
+<MarketingLayout
+  title="HIPAA Compliance Software by Role | PHIGuard"
+  description="See how PHIGuard fits each role at a small clinic, including practice administrators, office managers, compliance officers, and practice owners."
+  canonicalUrl="https://phiguard.app/personas"
+  jsonLd={[breadcrumbs, collectionSchema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Roles</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.35rem, 4.6vw, 4rem);">HIPAA work, mapped to your job.</h1>
+        <p class="hero-summary">
+          Pick the role closest to your job. Each page shows the HIPAA work you own, the proof you keep, and how PHIGuard helps you stay on top of it.
+        </p>
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">Popular starting points</p>
+        <div class="assurance-list">
+          {personas.slice(0, 4).map((entry: PersonaEntry) => {
+            const slug = entry.id.replace(/\.md$/, '')
+
+            return (
+              <div class="assurance-row">
+                <span class="assurance-bullet"></span>
+                <span class="assurance-title">{entry.data.persona}</span>
+                <span class="assurance-meta"><a href={`/personas/${slug}`}>Open</a></span>
+              </div>
+            )
+          })}
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Role pages</p>
+      <h2 class="section-title text-balance">Find the job title closest to yours.</h2>
+      <div class="detail-grid" style="margin-top: 1.75rem;">
+        {personas.map((entry: PersonaEntry) => {
+          const slug = entry.id.replace(/\.md$/, '')
+
+          return (
+            <a class="link-card" href={`/personas/${slug}`}>
+              <small>{entry.data.role}</small>
+              <strong>{entry.data.title}</strong>
+              <span>{entry.data.metaDescription}</span>
+            </a>
+          )
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-md">
+      <LeadCapturePanel magnetSlug="vendor-baa-tracker" />
+    </div>
+  </section>
+
+  <CTA
+    heading="See the plan that fits your clinic."
+    subheading="Once you know the work your role owns, compare the product and pricing that match your team."
+    secondaryLabel="View pricing"
+    secondaryHref="/pricing"
+  />
+</MarketingLayout>

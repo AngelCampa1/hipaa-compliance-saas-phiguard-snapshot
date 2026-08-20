@@ -1,0 +1,44 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro'
+import { buildBreadcrumbSchema } from '../lib/seo'
+import { sitePrimaryCta } from '../data/product'
+import { SUPPORT_EMAIL } from '@phiguard/brand/contact'
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'About', url: '/about' },
+])
+---
+
+<MarketingLayout
+  title="About | PHIGuard"
+  description="PHIGuard is a solo, bootstrapped HIPAA compliance platform built for small medical clinics. A note from the founder on how this product is run."
+  canonicalUrl="https://phiguard.app/about"
+  jsonLd={breadcrumbs}
+>
+  <section class="page-surface page-surface--tight">
+    <div class="shell-md prose">
+      <h1>A note from the founder</h1>
+      <p>
+        PHIGuard is a solo, bootstrapped business. If that is a reason to look elsewhere, I understand. Reputation matters when you are choosing the system that will hold your compliance program. PHIGuard is not a big private-equity portfolio company. It is not a venture-backed startup with money to burn.
+      </p>
+      <p>
+        Here is what I can promise while PHIGuard is small. I read every customer message myself today. I will keep doing that as long as I can. If you want to talk it through, email me and I will set up a call. I read every feature request and take it seriously. I watch for bugs and aim to fix them fast. I care about every clinic on the platform, and I want PHIGuard to make your work easier.
+      </p>
+      <p>
+        My goal is to give practice administrators great, personal service. If that is what you want, start the free trial. If you decide PHIGuard is not the right fit, I still appreciate you trying it. I would value your feedback, even a quick note.
+      </p>
+      <p>
+        You can reach me directly at <a href={`mailto:${SUPPORT_EMAIL}`} style="overflow-wrap: anywhere;">{SUPPORT_EMAIL}</a> or on <a href="https://www.linkedin.com/in/angelcampa1/">LinkedIn</a>. Email first. I will set up a call from there if it helps.
+      </p>
+      <p>Angel Campa, founder, PHIGuard</p>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-md">
+      <p>PHIGuard is built for practice administrators who want compliance done right without enterprise pricing or enterprise complexity.</p>
+      <a href={sitePrimaryCta.href} class="button-primary">{sitePrimaryCta.label}</a>
+    </div>
+  </section>
+</MarketingLayout>

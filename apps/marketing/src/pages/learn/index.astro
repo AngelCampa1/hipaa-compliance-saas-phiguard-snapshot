@@ -1,0 +1,129 @@
+---
+import { getCollection } from 'astro:content'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import CTA from '../../components/CTA.astro'
+import LeadCapturePanel from '../../components/LeadCapturePanel.astro'
+import { buildBreadcrumbSchema, buildCollectionPageSchema } from '../../lib/seo'
+import { buildLearnPath, getPillarArticles, getPillarMeta, type LearnEntry } from '../../lib/learn'
+
+const learnEntries = await getCollection('learn') as LearnEntry[]
+const hubs = learnEntries
+  .filter((entry: LearnEntry) => entry.data.kind === 'hub')
+  .sort((a: LearnEntry, b: LearnEntry) => a.data.title.localeCompare(b.data.title))
+
+const recentArticles = learnEntries
+  .filter((entry: LearnEntry) => entry.data.kind === 'article')
+  .sort((a: LearnEntry, b: LearnEntry) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime())
+  .slice(0, 8)
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Learn', url: '/learn' },
+])
+
+const schema = buildCollectionPageSchema({
+  name: 'PHI and HIPAA Learning Center',
+  description: 'Educational hubs and practical HIPAA and PHI guidance for healthcare teams evaluating definitions, workflows, and vendors.',
+  url: '/learn',
+  items: hubs.map((entry: LearnEntry) => ({
+    name: entry.data.title,
+    url: buildLearnPath(entry),
+    description: entry.data.metaDescription,
+  })),
+})
+---
+
+<MarketingLayout
+  title="Learn PHI and HIPAA Workflows | PHIGuard"
+  description="Educational hubs and plain-language PHI and HIPAA guidance covering PHI definitions, PHI workflows, vendor evaluation, and healthcare compliance operations."
+  canonicalUrl="https://phiguard.app/learn"
+  jsonLd={[breadcrumbs, schema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Learning center</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.35rem, 4.6vw, 4rem);">PHI and HIPAA guidance for the teams deciding where patient data can safely live.</h1>
+        <p class="hero-summary">
+          Use these hubs to move from definitions into workflow and vendor decisions. The educational layer is meant to reduce ambiguity around PHI, then route higher-intent readers into the right product or commercial next step.
+        </p>
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">Good next steps</p>
+        <div class="assurance-list">
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Need feature detail?</span><span class="assurance-meta"><a href="/product">/product</a></span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Need plan fit?</span><span class="assurance-meta"><a href="/pricing">/pricing</a></span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Need legal review?</span><span class="assurance-meta"><a href="/baa">/baa</a></span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Need state workflows?</span><span class="assurance-meta"><a href="/locations/hipaa-breach-notification">/locations</a></span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Hubs</p>
+      <h2 class="section-title text-balance">Start with the PHI or HIPAA category that is currently creating the most confusion.</h2>
+      <div class="story-grid" style="margin-top: 1.75rem;">
+        {hubs.map((entry: LearnEntry) => {
+          const articles = getPillarArticles(learnEntries, entry.data.pillar)
+          const pillar = getPillarMeta(entry.data.pillar)
+
+          return (
+            <article class="story-card">
+              <p class="panel-label">{pillar.shortTitle}</p>
+              <h3><a href={buildLearnPath(entry)}>{entry.data.title}</a></h3>
+              <p>{entry.data.description}</p>
+              <ul class="commercial-list" style="margin-top: 0.9rem;">
+                {articles.slice(0, 3).map((article) => (
+                  <li>
+                    <strong><a href={buildLearnPath(article)}>{article.data.title}</a></strong>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          )
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <LeadCapturePanel magnetSlug="hipaa-compliance-self-assessment" />
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Recently updated</p>
+      <h2 class="section-title text-balance">Fresh articles with visible attribution, direct answers, and source lists.</h2>
+      <div class="detail-grid" style="margin-top: 1.75rem;">
+        <a class="link-card" href="/locations/hipaa-compliance-software">
+          <small>State guides</small>
+          <strong>HIPAA compliance software by state</strong>
+          <span>Commercial state pages for clinics comparing BAA-ready software and operating controls.</span>
+        </a>
+        <a class="link-card" href="/locations/hipaa-breach-notification">
+          <small>State guides</small>
+          <strong>HIPAA breach notification by state</strong>
+          <span>Operational state pages for incident triage, OCR timelines, and notice checkpoints.</span>
+        </a>
+        {recentArticles.map((entry: LearnEntry) => (
+          <a class="link-card" href={buildLearnPath(entry)}>
+            <small>{getPillarMeta(entry.data.pillar).shortTitle}</small>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    heading="Use the library to clarify the problem, then inspect the product."
+    subheading="The learning center should reduce confusion, not trap high-intent readers in editorial loops."
+    secondaryLabel="Explore the product"
+    secondaryHref="/product"
+  />
+</MarketingLayout>

@@ -1,0 +1,61 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import type { GetStaticPaths } from 'astro'
+import StateGuideArticle from '../../../components/StateGuideArticle.astro'
+
+type StateGuideEntry = CollectionEntry<'state-guides'>
+type CityGuideEntry = CollectionEntry<'city-guides'>
+
+export const prerender = true
+
+export const getStaticPaths = (async () => {
+  const entries = (await getCollection('state-guides')).filter(
+    (entry: StateGuideEntry) => entry.data.pageFamily === 'breach-notification',
+  )
+  return entries.map((entry: StateGuideEntry) => ({
+    params: { slug: entry.data.slug },
+    props: { entry },
+  }))
+}) satisfies GetStaticPaths
+
+const { entry } = Astro.props as { entry: StateGuideEntry }
+const data = entry.data
+const allStateGuides = await getCollection('state-guides')
+const softwareGuide = allStateGuides.find(
+  (guide: StateGuideEntry) => guide.data.pageFamily === 'compliance-software' && guide.data.slug === data.slug,
+)
+const allCityGuides = await getCollection('city-guides')
+const cityBySlug = new Map(allCityGuides.map((guide: CityGuideEntry) => [guide.id, guide]))
+const relatedCities = data.relatedCitySlugs
+  .map((slug: string) => cityBySlug.get(slug))
+  .filter(Boolean) as CityGuideEntry[]
+
+const relatedItems = [
+  softwareGuide && {
+    href: `/locations/hipaa-compliance-software/${softwareGuide.data.slug}`,
+    title: `${data.state} HIPAA compliance software guide`,
+    description: softwareGuide.data.metaDescription,
+    eyebrow: 'State software guide',
+  },
+  ...relatedCities.map((guide: CityGuideEntry) => ({
+    href: `/locations/hipaa-compliance/${guide.id}`,
+    title: `${guide.data.city}, ${guide.data.stateAbbreviation} HIPAA compliance guide`,
+    description: guide.data.metaDescription,
+    eyebrow: 'City guide',
+  })),
+  {
+    href: '/locations/hipaa-breach-notification',
+    title: 'HIPAA breach notification by state',
+    description: 'Browse all state breach notification workflow pages.',
+    eyebrow: 'Parent hub',
+  },
+].filter(Boolean)
+---
+
+<StateGuideArticle
+  entry={entry}
+  hubPath="/locations/hipaa-breach-notification"
+  hubLabel="HIPAA breach notification by state"
+  familyLabel="Breach notification"
+  relatedItems={relatedItems}
+/>

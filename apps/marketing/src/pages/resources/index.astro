@@ -1,0 +1,328 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import CTA from '../../components/CTA.astro'
+import { buildLearnPath, getPillarMeta, type LearnEntry } from '../../lib/learn'
+import { internalPath } from '../../lib/internal-links'
+import { buildBreadcrumbSchema, buildCollectionPageSchema } from '../../lib/seo'
+
+type ResourceEntry = CollectionEntry<'resources'>
+type AlternativeEntry = CollectionEntry<'alternatives'>
+type ComparisonEntry = CollectionEntry<'comparisons'>
+type PracticeTypeEntry = CollectionEntry<'practice-types'>
+type GuideEntry = CollectionEntry<'guides'>
+type BestEntry = CollectionEntry<'best'>
+type HipaaSoftwareEntry = CollectionEntry<'hipaa-software'>
+type StateGuideEntry = CollectionEntry<'state-guides'>
+
+const byPublishedDesc = <T extends { data: { publishedAt: Date } }>(a: T, b: T) =>
+  b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+
+const resources = (await getCollection('resources')).sort(byPublishedDesc)
+const guides = (await getCollection('guides')).sort((a: GuideEntry, b: GuideEntry) =>
+  b.data.updatedAt.getTime() - a.data.updatedAt.getTime())
+const bestPages = (await getCollection('best')).sort((a: BestEntry, b: BestEntry) =>
+  b.data.updatedAt.getTime() - a.data.updatedAt.getTime())
+const hipaaSoftwarePages = (await getCollection('hipaa-software')).sort((a: HipaaSoftwareEntry, b: HipaaSoftwareEntry) =>
+  b.data.updatedAt.getTime() - a.data.updatedAt.getTime())
+const alternatives = (await getCollection('alternatives')).sort(byPublishedDesc)
+const comparisons = (await getCollection('comparisons')).sort(byPublishedDesc)
+const practiceTypes = (await getCollection('practice-types')).sort(byPublishedDesc)
+const stateGuides = (await getCollection('state-guides')).sort((a: StateGuideEntry, b: StateGuideEntry) =>
+  a.data.state.localeCompare(b.data.state) || a.data.pageFamily.localeCompare(b.data.pageFamily))
+
+const learnEntries = await getCollection('learn') as LearnEntry[]
+const learnHubs = learnEntries
+  .filter((entry: LearnEntry) => entry.data.kind === 'hub')
+  .sort((a: LearnEntry, b: LearnEntry) => a.data.title.localeCompare(b.data.title))
+
+const editorialContent = learnEntries
+  .filter((entry: LearnEntry) => entry.data.kind === 'article')
+  .sort((a: LearnEntry, b: LearnEntry) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime())
+  .slice(0, 8)
+
+const stageLabel: Record<string, string> = {
+  awareness: 'Quick reference',
+  consideration: 'Assessment tool',
+  decision: 'Template',
+}
+
+const referencePages = [
+  {
+    href: '/resources/tools',
+    eyebrow: 'Templates',
+    title: 'Free tools and templates',
+    description: 'A crawlable hub for every downloadable HIPAA checklist, worksheet, log, and template in the library.',
+  },
+  {
+    href: internalPath.glossary,
+    eyebrow: 'Reference',
+    title: 'Glossary',
+    description: 'Definitions for PHI, HIPAA, BAA, audit, and compliance terms used across the resource library.',
+  },
+  {
+    href: internalPath.contributors,
+    eyebrow: 'Editorial',
+    title: 'Contributors',
+    description: 'Review the authors, reviewers, and editorial ownership behind PHIGuard resources.',
+  },
+  {
+    href: internalPath.partners,
+    eyebrow: 'Ecosystem',
+    title: 'Partner program',
+    description: 'For consultants and operators who help clinics run HIPAA work more calmly.',
+  },
+]
+
+const slugOf = (entry: { id: string }) => entry.id.replace(/\.mdx?$/, '')
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Resources', url: '/resources' },
+])
+const collectionSchema = buildCollectionPageSchema({
+  name: 'PHIGuard Resources',
+  description: 'Templates, vendor guides, educational hubs, and comparison content for PHI and HIPAA workflows.',
+  url: '/resources',
+  items: [
+    ...resources.map((resource: ResourceEntry) => ({
+      name: resource.data.title,
+      url: `/resources/${resource.data.magnetSlug}`,
+      description: resource.data.metaDescription,
+    })),
+    ...guides.map((entry: GuideEntry) => ({
+      name: entry.data.title,
+      url: `/resources/guides/${slugOf(entry)}`,
+      description: entry.data.metaDescription,
+    })),
+    ...bestPages.map((entry: BestEntry) => ({
+      name: entry.data.title,
+      url: `/resources/best/${slugOf(entry)}`,
+      description: entry.data.metaDescription,
+    })),
+    ...hipaaSoftwarePages.map((entry: HipaaSoftwareEntry) => ({
+      name: entry.data.title,
+      url: `/hipaa-software/${slugOf(entry)}`,
+      description: entry.data.metaDescription,
+    })),
+    ...alternatives.map((entry: AlternativeEntry) => ({
+      name: entry.data.title,
+      url: `/alternatives/${slugOf(entry)}`,
+      description: entry.data.metaDescription,
+    })),
+    ...comparisons.map((entry: ComparisonEntry) => ({
+      name: entry.data.title,
+      url: `/compare/${slugOf(entry)}`,
+      description: entry.data.metaDescription,
+    })),
+    ...practiceTypes.map((entry: PracticeTypeEntry) => ({
+      name: entry.data.title,
+      url: `/practice-types/${slugOf(entry)}`,
+      description: entry.data.metaDescription,
+    })),
+    ...stateGuides.map((entry: StateGuideEntry) => ({
+      name: entry.data.title,
+      url: `/locations/${entry.data.pageFamily === 'breach-notification' ? 'hipaa-breach-notification' : 'hipaa-compliance-software'}/${entry.data.slug}`,
+      description: entry.data.metaDescription,
+    })),
+    ...learnHubs.map((entry: LearnEntry) => ({
+      name: entry.data.title,
+      url: buildLearnPath(entry),
+      description: entry.data.metaDescription,
+    })),
+    ...editorialContent.map((entry: LearnEntry) => ({
+      name: entry.data.title,
+      url: buildLearnPath(entry),
+      description: entry.data.metaDescription,
+    })),
+    ...referencePages.map((page) => ({
+      name: page.title,
+      url: page.href,
+      description: page.description,
+    })),
+  ],
+})
+---
+
+<MarketingLayout
+  title="Resources | PHIGuard HIPAA Library for Small Clinics"
+  description="Templates, vendor guides, educational hubs, and comparison content for practice administrators evaluating HIPAA workflows and software."
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}/resources`}
+  jsonLd={[breadcrumbs, collectionSchema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Resources</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.35rem, 4.6vw, 4rem);">HIPAA resources for clinics that need a clearer next step.</h1>
+        <p class="hero-summary">
+          Use the library to answer the immediate question, then turn the answer into action. Start with a checklist, compare a vendor, explain a PHI workflow, or move into product evaluation when the clinic is ready.
+        </p>
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">Jump to</p>
+        <div class="assurance-list">
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title"><a href="#free-tools">Free tools</a></span><span class="assurance-meta">Templates</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title"><a href="#guides">Vendor guides</a></span><span class="assurance-meta">Decision support</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title"><a href="#learn">Learning center</a></span><span class="assurance-meta">Educational hubs</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title"><a href="#commercial">Commercial pages</a></span><span class="assurance-meta">Compare and fit</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title"><a href="#reference">Reference</a></span><span class="assurance-meta">Glossary and editorial</span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="free-tools" class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Free tools and templates</p>
+      <h2 class="section-title text-balance">Useful before a trial, a vendor review, or a staff meeting.</h2>
+      <div class="story-grid" style="margin-top: 1.75rem;">
+        {resources.map((resource: ResourceEntry) => (
+          <article class="story-card">
+            <p class="panel-label">{stageLabel[resource.data.stage] ?? resource.data.stage}</p>
+            <h3><a href={`/resources/${resource.data.magnetSlug}`}>{resource.data.title}</a></h3>
+            <p>{resource.data.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="guides" class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Vendor guides</p>
+      <h2 class="section-title text-balance">Vendor guides for buyers asking PHI and HIPAA questions.</h2>
+      <div class="detail-grid" style="margin-top: 1.75rem;">
+        {guides.map((entry: GuideEntry) => (
+          <a href={`/resources/guides/${slugOf(entry)}`} class="link-card">
+            <small>{entry.data.vendor ?? 'Guide'}</small>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="learn" class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Learning center</p>
+      <h2 class="section-title text-balance">Educational hubs and recent explainers across PHI, workflows, and HIPAA operations.</h2>
+      <div class="link-grid" style="margin-top: 1.75rem;">
+        {learnHubs.map((entry: LearnEntry) => (
+          <a href={buildLearnPath(entry)} class="link-card">
+            <small>Hub</small>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+      </div>
+      <div class="detail-grid" style="margin-top: 1rem;">
+        {editorialContent.map((entry: LearnEntry) => (
+          <a href={buildLearnPath(entry)} class="link-card">
+            <small>{getPillarMeta(entry.data.pillar).shortTitle}</small>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="commercial" class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Commercial paths</p>
+      <h2 class="section-title text-balance">Pages for clinics already comparing software.</h2>
+      <div class="detail-grid" style="margin-top: 1.75rem;">
+        {bestPages.map((entry: BestEntry) => (
+          <a href={`/resources/best/${slugOf(entry)}`} class="link-card">
+            <small>{entry.data.category}</small>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+        {hipaaSoftwarePages.map((entry: HipaaSoftwareEntry) => (
+          <a href={`/hipaa-software/${slugOf(entry)}`} class="link-card">
+            <small>{entry.data.audience}</small>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+        {alternatives.map((entry: AlternativeEntry) => (
+          <a href={`/alternatives/${slugOf(entry)}`} class="link-card">
+            <small>Alternative</small>
+            <strong>{entry.data.competitor} alternative</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+        {comparisons.map((entry: ComparisonEntry) => (
+          <a href={`/compare/${slugOf(entry)}`} class="link-card">
+            <small>Comparison</small>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+        {practiceTypes.map((entry: PracticeTypeEntry) => (
+          <a href={`/practice-types/${slugOf(entry)}`} class="link-card">
+            <small>Practice type</small>
+            <strong>{entry.data.practiceType}</strong>
+            <span>{entry.data.metaDescription}</span>
+          </a>
+        ))}
+        <a href="/locations/hipaa-compliance-software" class="link-card">
+          <small>State guides</small>
+          <strong>HIPAA compliance software by state</strong>
+          <span>State-focused software evaluation pages for clinics.</span>
+        </a>
+        <a href="/locations/hipaa-breach-notification" class="link-card">
+          <small>State guides</small>
+          <strong>HIPAA breach notification by state</strong>
+          <span>State-focused incident and notice workflow pages for clinics.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="reference" class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Reference and trust</p>
+      <h2 class="section-title text-balance">Pages that make the library easier to parse and verify.</h2>
+      <div class="link-grid" style="margin-top: 1.75rem;">
+        {referencePages.map((page) => (
+          <a href={page.href} class="link-card">
+            <small>{page.eyebrow}</small>
+            <strong>{page.title}</strong>
+            <span>{page.description}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    heading="Ready to turn the research into a cleaner HIPAA workflow?"
+    subheading="Use the product page to see how PHIGuard handles the work, or start the trial if your clinic is ready to get out of spreadsheets."
+    secondaryLabel="Explore the product"
+    secondaryHref="/product"
+  />
+</MarketingLayout>
+
+<style>
+  /* Stretch story-card h3 anchor to cover the full card hit area */
+  .story-card {
+    position: relative;
+  }
+  .story-card h3 a::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  /* Jump-to sidebar links: 44px minimum tap target */
+  .assurance-title a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+</style>

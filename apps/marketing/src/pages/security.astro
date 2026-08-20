@@ -1,0 +1,97 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro'
+import CTA from '../components/CTA.astro'
+import { buildBreadcrumbSchema, buildOrganizationSchema } from '../lib/seo'
+import { siteSecondaryCtas } from '../data/product'
+import { securityControlRows, securityPageCopy, securitySafeguards } from '@phiguard/knowledge/legal-trust'
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Security', url: '/security' },
+])
+---
+
+<MarketingLayout
+  title="Security | PHIGuard Technical Safeguards"
+  description="PHIGuard security overview for buyers reviewing encryption, access controls, audit behavior, and operational boundaries."
+  jsonLd={[breadcrumbs, buildOrganizationSchema()]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Security</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.35rem, 4.6vw, 4rem);">{securityPageCopy.heroHeading}</h1>
+        <p class="hero-summary">
+          {securityPageCopy.heroSummary}
+        </p>
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">{securityPageCopy.baselineLabel}</p>
+        <div class="assurance-list">
+          {securityPageCopy.baselineRows.map((row) => (
+            <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">{row.title}</span><span class="assurance-meta">{row.meta}</span></div>
+          ))}
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg detail-grid">
+      {securitySafeguards.map((item) => (
+        <div class="detail-card">
+          <h3>{item.title}</h3>
+          <p>{item.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Control mapping</p>
+        <h2 class="section-title text-balance">{securityPageCopy.controlHeading}</h2>
+        <p class="section-body">
+          {securityPageCopy.controlBody}
+        </p>
+      </div>
+      <div class="table-shell compact-table">
+        <div class="table-scroll">
+        <table aria-label="HIPAA technical safeguard summary">
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Current product-linked description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {securityControlRows.map((row) => (
+              <tr><td>{row.area}</td><td>{row.description}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg link-grid">
+      {securityPageCopy.links.map((link) => (
+        <a href={link.href} class="link-card">
+          <small>{link.eyebrow}</small>
+          <strong>{link.title}</strong>
+          <span>{link.body}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <CTA
+    heading="Review the controls, then review the product."
+    subheading="Security review goes faster when you can see what the app does for task history, incidents, and evidence."
+    secondaryLabel={siteSecondaryCtas.product.label}
+    secondaryHref={siteSecondaryCtas.product.href}
+  />
+</MarketingLayout>

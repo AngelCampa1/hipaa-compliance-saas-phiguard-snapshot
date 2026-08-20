@@ -1,0 +1,101 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import MarketingLayout from '../../layouts/MarketingLayout.astro'
+import CTA from '../../components/CTA.astro'
+import LeadCapturePanel from '../../components/LeadCapturePanel.astro'
+import { buildBreadcrumbSchema, buildCollectionPageSchema } from '../../lib/seo'
+
+type PracticeTypeEntry = CollectionEntry<'practice-types'>
+
+const practiceTypes = (await getCollection('practice-types')).sort(
+  (a: PracticeTypeEntry, b: PracticeTypeEntry) => a.data.practiceType.localeCompare(b.data.practiceType),
+)
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Practice Types', url: '/practice-types' },
+])
+
+const collectionSchema = buildCollectionPageSchema({
+  name: 'HIPAA software by practice type',
+  description: 'Practice-specific HIPAA software guidance for medical offices comparing operations, vendor, and compliance needs.',
+  url: '/practice-types',
+  items: practiceTypes.map((entry: PracticeTypeEntry) => {
+    const slug = entry.id.replace(/\.md$/, '')
+
+    return {
+      name: entry.data.title,
+      url: `/practice-types/${slug}`,
+      description: entry.data.metaDescription,
+    }
+  }),
+})
+---
+
+<MarketingLayout
+  title="HIPAA Software by Practice Type | PHIGuard"
+  description="Compare HIPAA software considerations by practice type, including dental, mental health, dermatology, pediatric, and specialty clinics."
+  canonicalUrl="https://phiguard.app/practice-types"
+  jsonLd={[breadcrumbs, collectionSchema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Practice types</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.35rem, 4.6vw, 4rem);">HIPAA software guidance for the way each clinic actually works.</h1>
+        <p class="hero-summary">
+          Use these practice-specific pages to compare the PHI procedures, vendor questions, and compliance operating habits that matter most for each specialty.
+        </p>
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">Popular starting points</p>
+        <div class="assurance-list">
+          {practiceTypes.slice(0, 4).map((entry: PracticeTypeEntry) => {
+            const slug = entry.id.replace(/\.md$/, '')
+
+            return (
+              <div class="assurance-row">
+                <span class="assurance-bullet"></span>
+                <span class="assurance-title">{entry.data.practiceType}</span>
+                <span class="assurance-meta"><a href={`/practice-types/${slug}`}>Open</a></span>
+              </div>
+            )
+          })}
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Specialty pages</p>
+      <h2 class="section-title text-balance">Choose the practice type closest to the team you are supporting.</h2>
+      <div class="detail-grid" style="margin-top: 1.75rem;">
+        {practiceTypes.map((entry: PracticeTypeEntry) => {
+          const slug = entry.id.replace(/\.md$/, '')
+
+          return (
+            <a class="link-card" href={`/practice-types/${slug}`}>
+              <small>{entry.data.practiceType}</small>
+              <strong>{entry.data.title}</strong>
+              <span>{entry.data.metaDescription}</span>
+            </a>
+          )
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-md">
+      <LeadCapturePanel magnetSlug="vendor-baa-tracker" />
+    </div>
+  </section>
+
+  <CTA
+    heading="Map practice-specific HIPAA work to a product path."
+    subheading="Once the specialty fit is clear, compare the product operations and pricing options that match the practice."
+    secondaryLabel="View pricing"
+    secondaryHref="/pricing"
+  />
+</MarketingLayout>

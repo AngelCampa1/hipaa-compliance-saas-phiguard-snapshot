@@ -1,0 +1,141 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro'
+import { buildBreadcrumbSchema } from '../lib/seo'
+import { commercialKnowledgeCopy } from '@phiguard/knowledge/commercial'
+import { legalNotice } from '@phiguard/knowledge/legal-trust'
+import { SUPPORT_EMAIL } from '@phiguard/knowledge/support'
+import { limitedOfferCommercialCopy } from '../data/product'
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Terms of Service', url: '/terms' },
+])
+---
+
+<LegalLayout
+  title="Terms of Service | PHIGuard"
+  description="Public summary of the current PHIGuard Terms of Service, including legal acceptance, billing, data handling, support, and dispute terms."
+  canonicalUrl="https://phiguard.app/terms"
+  jsonLd={breadcrumbs}
+>
+  <h1>Terms of Service</h1>
+  <p>
+    <strong>PHIGuard has shut down.</strong> We left this page up as a record. These were the
+    terms when it ran. It is not an offer. You cannot sign up.
+  </p>
+  <p><em>Public summary updated: April 22, 2026</em></p>
+  <p>
+    This page is a public summary of PHIGuard's current standard Terms of Service. The operative agreement
+    for each customer is the version reviewed and accepted in the PHIGuard onboarding flow for that
+    customer's legal entity.
+  </p>
+
+  <h2>Contracting party and acceptance</h2>
+  <p>
+    PHIGuard's current contracting party is <strong>{legalNotice.entity}</strong>.
+    The customer contracting party is the clinic, practice, or company legal entity identified during signup.
+  </p>
+  <p>
+    PHIGuard uses an in-app legal acceptance flow. An organization owner or organization admin reviews the
+    current Terms and current Business Associate Agreement during onboarding, enters signer details, and
+    accepts both documents on behalf of the customer legal entity before billing can proceed.
+  </p>
+
+  <h2>What the service covers</h2>
+  <p>
+    PHIGuard provides HIPAA-native task management, compliance operations, incident documentation, vendor BAA
+    tracking, audit evidence, and related administrative tooling for healthcare organizations.
+  </p>
+  <p>
+    PHIGuard provides software and supporting controls. It does not provide legal advice and does not
+    guarantee that use of the service alone satisfies every regulatory obligation for a customer.
+  </p>
+
+  <h2>Customer responsibilities</h2>
+  <ul>
+    <li>Use the service lawfully and in accordance with HIPAA and other applicable requirements.</li>
+    <li>Maintain accurate account, administrator, and billing information.</li>
+    <li>Use unique accounts for each workforce member; shared accounts are not permitted.</li>
+    <li>Do not misuse the service for malicious, abusive, fraudulent, or unauthorized activity.</li>
+  </ul>
+
+  <h2>Subscriptions, trials, and billing</h2>
+  <p>
+    PHIGuard subscriptions may be offered on monthly or annual terms, as shown in the applicable pricing or
+    checkout flow. Subscription fees are billed in advance and renew automatically until canceled.
+  </p>
+  <p>
+    Where a trial is offered, PHIGuard may allow the customer to start without a payment method. If billing
+    details are not added before the trial ends, PHIGuard may pause the subscription until billing is completed.
+    Billing stays locked until the current Terms and current BAA have been accepted.
+  </p>
+  <ul>
+    <li>Taxes are the customer's responsibility except for taxes based on PHIGuard's income.</li>
+    <li>Nonpayment may result in suspension after reasonable notice where legally permitted.</li>
+    <li>Cancellation takes effect according to the applicable billing flow and already-paid period.</li>
+    <li>Where a {commercialKnowledgeCopy.guarantee} is shown, {commercialKnowledgeCopy.guaranteeEligibility}</li>
+  </ul>
+
+  <h2 id="limited-offer">Limited offer details</h2>
+  <p>
+    {limitedOfferCommercialCopy.promoBannerMessage}
+    Prices on the site round up to the next whole dollar.
+  </p>
+
+  <h2>Data, confidentiality, and HIPAA</h2>
+  <p>
+    The customer retains ownership of customer data. PHIGuard receives a limited right to host, process,
+    transmit, secure, support, and improve the service using that data as permitted by the Terms,
+    the BAA, and applicable law.
+  </p>
+  <p>
+    PHI handled by PHIGuard is governed by the Business Associate Agreement accepted alongside the Terms.
+    The BAA controls if there is a conflict about PHI handling.
+  </p>
+
+  <h2>Support, suspension, and termination</h2>
+  <p>
+    PHIGuard provides commercially reasonable support and administrative assistance during an active
+    subscription term. The current standard Terms do not include a public uptime commitment or standalone
+    service-level agreement.
+  </p>
+  <p>
+    Either party may terminate for a material breach that remains uncured for 30 days after notice.
+    PHIGuard may suspend access immediately where necessary to prevent harm, address a security issue,
+    or comply with law.
+  </p>
+
+  <h2>Liability and dispute framework</h2>
+  <p>
+    The service is provided on an "as is" and "as available" basis to the maximum extent permitted by law.
+    Under the current standard Terms, each party's aggregate liability is capped at the fees paid or payable
+    by the customer in the 12 months before the event giving rise to the claim, subject to liabilities that
+    cannot be limited by law.
+  </p>
+  <p>
+    The current standard Terms select Delaware law and exclusive venue in state and federal courts located
+    in Delaware.
+  </p>
+
+  <h2>Document updates and notices</h2>
+  <p>
+    PHIGuard may publish updated Terms prospectively. If a newer standard Terms or BAA version becomes
+    current, PHIGuard can require re-acceptance before protected app access or new billing actions continue.
+  </p>
+  <p>
+    Legal notices to PHIGuard should be directed to:
+  </p>
+  <p>
+    {legalNotice.entity}<br />
+    {legalNotice.addressLines.join(', ')}<br />
+    <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+  </p>
+
+  <h2>Executed copies</h2>
+  <p>
+    PHIGuard stores evidence of legal acceptance for the accepted Terms and BAA versions, including the
+    document snapshot, signer details, timestamp, and related execution artifacts. Executed copies are
+    stored server-side per acceptance record, and PHIGuard can provide them through its current support or
+    operational handling flow.
+  </p>
+</LegalLayout>

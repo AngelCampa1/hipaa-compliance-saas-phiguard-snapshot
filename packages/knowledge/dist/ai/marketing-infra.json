@@ -1,0 +1,44 @@
+{
+  "generatedAt": "static",
+  "domain": "marketing",
+  "bundle": "public-marketing-artifacts",
+  "items": [
+    {
+      "id": "public.site.facts",
+      "domain": "marketing",
+      "title": "Public site facts",
+      "summary": "PHIGuard is a HIPAA-native task management and compliance platform for healthcare teams handling PHI.",
+      "body": "HIPAA-native task management software for healthcare teams\nBuilt for PHI-bearing coordination, auditability, incidents, evidence, and compliance operations\nBAA included on every plan\nproduct: https://phiguard.app/product\npricing: https://phiguard.app/pricing\nhipaa: https://phiguard.app/hipaa\nbaa: https://phiguard.app/baa\nlearn: https://phiguard.app/learn\nresources: https://phiguard.app/resources\nphiFundamentals: https://phiguard.app/learn/phi-fundamentals\nwhatCountsAsPhi: https://phiguard.app/learn/hipaa-basics/what-is-phi\nphiWorkflows: https://phiguard.app/learn/phi-workflows\nresourceGuides: https://phiguard.app/resources/guides\nbestResources: https://phiguard.app/resources/best\ncompare: https://phiguard.app/compare\ngenericStackComparison: https://phiguard.app/compare/phiguard-vs-generic-phi-workflow-stack\nbestPhiManagementSoftware: https://phiguard.app/resources/best/best-phi-management-software\nbestSoftwareForHandlingPhi: https://phiguard.app/resources/best/best-software-for-handling-phi",
+      "tags": [
+        "public",
+        "site",
+        "urls",
+        "positioning"
+      ],
+      "audience": [
+        "buyers",
+        "marketing",
+        "ai crawlers"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "public-marketing-artifacts",
+        "public-schema"
+      ]
+    }
+  ]
+}

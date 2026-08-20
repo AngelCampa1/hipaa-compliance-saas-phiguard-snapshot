@@ -1,0 +1,537 @@
+{
+  "generatedAt": "static",
+  "domain": "mixed",
+  "bundle": "marketing",
+  "items": [
+    {
+      "id": "marketing.positioning.core",
+      "domain": "marketing",
+      "title": "Core product positioning",
+      "summary": "PHIGuard is a HIPAA operations hub for small clinics and growing healthcare organizations.",
+      "body": "Primary CTA:\nStart free trial (https://my.phiguard.app/signup).\nProduct pillars:\nRecurring HIPAA tasks and audit history: Assign recurring clinic work, keep its full history, and tie each task to the person who owns it.\nChecklists, evidence, and exports: Start from HIPAA checklists and templates instead of rebuilding the program in shared docs or spreadsheets.\nPolicies, training, risk, and vendor BAAs: Add advanced Group-plan program modules for policies, training records, risk work, and vendor BAA tracking.\nIncidents and response history: Write down events, keep response steps visible, and save incident history in the same system as the rest of the program.\nMulti-location reporting and Group controls: Support larger clinics and multi-site groups that need shared visibility, integrations, and stronger evidence handling.",
+      "tags": [
+        "positioning",
+        "product",
+        "homepage"
+      ],
+      "audience": [
+        "clinic owners",
+        "practice administrators",
+        "compliance leads"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant"
+      ]
+    },
+    {
+      "id": "marketing.trust.claims",
+      "domain": "marketing",
+      "title": "Public trust claims",
+      "summary": "Reusable public trust claims for BAA coverage, audit history, pricing, and conservative security posture.",
+      "body": "BAA at every plan: You get a signed BAA from your first login. You do not have to ask for an enterprise plan to get it.\nAppend-only audit history: Task actions, evidence, incident updates, and program work build a lasting record you can review later.\nPer-clinic pricing: You pay one price for the clinic. We do not charge per user for each admin, provider, and coordinator.\nPlain security claims: Our security pages tell you what the product does today. We do not claim certifications we have not earned.",
+      "tags": [
+        "trust",
+        "baa",
+        "audit",
+        "pricing"
+      ],
+      "audience": [
+        "evaluators",
+        "clinic buyers"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant"
+      ]
+    },
+    {
+      "id": "marketing.comparison.generic-tools",
+      "domain": "marketing",
+      "title": "Generic tool comparison",
+      "summary": "PHIGuard is the better fit when your clinic needs a BAA at every plan, audit history, per-clinic pricing, and compliance tasks, incidents, vendors, and policies in one system.",
+      "body": "PHIGuard fits small clinics that need HIPAA work handled, not another generic workspace.\nPHIGuard is not the best fit for every buyer. Enterprise teams with broad GRC needs, deep custom development, or non-clinic collaboration should compare those needs directly.\nBusiness Associate Agreement: Included at every plan vs Often not offered, or held for enterprise buyers\nAudit-ready task history: Append-only audit trail vs Activity feed or mutable history\nPricing model: Flat clinic pricing vs Per-user cost growth\nRecurring compliance work: HIPAA-oriented tasks, checklists, and evidence vs Generic project templates or none\nIncident response process: Structured incident tracking in-product vs Usually managed outside the tool",
+      "tags": [
+        "comparison",
+        "alternatives",
+        "generic-tools"
+      ],
+      "audience": [
+        "clinic buyers",
+        "marketing"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "mutable-claim"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant"
+      ]
+    },
+    {
+      "id": "commercial.plans.display",
+      "domain": "commercial",
+      "title": "Plan display copy",
+      "summary": "Public pricing display copy derived from the canonical billing plan source.",
+      "body": "PHIGuard uses flat per-clinic pricing, not per-user fees.\nA Business Associate Agreement is included on every public plan.\nThe primary trial path is a 30-day free trial with no credit card required.\n30-day free trial\nLimited time offer: 80% off the first year. Auto-applied at checkout.\n30-day money-back guarantee",
+      "tags": [
+        "pricing",
+        "plans",
+        "promotion"
+      ],
+      "audience": [
+        "buyers",
+        "sales",
+        "support"
+      ],
+      "source": {
+        "kind": "derived",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "commercial.marketing.page-copy",
+      "domain": "commercial",
+      "title": "Reusable public pricing and trial copy",
+      "summary": "Canonical marketing page copy for public pricing, trial, no-card, BAA, and audit posture claims.",
+      "body": "Per-clinic pricing. BAA at every tier.\nPHIGuard gives practice administrators a calmer way to run compliance work. One clinic price, an immutable audit trail, and guardrails that generic task tools do not give you.\nEvery plan includes a signed Business Associate Agreement and an immutable audit trail. No enterprise contracts. No surprise scaling costs.\nWhat should a small clinic choose first?: Most small clinics choose Essentials when they need the HIPAA baseline and not the extra structure of the higher plans.\nWhen does Clinic make more sense?: Clinic fits better once your practice has more coordination, more users, or a need for calendar and integration support.\nWhat pushes an organization to Group?: Group is for multi-location reporting and advanced compliance work, such as policy, training, vendor, risk, and SOC 2 evidence management.\nDo you offer a custom path?: Yes. Compliance Ops is a custom path for teams that need hands-on compliance support. It is not a public price card.\nCan we just start a trial instead of talking to sales?: Yes. Self-serve trial signup is the main action, and you do not need a credit card to start.",
+      "tags": [
+        "pricing",
+        "trial",
+        "baa",
+        "audit",
+        "marketing-page"
+      ],
+      "audience": [
+        "buyers",
+        "clinic administrators",
+        "marketing"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "support.contact.no-phi",
+      "domain": "support",
+      "title": "Support contact and no-PHI warning",
+      "summary": "Use angel.campa@phiguard.app for support handoff and do not send PHI by email.",
+      "body": "Please do not email patient names, dates of birth, medical record numbers, or other PHI.\nContact: angel.campa@phiguard.app",
+      "tags": [
+        "support",
+        "no-phi",
+        "handoff"
+      ],
+      "audience": [
+        "authenticated users",
+        "marketing visitors",
+        "support"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "authenticated-help",
+        "authenticated-support",
+        "marketing-assistant"
+      ]
+    },
+    {
+      "id": "public.site.facts",
+      "domain": "marketing",
+      "title": "Public site facts",
+      "summary": "PHIGuard is a HIPAA-native task management and compliance platform for healthcare teams handling PHI.",
+      "body": "HIPAA-native task management software for healthcare teams\nBuilt for PHI-bearing coordination, auditability, incidents, evidence, and compliance operations\nBAA included on every plan\nproduct: https://phiguard.app/product\npricing: https://phiguard.app/pricing\nhipaa: https://phiguard.app/hipaa\nbaa: https://phiguard.app/baa\nlearn: https://phiguard.app/learn\nresources: https://phiguard.app/resources\nphiFundamentals: https://phiguard.app/learn/phi-fundamentals\nwhatCountsAsPhi: https://phiguard.app/learn/hipaa-basics/what-is-phi\nphiWorkflows: https://phiguard.app/learn/phi-workflows\nresourceGuides: https://phiguard.app/resources/guides\nbestResources: https://phiguard.app/resources/best\ncompare: https://phiguard.app/compare\ngenericStackComparison: https://phiguard.app/compare/phiguard-vs-generic-phi-workflow-stack\nbestPhiManagementSoftware: https://phiguard.app/resources/best/best-phi-management-software\nbestSoftwareForHandlingPhi: https://phiguard.app/resources/best/best-software-for-handling-phi",
+      "tags": [
+        "public",
+        "site",
+        "urls",
+        "positioning"
+      ],
+      "audience": [
+        "buyers",
+        "marketing",
+        "ai crawlers"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "public-marketing-artifacts",
+        "public-schema"
+      ]
+    },
+    {
+      "id": "public.signup.positioning",
+      "domain": "marketing",
+      "title": "Public signup positioning",
+      "summary": "You outgrew sticky notes. You never wanted Asana with a HIPAA bolt-on. PHIGuard is the task and compliance system for the gap in between.",
+      "body": "HIPAA-native compliance for small clinics\nCompliance built in.\nPer-clinic pricing.\nBAA included.\nYou outgrew sticky notes. You never wanted Asana with a HIPAA bolt-on. PHIGuard is the task and compliance system for the gap in between.\nGeneric project tools skip what covered entities need: PHI handling, an audit trail, a signed BAA. With PHIGuard, you start with all three.\nPer-seat pricing punishes growth. PHIGuard charges per clinic, flat. Add staff without the bill creeping up every quarter.\nA signed BAA comes with every plan, including Essentials. No enterprise contract, no legal review queue.",
+      "tags": [
+        "signup",
+        "positioning",
+        "trial"
+      ],
+      "audience": [
+        "trial users",
+        "buyers"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "public-schema"
+      ]
+    },
+    {
+      "id": "email.partner.program",
+      "domain": "commercial",
+      "title": "Partner program email copy",
+      "summary": "Thanks for applying to partner with PHIGuard. We will review the details and follow up by email.",
+      "body": "PHIGuard partner program\nYour PHIGuard partner application has been received\nPartner application received\nApplication received\nHi,\nThank you for applying to the PHIGuard Partner Program.\nWe received your application for a PHIGuard partner relationship.\nOur team reviews every application and will be in touch within two business days.\nThanks for applying to partner with PHIGuard. We will review the details and follow up by email.\nMost applications receive a response within a few business days.\nQuestions? Email us at the PHIGuard support address.",
+      "tags": [
+        "email",
+        "partners",
+        "commercial"
+      ],
+      "audience": [
+        "partners",
+        "marketing"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "commercial"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "transactional-email",
+        "marketing-email",
+        "marketing"
+      ]
+    },
+    {
+      "id": "legalTrust.baa",
+      "domain": "legalTrust",
+      "title": "Business Associate Agreement",
+      "summary": "PHIGuard makes the BAA part of the standard signup, before you use any PHI features.",
+      "body": "PHIGuard makes the BAA part of the standard signup, before you use any PHI features.\nThis is a public summary, not legal advice. It does not replace reading the signed agreement.",
+      "tags": [
+        "legal",
+        "trust",
+        "baa"
+      ],
+      "audience": [
+        "buyers",
+        "clinic admins",
+        "support"
+      ],
+      "source": {
+        "kind": "summary",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "legal-summary"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "legalTrust.terms",
+      "domain": "legalTrust",
+      "title": "Terms and legal acceptance",
+      "summary": "Signing in and billing may require current Terms and BAA acceptance by someone allowed to act for your clinic.",
+      "body": "Signing in and billing may require current Terms and BAA acceptance by someone allowed to act for your clinic.\nOnly accept legal documents if you have the authority to bind the clinic or organization.",
+      "tags": [
+        "legal",
+        "trust",
+        "terms"
+      ],
+      "audience": [
+        "buyers",
+        "clinic admins",
+        "support"
+      ],
+      "source": {
+        "kind": "summary",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "legal-summary"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "legalTrust.security",
+      "domain": "legalTrust",
+      "title": "Security and trust posture",
+      "summary": "PHIGuard keeps security claims careful. We describe the controls we have today and do not claim certifications we have not finished.",
+      "body": "PHIGuard keeps security claims careful. We describe the controls we have today and do not claim certifications we have not finished.\nWe only claim a milestone once the evidence and review behind it are done.",
+      "tags": [
+        "legal",
+        "trust",
+        "security"
+      ],
+      "audience": [
+        "buyers",
+        "clinic admins",
+        "support"
+      ],
+      "source": {
+        "kind": "summary",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "legal-summary"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "legalTrust.public.faqs",
+      "domain": "legalTrust",
+      "title": "Public legal and trust FAQs",
+      "summary": "Reusable public FAQ answers for BAA coverage and audit-trail claims.",
+      "body": "What is a Business Associate Agreement (BAA)?: A Business Associate Agreement is a legally required HIPAA contract between your clinic and any vendor that handles Protected Health Information for you. It sets out how the vendor may use PHI and the safeguards it must keep.\nDo you sign BAAs on every pricing tier?: Yes. PHIGuard includes a signed Business Associate Agreement at every pricing tier. You do not have to negotiate an enterprise contract to get basic legal coverage.\nDoes PHIGuard create an audit trail for HIPAA compliance?: Yes. Every relevant task action is recorded in an immutable audit log, so your clinic has solid evidence for reviews, investigations, and recurring compliance work.",
+      "tags": [
+        "faq",
+        "baa",
+        "audit",
+        "legal"
+      ],
+      "audience": [
+        "buyers",
+        "clinic administrators"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "legal-summary"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant"
+      ]
+    },
+    {
+      "id": "legalTrust.security.public",
+      "domain": "legalTrust",
+      "title": "Public security posture",
+      "summary": "Public-safe security page claims for safeguards, telemetry boundaries, audit controls, and encryption posture.",
+      "body": "Encryption and transport protections: App traffic runs over HTTPS, and managed infrastructure encrypts stored data at rest.\nAccess and identity boundaries: The product uses unique user logins and role-based access, so each action ties back to the person who did it.\nAppend-only audit behavior: Audit events are kept in an append-only record. They are not treated like a feed you can edit.\nMarketing and app telemetry separation: Analytics stay on the public site. The signed-in product does not load third-party marketing scripts.\nAccess control: Role-based access and unique user logins keep clinic actions tied to a person.\nAudit controls: Product activity is kept in an append-only audit record, not a feed you can edit.\nTransmission security: HTTPS/TLS protects app traffic in transit.\nStored data protection: Managed infrastructure encrypts stored data at rest.\nTelemetry boundary: Public-site analytics stay separate from the signed-in app.",
+      "tags": [
+        "security",
+        "trust",
+        "technical-safeguards"
+      ],
+      "audience": [
+        "buyers",
+        "privacy officers",
+        "security reviewers"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "legal-summary"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "legalTrust.subprocessors.public",
+      "domain": "legalTrust",
+      "title": "Public subprocessor inventory",
+      "summary": "Public inventory of providers and service-provider boundaries disclosed on the subprocessor page.",
+      "body": "Managed database provider: Managed PostgreSQL database hosting; Application data and audit data stored in PostgreSQL; Database provider\nSentry: Application error monitoring and alerting; Sanitized error and request metadata with PHI scrubbing enabled; Operational monitoring\nResend: Transactional email and marketing email delivery; Recipient email address and message metadata only; no PHI permitted in email content; Email delivery\nStripe: Subscription billing and payment processing; Organization billing metadata and billing contact details only; no PHI permitted; Billing provider\nPostHog: Marketing-site analytics only; Public-site analytics only; not loaded in the authenticated app; Marketing analytics",
+      "tags": [
+        "subprocessors",
+        "vendors",
+        "trust"
+      ],
+      "audience": [
+        "buyers",
+        "privacy officers",
+        "security reviewers"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "mutable-claim"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "marketing",
+        "marketing-assistant",
+        "authenticated-support"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "generatedAt": "static",
+  "domain": "mixed",
+  "bundle": "emails",
+  "items": [
+    {
+      "id": "email.transactional.public-copy",
+      "domain": "support",
+      "title": "Transactional email public copy",
+      "summary": "Public-safe copy for signup, trial, lead-magnet, unsubscribe, and footer email surfaces.",
+      "body": "Your PHIGuard account is ready. Continue setup to choose a plan, review the BAA, and start organizing the clinic compliance work in one auditable workspace.\nNo credit card was required to get started. If you want PHIGuard to continue after the trial, add billing details before the trial ends.\nPHIGuard gives small clinics a HIPAA-native task management system with a BAA available from day one - no enterprise contract, no per-user fees.\nYou are receiving this because an account was created for this email address.\nYou are receiving this because you created a PHIGuard account.\nYou received this email because you requested a free resource at phiguard.app.\nYou received this email because you requested a PHIGuard resource.\nYou received this email because you subscribed at phiguard.app.\nYou are receiving this because you requested a PHIGuard resource or signed up for product updates.",
+      "tags": [
+        "email",
+        "transactional",
+        "support",
+        "trial"
+      ],
+      "audience": [
+        "trial users",
+        "resource subscribers"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "transactional-email",
+        "marketing-email",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "email.signup-trial.sequence",
+      "domain": "commercial",
+      "title": "Signup trial nurture sequence",
+      "summary": "Public-safe signup trial nurture subjects, preview text, body copy, and CTA labels.",
+      "body": "Welcome to PHIGuard: Your account is ready. Continue setup to choose a plan, review the BAA, and start organizing clinic compliance work in one auditable workspace.\nYour PHIGuard trial is live: Your 30-day free trial is active with no credit card required. Add billing details before the trial ends if you want service to continue without a pause.\nKeep your HIPAA work moving: Use the trial to centralize recurring compliance tasks, incidents, evidence, and audit trail activity before the trial window closes.",
+      "tags": [
+        "email",
+        "trial",
+        "nurture",
+        "billing"
+      ],
+      "audience": [
+        "trial users"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "commercial"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "transactional-email",
+        "marketing-email",
+        "authenticated-support"
+      ]
+    },
+    {
+      "id": "email.partner.program",
+      "domain": "commercial",
+      "title": "Partner program email copy",
+      "summary": "Thanks for applying to partner with PHIGuard. We will review the details and follow up by email.",
+      "body": "PHIGuard partner program\nYour PHIGuard partner application has been received\nPartner application received\nApplication received\nHi,\nThank you for applying to the PHIGuard Partner Program.\nWe received your application for a PHIGuard partner relationship.\nOur team reviews every application and will be in touch within two business days.\nThanks for applying to partner with PHIGuard. We will review the details and follow up by email.\nMost applications receive a response within a few business days.\nQuestions? Email us at the PHIGuard support address.",
+      "tags": [
+        "email",
+        "partners",
+        "commercial"
+      ],
+      "audience": [
+        "partners",
+        "marketing"
+      ],
+      "source": {
+        "kind": "canonical",
+        "verifiedAt": "2026-05-09"
+      },
+      "freshness": {
+        "reviewedAt": "2026-05-09",
+        "reviewCadence": "quarterly"
+      },
+      "safetyLabels": [
+        "public-safe",
+        "no-phi",
+        "commercial"
+      ],
+      "relatedIds": [],
+      "consumers": [
+        "transactional-email",
+        "marketing-email",
+        "marketing"
+      ]
+    }
+  ]
+}

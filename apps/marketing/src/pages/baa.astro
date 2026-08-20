@@ -1,0 +1,110 @@
+---
+import LeadCapturePanel from '../components/LeadCapturePanel.astro'
+import LegalLayout from '../layouts/LegalLayout.astro'
+import { buildBreadcrumbSchema } from '../lib/seo'
+import { SUPPORT_EMAIL } from '@phiguard/knowledge/support'
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Business Associate Agreement', url: '/baa' },
+])
+---
+
+<LegalLayout
+  title="Business Associate Agreement | PHIGuard"
+  description="Public summary of PHIGuard's current Business Associate Agreement: when it applies, how it is accepted, and what obligations it covers."
+  canonicalUrl="https://phiguard.app/baa"
+  jsonLd={breadcrumbs}
+>
+  <h1>Business Associate Agreement</h1>
+  <p><em>Public summary updated: April 21, 2026</em></p>
+  <p>
+    This page is a public summary of PHIGuard's current standard Business Associate Agreement. The BAA that
+    applies to each customer is the version reviewed and accepted during PHIGuard's onboarding for that
+    customer's legal entity.
+  </p>
+
+  <h2>When PHIGuard acts as a business associate</h2>
+  <p>
+    PHIGuard acts as a business associate when it creates, receives, maintains, or transmits Protected
+    Health Information on behalf of a customer. The current standard BAA supplements the governing PHIGuard
+    Terms of Service. If the two conflict about PHI handling, the BAA controls.
+  </p>
+
+  <h2>How the BAA is accepted</h2>
+  <p>
+    PHIGuard handles legal acceptance natively in the app. During onboarding, an authorized organization
+    owner or admin reviews and accepts the current standard Terms and current standard BAA together on
+    behalf of the customer legal entity.
+  </p>
+  <p>
+    Billing stays locked until the current BAA and current Terms have been accepted. PHIGuard records the
+    acceptance timestamp, signer details, accepted document version, and execution artifacts for the
+    organization.
+  </p>
+
+  <h2>What the current standard BAA covers</h2>
+  <h3>Permitted uses and disclosures</h3>
+  <p>
+    PHIGuard may use and disclose PHI only as needed to provide the contracted services, as otherwise
+    permitted by the BAA, or as required by law. PHIGuard does not claim a right to use PHI for marketing.
+  </p>
+
+  <h3>Safeguards</h3>
+  <p>
+    The current standard BAA requires PHIGuard to implement appropriate administrative, physical, and
+    technical safeguards for PHI and to comply with applicable HIPAA Security Rule obligations for ePHI.
+  </p>
+
+  <h3>Security incident and breach reporting</h3>
+  <p>
+    The current standard BAA requires PHIGuard to report impermissible uses or disclosures of PHI and
+    Security Incidents as required by HIPAA and the agreement. It also requires notice of a Breach of
+    Unsecured PHI without unreasonable delay and no later than the outside deadline required by HIPAA.
+  </p>
+
+  <h3>Subcontractors</h3>
+  <p>
+    If a subcontractor creates, receives, maintains, or transmits PHI on PHIGuard's behalf, the current
+    standard BAA requires PHIGuard to bind that subcontractor to the same restrictions and conditions that
+    apply to PHIGuard. You can see the public vendor list on the
+    <a href="/subprocessors">Subprocessors</a> page.
+  </p>
+
+  <h3>Support for customer HIPAA obligations</h3>
+  <p>
+    To the extent PHIGuard maintains PHI in a designated record set or otherwise holds information needed
+    for customer HIPAA requests, the current standard BAA requires PHIGuard to support customer access,
+    amendment, and accounting obligations as required by HIPAA.
+  </p>
+
+  <h3>Termination and post-termination handling</h3>
+  <p>
+    The current standard BAA permits termination for a material breach that remains uncured after notice.
+    At termination, PHIGuard supports its standard product export and deletion handling. If return or
+    destruction of PHI is infeasible, PHIGuard must continue to protect that PHI and limit further use
+    and disclosure as required by HIPAA.
+  </p>
+
+  <h2>Executed copies and current versioning</h2>
+  <p>
+    PHIGuard stores executed legal evidence for each acceptance record. The accepted BAA version is tied to
+    the organization's legal acceptance history. PHIGuard can require re-acceptance if a newer standard BAA
+    version becomes current.
+  </p>
+  <p>
+    Public questions about PHIGuard's BAA can be sent to
+    <a href={`mailto:${SUPPORT_EMAIL}`} style="overflow-wrap: anywhere;">{SUPPORT_EMAIL}</a>.
+  </p>
+
+  <div style="margin-top: 2.5rem;">
+    <LeadCapturePanel
+      magnetSlug="baa-template"
+      variant="inline"
+      ctaContext="inline-content-upgrade"
+      eyebrow="BAA template pack"
+      heading="Need a practical BAA starting point while you review the agreement?"
+      body="Get the free template pack and follow-up guidance. It is separate from PHIGuard's own executed BAA."
+    />
+  </div>
+</LegalLayout>

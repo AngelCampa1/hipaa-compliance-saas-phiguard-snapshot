@@ -1,0 +1,35 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import Nav from '../components/Nav.astro'
+import Footer from '../components/Footer.astro'
+import LeadMagnetPopup from '../components/LeadMagnetPopup.astro'
+import LaunchBanner from '../components/LaunchBanner.astro'
+import { isPopupExcludedPath } from '@phiguard/lead-magnets'
+
+interface Props {
+  title?: string
+  description?: string
+  ogImage?: string
+  canonicalUrl?: string
+  jsonLd?: object | object[]
+  noindex?: boolean
+  ogType?: string
+  publishedTime?: string
+  modifiedTime?: string
+}
+
+const props = Astro.props
+const shouldRenderLeadPopup = !isPopupExcludedPath(Astro.url.pathname)
+---
+
+<BaseLayout {...props}>
+  <div class="site-sticky-header sticky top-0 z-50">
+    <LaunchBanner />
+    <Nav />
+  </div>
+  <main id="main-content">
+    <slot />
+  </main>
+  <Footer />
+  {shouldRenderLeadPopup && <LeadMagnetPopup pathname={Astro.url.pathname} />}
+</BaseLayout>

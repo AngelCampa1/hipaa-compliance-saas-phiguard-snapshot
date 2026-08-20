@@ -1,0 +1,81 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro'
+import { buildBreadcrumbSchema } from '../lib/seo'
+import { publicSubprocessors, subprocessorsPageCopy } from '@phiguard/knowledge/legal-trust'
+import { SUPPORT_EMAIL } from '@phiguard/knowledge/support'
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Subprocessors', url: '/subprocessors' },
+])
+---
+
+<LegalLayout
+  title="Subprocessors | PHIGuard"
+  description="Public subprocessor inventory for PHIGuard production and marketing services."
+  canonicalUrl="https://phiguard.app/subprocessors"
+  jsonLd={breadcrumbs}
+>
+  <h1>Subprocessors</h1>
+  <p>
+    {subprocessorsPageCopy.intro}
+  </p>
+  <p>
+    {subprocessorsPageCopy.tenantBoundary}
+  </p>
+
+  <h2>Current list</h2>
+  <div class="table-scroll">
+  <table style="overflow-wrap: anywhere;">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Purpose</th>
+        <th>Data scope</th>
+        <th>Current status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {publicSubprocessors.map((vendor) => (
+        <tr>
+          <td>{vendor.name}</td>
+          <td>{vendor.purpose}</td>
+          <td>{vendor.data}</td>
+          <td>{vendor.status}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Change notice</h2>
+  <p>
+    {subprocessorsPageCopy.changeNotice}
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions about subprocessors or vendor controls can be sent to
+    <a href={`mailto:${SUPPORT_EMAIL}`} style="overflow-wrap: anywhere;">{SUPPORT_EMAIL}</a>.
+  </p>
+
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      border: 1px solid var(--phig-color-border-default);
+      padding: 0.85rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--phig-color-surface-50);
+      font-weight: 600;
+    }
+  </style>
+</LegalLayout>

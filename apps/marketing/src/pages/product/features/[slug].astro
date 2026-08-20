@@ -1,0 +1,235 @@
+---
+import MarketingLayout from '../../../layouts/MarketingLayout.astro'
+import CTA from '../../../components/CTA.astro'
+import {
+  productPillars,
+  sitePrimaryCta,
+  siteSecondaryCtas,
+} from '../../../data/product'
+import {
+  buildBreadcrumbSchema,
+  buildFAQSchema,
+  buildItemListSchema,
+  buildSoftwareApplicationSchema,
+} from '../../../lib/seo'
+import { PHIGUARD_PUBLIC_SITE_ORIGIN } from '@phiguard/brand/identity'
+import { AlertTriangle, Building2, ClipboardList, FileArchive, ShieldCheck } from 'lucide-astro'
+
+export function getStaticPaths() {
+  return productPillars.map((feature) => ({
+    params: { slug: feature.slug },
+    props: { feature },
+  }))
+}
+
+const { feature } = Astro.props
+const featurePath = `/product/features/${feature.slug}`
+const relatedFeatures = productPillars.filter((item) => item.slug !== feature.slug).slice(0, 4)
+const Icon = {
+  'tasks-audit': ShieldCheck,
+  'checklists-evidence': ClipboardList,
+  'program-operations': FileArchive,
+  incidents: AlertTriangle,
+  'group-operations': Building2,
+}[feature.id]
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Product', url: '/product' },
+  { name: 'Features', url: '/product/features' },
+  { name: feature.shortName, url: featurePath },
+])
+
+const faqSchema = buildFAQSchema([...feature.faq])
+const relatedSchema = buildItemListSchema({
+  name: `Related PHIGuard feature pages for ${feature.shortName}`,
+  url: featurePath,
+  items: relatedFeatures.map((item) => ({
+    name: item.name,
+    url: `/product/features/${item.slug}`,
+    description: item.summary,
+  })),
+})
+const workflowSchema = buildItemListSchema({
+  name: `PHIGuard workflow steps for ${feature.shortName}`,
+  url: featurePath,
+  items: feature.workflowSteps.map((step) => ({
+    name: step.title,
+    description: step.body,
+  })),
+})
+---
+
+<MarketingLayout
+  title={feature.seoTitle}
+  description={feature.metaDescription}
+  canonicalUrl={`${PHIGUARD_PUBLIC_SITE_ORIGIN}${featurePath}`}
+  jsonLd={[breadcrumbs, buildSoftwareApplicationSchema(), workflowSchema, faqSchema, relatedSchema]}
+>
+  <section class="commercial-hero commercial-hero--soft commercial-hero--bordered">
+    <div class="shell-lg feature-hero-grid">
+      <div>
+        <p class="kicker">PHIGuard feature</p>
+        <div class="icon-badge">
+          <Icon class="h-5 w-5" aria-hidden="true" />
+        </div>
+        <h1 class="hero-title text-balance">{feature.name}</h1>
+        <p class="hero-summary">{feature.problem}</p>
+        <div class="hero-actions">
+          <a href={sitePrimaryCta.href} class="button-primary">{sitePrimaryCta.label}</a>
+          <a href="/product/features" class="button-secondary">Back to features</a>
+        </div>
+      </div>
+
+      <aside class="feature-answer-panel" aria-label="Short answer">
+        <p class="panel-label">Answer for evaluators</p>
+        <h2 class="preview-title">What this feature does</h2>
+        <p>{feature.aiAnswer}</p>
+        <div class="feature-audience-pill">{feature.audience}</div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg problem-solution-grid">
+      <div class="feature-copy-block">
+        <p class="kicker">The problem</p>
+        <h2 class="section-title text-balance">{feature.problemHeading}</h2>
+        <p class="section-body">{feature.problem}</p>
+      </div>
+      <div class="feature-copy-block">
+        <p class="kicker">The PHIGuard solution</p>
+        <h2 class="section-title text-balance">{feature.solutionHeading}</h2>
+        <p class="section-body">{feature.solution}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">How it helps</p>
+        <h2 class="section-title text-balance">{feature.outcomeHeading}</h2>
+        <p class="section-body">{feature.outcome}</p>
+      </div>
+      <div class="feature-point-list">
+        {feature.bullets.map((bullet, index) => (
+          <div class="feature-point">
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <p>{bullet}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Included capabilities</p>
+      <h2 class="section-title text-balance">Each capability has a named role in this workflow.</h2>
+      <div class="feature-capability-grid">
+        {feature.bullets.map((bullet) => (
+          <article class="feature-capability-card">
+            <h3>{bullet}</h3>
+            <p>{feature.shortName} uses this capability to keep clinic work easier to assign, prove, and review.</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Workflow</p>
+      <h2 class="section-title text-balance">How clinics use this feature in practice.</h2>
+      <div class="feature-workflow-grid">
+        {feature.workflowSteps.map((step, index) => (
+          <article class="feature-workflow-step">
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Evaluation notes</p>
+        <h2 class="section-title text-balance">What to check before choosing a system.</h2>
+        <p class="section-body">
+          Use these points to compare PHIGuard with spreadsheets, shared drives, and general project tools.
+        </p>
+      </div>
+      <div class="feature-evaluation-list">
+        {feature.evaluationPoints.map((point) => (
+          <div class="feature-evaluation-row">
+            <strong>{point.label}</strong>
+            <p>{point.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Internal paths</p>
+        <h2 class="section-title text-balance">Use this page with the rest of the buying path.</h2>
+        <p class="section-body">
+          Strong evaluations connect the feature to the HIPAA education, pricing, legal, and security pages that answer the next buyer question.
+        </p>
+      </div>
+      <div class="link-grid">
+        {feature.relatedLinks.map((link) => (
+          <a href={link.href} class="link-card">
+            <small>Related</small>
+            <strong>{link.label}</strong>
+            <span>{link.description}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Related features</p>
+      <h2 class="section-title text-balance">Keep exploring the product system.</h2>
+      <div class="jump-grid">
+        {relatedFeatures.map((item) => (
+          <a href={`/product/features/${item.slug}`} class="jump-card">
+            <small>{item.audience}</small>
+            <h3>{item.name}</h3>
+            <p>{item.summary}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <p class="kicker">Questions</p>
+      <h2 class="section-title text-balance">What clinics usually ask about this feature.</h2>
+      <div class="feature-faq-grid">
+        {feature.faq.map((item) => (
+          <div class="faq-panel">
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    heading="See the full product path, then choose the right plan."
+    subheading="Start with the feature that matches your workflow gap, then move into pricing, security, or the BAA review when the next question is clear."
+    secondaryLabel={siteSecondaryCtas.pricing.label}
+    secondaryHref={siteSecondaryCtas.pricing.href}
+  />
+</MarketingLayout>

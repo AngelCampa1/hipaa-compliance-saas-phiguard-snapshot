@@ -1,0 +1,27 @@
+---
+import { commercialKnowledgeCopy } from '@phiguard/knowledge/commercial'
+
+interface Props {
+  label?: string
+}
+
+const { label = 'PHIGuard commercial baseline' } = Astro.props
+---
+
+<section class="editorial-card canonical-commercial-note">
+  <p class="panel-label">{label}</p>
+  <p>
+    {commercialKnowledgeCopy.pricingModel} {commercialKnowledgeCopy.baaIncluded} {commercialKnowledgeCopy.trial}
+    See <a href="/pricing">current PHIGuard pricing</a> for plan names, monthly list prices, annual totals, and current launch details.
+  </p>
+</section>
+
+<style>
+  .canonical-commercial-note {
+    margin-top: 1.5rem;
+  }
+
+  .canonical-commercial-note p:last-child {
+    margin-bottom: 0;
+  }
+</style>

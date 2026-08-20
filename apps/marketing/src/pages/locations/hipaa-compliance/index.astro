@@ -1,0 +1,159 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+import MarketingLayout from '../../../layouts/MarketingLayout.astro'
+import CTA from '../../../components/CTA.astro'
+import { buildBreadcrumbSchema, buildCollectionPageSchema } from '../../../lib/seo'
+
+type CityGuideEntry = CollectionEntry<'city-guides'>
+type StateGuideEntry = CollectionEntry<'state-guides'>
+
+const guides = (await getCollection('city-guides')).sort((a: CityGuideEntry, b: CityGuideEntry) =>
+  a.data.state.localeCompare(b.data.state) || a.data.city.localeCompare(b.data.city)
+)
+const stateGuides = (await getCollection('state-guides')).filter(
+  (entry: StateGuideEntry) => entry.data.pageFamily === 'compliance-software',
+)
+const stateGuideSlugs = new Set(stateGuides.map((entry: StateGuideEntry) => entry.data.slug))
+
+const states = Array.from(new Set<string>(guides.map((entry: CityGuideEntry) => String(entry.data.state))))
+const byState: Array<{ state: string; entries: CityGuideEntry[] }> = states.map((state: string) => ({
+  state,
+  entries: guides.filter((entry: CityGuideEntry) => entry.data.state === state),
+}))
+
+const guideUrl = (entry: CityGuideEntry) => `/locations/hipaa-compliance/${entry.id}`
+const stateSoftwareUrl = (state: string) => `/locations/hipaa-compliance-software/${state.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`
+const hasStateSoftwareGuide = (state: string) => stateGuideSlugs.has(state.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''))
+
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'HIPAA compliance locations', url: '/locations/hipaa-compliance' },
+])
+
+const collectionSchema = buildCollectionPageSchema({
+  name: 'HIPAA Compliance City Guides',
+  description: 'Clinic operations guides for HIPAA compliance by US city, with federal baseline sources, state oversight checkpoints, and practical administrator checklists.',
+  url: '/locations/hipaa-compliance',
+  items: guides.map((entry: CityGuideEntry) => ({
+    name: entry.data.title,
+    url: guideUrl(entry),
+    description: entry.data.metaDescription,
+  })),
+})
+---
+
+<MarketingLayout
+  title="HIPAA Compliance City Guides | PHIGuard"
+  description="Browse HIPAA compliance city guides for US clinics, grouped by state with federal sources, oversight checkpoints, and administrator checklists."
+  canonicalUrl="https://phiguard.app/locations/hipaa-compliance"
+  jsonLd={[breadcrumbs, collectionSchema]}
+>
+  <section class="hub-hero">
+    <div class="hub-inner">
+      <p class="hub-eyebrow">Clinic locations</p>
+      <h1 class="hub-heading">HIPAA compliance city guides for small clinics</h1>
+      <p class="hub-subheading">
+        Each guide starts with the federal HIPAA baseline, adds state oversight checkpoints, and turns the result into an operating checklist for practice administrators.
+      </p>
+      <div class="location-topic-row" aria-label="Related HIPAA topics">
+        <a href="/hipaa">HIPAA overview</a>
+        <a href="/pricing">Flat clinic pricing</a>
+        <a href="/resources/hipaa-state-law-overlay-matrix">State-law matrix</a>
+        <a href="/locations/hipaa-compliance-software">Software by state</a>
+        <a href="/locations/hipaa-breach-notification">Breach notification by state</a>
+        <a href="/learn/compliance-operations/hipaa-multi-state-practice-compliance-guide">Multi-state guide</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="hub-section">
+    <div class="hub-inner">
+      <div class="editorial-card location-hub-note">
+        <p class="panel-label">Selection model</p>
+        <p>
+          These cities are organized around city-modified HIPAA compliance, consultant, training, and software queries. Each page is written as clinic operating guidance and should be refreshed with live keyword and SERP evidence before major republication cycles.
+        </p>
+      </div>
+
+      <div class="location-state-grid">
+        {byState.map(({ state, entries }) => (
+          <section class="location-state-group" aria-labelledby={`state-${state.toLowerCase().replaceAll(' ', '-')}`}>
+            <h2 id={`state-${state.toLowerCase().replaceAll(' ', '-')}`}>{state}</h2>
+            {hasStateSoftwareGuide(state) && (
+              <p class="state-guide-link">
+                <a href={stateSoftwareUrl(state)}>View the {state} HIPAA compliance software guide</a>
+              </p>
+            )}
+            <ul class="hub-list" role="list">
+              {entries.map((entry: CityGuideEntry) => (
+                <li class="hub-list-item">
+                  <a href={guideUrl(entry)} class="hub-list-link">
+                    <span class="hub-item-label">{entry.data.city}, {entry.data.stateAbbreviation}</span>
+                    <span class="hub-list-title">{entry.data.seoTitle}</span>
+                    <span class="hub-list-desc">{entry.data.metaDescription}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    heading="Run HIPAA compliance as recurring clinic work."
+    subheading="PHIGuard gives US clinics a BAA-ready operating layer for risk analysis, vendor evidence, workforce tasks, and compliance follow-through."
+  />
+</MarketingLayout>
+
+<style is:global>
+  .location-topic-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .location-topic-row a {
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    color: #0f172a;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.55rem 0.85rem;
+    text-decoration: none;
+  }
+
+  .location-hub-note {
+    margin-bottom: 2rem;
+  }
+
+  .location-hub-note p:last-child {
+    margin-bottom: 0;
+  }
+
+  .location-state-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .location-state-group h2 {
+    color: #111827;
+    font-size: 1.35rem;
+    margin: 0 0 1rem;
+  }
+
+  .state-guide-link {
+    margin: -0.4rem 0 1rem;
+    color: #475569;
+    font-size: 0.95rem;
+  }
+
+  .state-guide-link a {
+    color: #0f766e;
+    font-weight: 700;
+    text-decoration: none;
+  }
+</style>

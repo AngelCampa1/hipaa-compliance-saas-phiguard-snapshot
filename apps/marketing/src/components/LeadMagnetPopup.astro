@@ -1,0 +1,385 @@
+---
+import { getPopupPickerSlugs } from '@phiguard/lead-magnets'
+import LeadCapturePanel from './LeadCapturePanel.astro'
+
+interface Props {
+  pathname: string
+}
+
+const { pathname } = Astro.props
+const pickerSlugs = getPopupPickerSlugs(pathname)
+---
+
+<div class="popup-shell" data-lead-popup hidden aria-hidden="true">
+  <div class="popup-shell__backdrop" data-lead-popup-close></div>
+  <section
+    class="popup-shell__dialog safe-bottom"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Free HIPAA resources"
+    tabindex="-1"
+    data-lead-popup-dialog
+  >
+    <button type="button" class="popup-shell__close touch-target" data-lead-popup-close aria-label="Close popup">
+      &times;
+    </button>
+    <div class="popup-shell__content">
+      <LeadCapturePanel
+        variant="popup"
+        pickerSlugs={pickerSlugs}
+        ctaContext="popup-exit-intent"
+        eyebrow="Free HIPAA resources"
+        heading="Take the next useful step before you leave."
+        body="Choose one practical worksheet and we will send it immediately."
+        buttonLabel="Email me the resource"
+      />
+    </div>
+  </section>
+</div>
+
+<script is:inline>
+  ;(() => {
+    const root = document.querySelector('[data-lead-popup]')
+    if (!root) return
+
+    const dialog = root.querySelector('[data-lead-popup-dialog]')
+    if (!dialog) return
+
+    const localDismissKey = 'phiguard-lead-popup-dismissed-until'
+    const localSubmitKey = 'phiguard-lead-popup-submitted-until'
+    const sessionShownKey = 'phiguard-lead-popup-shown'
+    const sessionViewsKey = 'phiguard-lead-popup-eligible-views'
+    const dismissDuration = 7 * 24 * 60 * 60 * 1000
+    const eligibleViews = Number(sessionStorage.getItem(sessionViewsKey) ?? '0') + 1
+    sessionStorage.setItem(sessionViewsKey, String(eligibleViews))
+
+    const now = Date.now()
+    const dismissedUntil = Number(localStorage.getItem(localDismissKey) ?? '0')
+    const submittedUntil = Number(localStorage.getItem(localSubmitKey) ?? '0')
+    const sessionShown = sessionStorage.getItem(sessionShownKey) === 'true'
+
+    if (sessionShown || dismissedUntil > now || submittedUntil > now) return
+
+    const form = root.querySelector('[data-lead-capture-form]')
+    const contextInput = form?.querySelector('input[name="cta_context"]')
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isDesktop = window.matchMedia('(min-width: 900px) and (pointer: fine)').matches
+    let lastFocused = null
+    let armedForExit = false
+    let activeContext = null
+    let pendingContext = null
+    let bannerDismissListenersAttached = false
+    let bannerObserver = null
+    const getAnalytics = () => window.phiguardAnalytics
+    const isConsentBannerVisible = () => {
+      const banner = document.getElementById('cookie-banner')
+      if (!banner) return false
+      const styles = window.getComputedStyle(banner)
+      const bounds = banner.getBoundingClientRect()
+      return styles.display !== 'none' && styles.visibility !== 'hidden' && bounds.width > 0 && bounds.height > 0
+    }
+
+    const onBannerDismissed = () => {
+      if (bannerObserver) {
+        bannerObserver.disconnect()
+        bannerObserver = null
+      }
+      if (pendingContext === null) return
+      const ctx = pendingContext
+      pendingContext = null
+      // Re-check all suppression guards now that banner is gone
+      const nowCheck = Date.now()
+      const dismissedUntilCheck = Number(localStorage.getItem(localDismissKey) ?? '0')
+      const submittedUntilCheck = Number(localStorage.getItem(localSubmitKey) ?? '0')
+      const sessionShownCheck = sessionStorage.getItem(sessionShownKey) === 'true'
+      if (sessionShownCheck || dismissedUntilCheck > nowCheck || submittedUntilCheck > nowCheck) return
+      open(ctx)
+    }
+
+    const attachBannerDismissListeners = () => {
+      if (bannerDismissListenersAttached) return
+      bannerDismissListenersAttached = true
+      const accept = document.getElementById('cookie-accept')
+      const decline = document.getElementById('cookie-decline')
+      if (accept) accept.addEventListener('click', onBannerDismissed, { once: true })
+      if (decline) decline.addEventListener('click', onBannerDismissed, { once: true })
+      // Fallback: if the banner is hidden by any other path (auto-dismiss, future
+      // close affordance, programmatic hide), still replay the deferred popup so it
+      // can never get stuck pending forever.
+      const banner = document.getElementById('cookie-banner')
+      if (banner && typeof MutationObserver !== 'undefined') {
+        bannerObserver = new MutationObserver(() => {
+          if (pendingContext !== null && !isConsentBannerVisible()) {
+            // onBannerDismissed disconnects the observer itself, covering both
+            // this fallback path and the accept/decline button path.
+            onBannerDismissed()
+          }
+        })
+        bannerObserver.observe(banner, { attributes: true, attributeFilter: ['style', 'class', 'hidden'] })
+      }
+    }
+
+    const focusableSelector =
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+    const close = (reason) => {
+      root.hidden = true
+      root.setAttribute('aria-hidden', 'true')
+      document.body.classList.remove('lead-popup-open')
+      sessionStorage.setItem(sessionShownKey, 'true')
+
+      if (reason === 'dismiss') {
+        localStorage.setItem(localDismissKey, String(Date.now() + dismissDuration))
+        getAnalytics()?.track?.('lead_popup_dismissed', {
+          trigger_context: activeContext,
+          eligible_views: eligibleViews,
+        })
+      } else {
+        localStorage.setItem(localSubmitKey, String(Date.now() + dismissDuration))
+        getAnalytics()?.track?.('lead_popup_submitted', {
+          trigger_context: activeContext,
+          eligible_views: eligibleViews,
+        })
+      }
+
+      lastFocused?.focus()
+    }
+
+    const trapFocus = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        close('dismiss')
+        return
+      }
+
+      if (event.key !== 'Tab') return
+
+      const focusable = Array.from(dialog.querySelectorAll(focusableSelector)).filter(
+        (element) => !element.hasAttribute('hidden'),
+      )
+      if (focusable.length === 0) return
+
+      const first = focusable[0]
+      const last = focusable.at(-1)
+      if (!first || !last) return
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    const open = (context) => {
+      if (!root.hidden) return false
+      if (isConsentBannerVisible()) {
+        // Keep the first trigger's context; a later trigger must not overwrite it
+        if (pendingContext === null) pendingContext = context
+        attachBannerDismissListeners()
+        return false
+      }
+      lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null
+      root.hidden = false
+      root.setAttribute('aria-hidden', 'false')
+      document.body.classList.add('lead-popup-open')
+      sessionStorage.setItem(sessionShownKey, 'true')
+      if (contextInput) contextInput.value = context
+      activeContext = context
+      getAnalytics()?.track?.('lead_popup_shown', {
+        trigger_context: context,
+        eligible_views: eligibleViews,
+      })
+
+      const closeBtn = dialog.querySelector('[data-lead-popup-close]')
+      const firstInput = dialog.querySelector('input, button, a')
+      window.setTimeout(() => {
+        if (prefersReducedMotion) {
+          closeBtn?.focus() ?? firstInput?.focus()
+        } else {
+          dialog.focus()
+          closeBtn?.focus() ?? firstInput?.focus()
+        }
+      }, 20)
+      return true
+    }
+
+    root.querySelectorAll('[data-lead-popup-close]').forEach((element) => {
+      element.addEventListener('click', () => close('dismiss'))
+    })
+
+    document.addEventListener('keydown', trapFocus)
+
+    form?.addEventListener('submit', () => {
+      if (contextInput && contextInput.value === 'popup-exit-intent') {
+        contextInput.value = isDesktop ? 'popup-exit-intent' : eligibleViews >= 2 ? 'popup-second-page' : 'popup-scroll-mobile'
+      }
+    })
+
+    form?.addEventListener('lead-capture:success', () => {
+      close('submit')
+    })
+
+    if (isDesktop) {
+      window.setTimeout(() => {
+        armedForExit = true
+      }, 20_000)
+
+      document.addEventListener('mouseleave', (event) => {
+        if (!armedForExit || event.clientY > 8) return
+        open('popup-exit-intent')
+      })
+      return
+    }
+
+    if (eligibleViews >= 2) {
+      const scheduleSecondPagePrompt = (attempt = 0) => {
+        window.setTimeout(() => {
+          if (!open('popup-second-page') && attempt < 6) {
+            scheduleSecondPagePrompt(attempt + 1)
+          }
+        }, 12_000)
+      }
+
+      scheduleSecondPagePrompt()
+      return
+    }
+
+    const onScroll = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight
+      if (scrollable <= 0) return
+      const progress = window.scrollY / scrollable
+      if (progress >= 0.7 && open('popup-scroll-mobile')) {
+        window.removeEventListener('scroll', onScroll)
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+  })()
+</script>
+
+<style>
+  .popup-shell[hidden] {
+    display: none;
+  }
+
+  .popup-shell {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+  }
+
+  .popup-shell__backdrop {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in oklch, var(--phig-color-brand-900) 28%, transparent);
+  }
+
+  .popup-shell__dialog {
+    position: relative;
+    width: min(100%, 42rem);
+    z-index: 1;
+    outline: none;
+  }
+
+  /* Close button: .touch-target class provides 44×44 minimum; explicit min sizes here as a guard */
+  .popup-shell__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+    min-width: 44px;
+    min-height: 44px;
+    border: 1px solid var(--phig-color-border-default);
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--phig-color-surface-0) 92%, var(--phig-color-brand-50));
+    color: var(--phig-color-text-primary);
+    font-size: 1.3rem;
+    cursor: pointer;
+  }
+
+  .popup-shell__content {
+    overflow-y: auto;
+  }
+
+  :global(body.lead-popup-open),
+  :global(html:has(body.lead-popup-open)) {
+    overflow: hidden;
+  }
+
+  /* Mobile sheet layout: <640px (below Tailwind sm breakpoint) */
+  @media (max-width: 639px) {
+    .popup-shell {
+      padding: 0;
+      align-items: flex-end;
+    }
+
+    .popup-shell__dialog {
+      width: 100%;
+      border-top-left-radius: 1.25rem;
+      border-top-right-radius: 1.25rem;
+      max-height: calc(100dvh - 4rem - env(safe-area-inset-top, 0px));
+      display: flex;
+      flex-direction: column;
+    }
+
+    .popup-shell__content {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Close button stays visible at top of sheet without scrolling */
+    .popup-shell__close {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      z-index: 2;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .popup-shell__dialog {
+        animation: lead-popup-sheet-enter 220ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+    }
+  }
+
+  /* Heading responsive font size: prevents overflow on narrow/landscape viewports */
+  .popup-shell__dialog :global([data-popup-heading]),
+  .popup-shell__dialog :global(h2),
+  .popup-shell__dialog :global(h3) {
+    font-size: clamp(1.25rem, 4.5vw, 1.9rem);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .popup-shell__dialog {
+      animation: lead-popup-enter 180ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+
+  @keyframes lead-popup-enter {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes lead-popup-sheet-enter {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

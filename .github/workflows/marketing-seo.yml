@@ -1,0 +1,90 @@
+name: Marketing SEO
+
+on:
+  pull_request:
+    paths:
+      - 'apps/marketing/**'
+      - 'packages/lead-magnets/**'
+      - 'packages/config/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/marketing-seo.yml'
+  push:
+    paths:
+      - 'apps/marketing/**'
+      - 'packages/lead-magnets/**'
+      - 'packages/config/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/marketing-seo.yml'
+  schedule:
+    - cron: '22 10 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NODE_OPTIONS: --max-old-space-size=8192
+
+jobs:
+  internal-guardrails:
+    if: github.event_name != 'schedule'
+    name: Internal link and nav guardrails
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browser
+        run: pnpm --filter @phiguard/marketing exec playwright install --with-deps chromium
+
+      - name: Build marketing
+        run: pnpm --filter @phiguard/marketing build
+
+      - name: Typecheck marketing
+        run: pnpm --filter @phiguard/marketing typecheck
+
+      - name: Check internal links
+        run: pnpm --filter @phiguard/marketing links:check:internal
+
+      - name: Check Resources navigation rendering
+        run: pnpm --filter @phiguard/marketing test:nav
+
+  strict-external-links:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    name: Strict external link audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build marketing
+        run: pnpm --filter @phiguard/marketing build
+
+      - name: Check all links strictly
+        run: pnpm --filter @phiguard/marketing links:check

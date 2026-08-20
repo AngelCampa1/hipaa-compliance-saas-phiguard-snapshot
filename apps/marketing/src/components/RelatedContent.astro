@@ -1,0 +1,159 @@
+---
+import { getCollection } from 'astro:content'
+import type { CollectionKey } from 'astro:content'
+
+interface Props {
+  cluster:
+    | 'alternatives'
+    | 'practice-types'
+    | 'personas'
+    | 'guides'
+    | 'comparisons'
+    | 'resources'
+    | 'best'
+    | 'hipaa-software'
+    | 'city-guides'
+    | 'state-guides'
+  currentSlug?: string
+  heading?: string
+  limit?: number
+  eyebrow?: string
+  items?: Array<RelatedItem | null | false | undefined>
+}
+
+type RelatedItem = {
+  href: string
+  title: string
+  description: string
+  eyebrow?: string
+}
+
+const clusterBasePath: Record<Props['cluster'], string> = {
+  alternatives: '/alternatives',
+  'practice-types': '/practice-types',
+  personas: '/practice-types',
+  guides: '/resources/guides',
+  comparisons: '/compare',
+  resources: '/resources',
+  best: '/resources/best',
+  'hipaa-software': '/hipaa-software',
+  'city-guides': '/locations/hipaa-compliance',
+  'state-guides': '/locations/hipaa-compliance-software',
+}
+
+const defaultHeadings: Record<Props['cluster'], string> = {
+  alternatives: 'More HIPAA-compliant alternatives to generic task tools',
+  'practice-types': 'PHIGuard for other practice types',
+  personas: 'PHIGuard for other clinic roles',
+  guides: 'More HIPAA software and operations guides',
+  comparisons: 'More PHIGuard comparisons',
+  resources: 'Related resources',
+  best: 'More best-of HIPAA software pages',
+  'hipaa-software': 'More HIPAA software pages by use case',
+  'city-guides': 'More HIPAA compliance city guides',
+  'state-guides': 'More state HIPAA guides',
+}
+
+const { cluster, currentSlug, heading, limit = 4, eyebrow = 'Keep exploring', items: explicitItems } = Astro.props
+
+const isRelatedItem = (item: RelatedItem | null | false | undefined): item is RelatedItem => Boolean(item)
+
+const items = explicitItems?.filter(isRelatedItem) ?? await (async () => {
+  const entries = await getCollection(cluster as CollectionKey)
+
+  return entries
+    .filter((entry: { id: string }) => {
+      const slug = entry.id.replace(/\.(md|mdx)$/, '')
+      return slug !== currentSlug
+    })
+    .sort((a: { data: { publishedAt?: Date } }, b: { data: { publishedAt?: Date } }) => {
+      const aDate = a.data.publishedAt?.getTime() ?? 0
+      const bDate = b.data.publishedAt?.getTime() ?? 0
+      return bDate - aDate
+    })
+    .slice(0, limit)
+    .map((entry: { id: string; data: Record<string, unknown> }) => {
+      const slug = entry.id.replace(/\.(md|mdx)$/, '')
+      const data = entry.data as {
+        title?: string
+        description?: string
+        metaDescription?: string
+        headline?: string
+      }
+      return {
+        href: `${clusterBasePath[cluster]}/${slug}`,
+        title: data.title ?? slug,
+        description: data.description ?? data.headline ?? data.metaDescription ?? '',
+      }
+    })
+})()
+
+const displayHeading = heading ?? defaultHeadings[cluster]
+---
+
+{items.length > 0 && (
+  <aside class="page-surface page-surface--tight" aria-labelledby="related-heading">
+    <div class="shell-md">
+      <p class="kicker">{eyebrow}</p>
+      <h2 id="related-heading" class="section-title">{displayHeading}</h2>
+      <ul class="related-grid">
+        {items.map((item: RelatedItem) => (
+          <li>
+            <a href={item.href} class="resource-card related-card">
+              {'eyebrow' in item && item.eyebrow && <span class="related-eyebrow">{item.eyebrow}</span>}
+              <span class="related-title">{item.title}</span>
+              {item.description && <span class="related-desc">{item.description}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </aside>
+)}
+
+<style>
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .related-grid li {
+    margin: 0;
+  }
+
+  .related-card {
+    display: block;
+    min-height: 100%;
+    text-decoration: none;
+  }
+
+  .related-title {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--phig-color-text-primary);
+    font-size: 0.98rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .related-desc {
+    display: block;
+    color: var(--phig-color-text-muted);
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+
+  .related-eyebrow {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    color: var(--phig-color-text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+</style>

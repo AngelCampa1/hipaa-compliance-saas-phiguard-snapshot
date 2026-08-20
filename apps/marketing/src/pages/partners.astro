@@ -1,0 +1,205 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro'
+import { PHIGUARD_APP_ORIGIN } from '@phiguard/brand/identity'
+import { commercialKnowledgeCopy } from '@phiguard/knowledge/commercial'
+import LeadCapturePanel from '../components/LeadCapturePanel.astro'
+import { buildBreadcrumbSchema, buildFAQSchema } from '../lib/seo'
+import { marketingPlans } from '../data/product'
+
+const partnerCommission = marketingPlans.find((p) => p.commissionPercent > 0)?.commissionPercent ?? 20
+const steps = [
+  { number: '1', heading: 'Apply', body: 'Tell us who you are and how you work with clinics. We review every application by hand.' },
+  { number: '2', heading: 'Share your link', body: 'Approved partners get a referral link. It tracks the clinics you send to us.' },
+  { number: '3', heading: 'Earn commission', body: `When a referred clinic starts paying, you earn ${partnerCommission}% of their monthly subscription. You keep earning it while they stay active.` },
+]
+
+const faqs = [
+  { q: 'Who qualifies to become a PHIGuard partner?', a: 'Healthcare IT consultants, practice management consultants, and vendors who work directly with small clinics are the typical fit.' },
+  { q: 'When do commissions get paid?', a: 'Commissions are paid monthly via ACH transfer after the standard hold period on the referred clinic’s first payment.' },
+  { q: 'Is there a minimum to receive a payout?', a: 'Payouts are issued when the balance reaches $50 or more.' },
+  { q: 'How long does referral attribution last?', a: 'Referral attribution is tracked for 90 days after the clinic clicks your link.' },
+]
+const breadcrumbs = buildBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Partners', url: '/partners' },
+])
+const faqSchema = buildFAQSchema(faqs)
+const applicationSucceeded = Astro.url.searchParams.get('applied') === '1'
+const applicationError = Astro.url.searchParams.has('error')
+---
+
+<MarketingLayout
+  title="Partner Program | PHIGuard"
+  description={`Refer small medical clinics to PHIGuard and earn ${partnerCommission}% monthly commission through a partner program built for clinic-focused advisors.`}
+  jsonLd={[breadcrumbs, faqSchema]}
+>
+  <section class="page-surface">
+    <div class="shell-lg section-grid">
+      <div>
+        <p class="kicker">Partner program</p>
+        <h1 class="hero-title text-balance" style="font-size: clamp(2.4rem, 4.4vw, 4rem);">A partner program for clinic-focused advisors.</h1>
+        <p class="hero-summary">
+          PHIGuard is easy to explain to clinics. The pitch is clear: {commercialKnowledgeCopy.pricingModel} {commercialKnowledgeCopy.baaIncluded} Compliance is built in.
+        </p>
+        <div class="hero-actions">
+          <a href="#apply" class="button-primary">Apply to become a partner</a>
+        </div>
+      </div>
+      <aside class="assurance-panel">
+        <p class="panel-label">Program snapshot</p>
+        <div class="assurance-list">
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">{partnerCommission}% recurring commission</span><span class="assurance-meta">Monthly</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">Clinic-first pricing</span><span class="assurance-meta">Easy to explain</span></div>
+          <div class="assurance-row"><span class="assurance-bullet"></span><span class="assurance-title">We review every application</span><span class="assurance-meta">By hand</span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg feature-grid">
+      {steps.map((step) => (
+        <div class="compare-card">
+          <p class="panel-label">Step {step.number}</p>
+          <h3>{step.heading}</h3>
+          <p>{step.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg editorial-card section-grid">
+      <div>
+        <p class="kicker">Commission structure</p>
+        <h2 class="section-title text-balance">Flat pricing makes the math straightforward.</h2>
+      </div>
+      <div class="metric-strip">
+        {marketingPlans.filter((plan) => plan.commissionPercent > 0).map((plan) => (
+          <div class="metric-item">
+            <span class="metric-value">{plan.commissionPercent}%</span>
+            <span class="metric-label">{plan.name} commission</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-surface page-surface--tight">
+    <div class="shell-lg">
+      <LeadCapturePanel magnetSlug="vendor-baa-tracker" />
+    </div>
+  </section>
+
+  <section id="apply" class="page-surface page-surface--tight">
+    <div class="shell-md editorial-card">
+      <p class="kicker">Application</p>
+      <h2 class="section-title text-balance">Apply to become a partner.</h2>
+      <p class="section-body">Tell us about your firm and how you work with clinics. We review every application and reach out when there is a fit.</p>
+
+      <form id="partner-application-form" class="mt-8 grid gap-5" action={`${PHIGUARD_APP_ORIGIN}/api/partners/apply`} method="POST">
+        <div>
+          <label for="name" class="mb-1 block text-sm font-medium text-text-secondary">Full name</label>
+          <input id="name" name="name" type="text" required autocomplete="name" class="w-full rounded-xl border border-border-strong px-4 py-3 text-sm" />
+        </div>
+        <div>
+          <label for="email" class="mb-1 block text-sm font-medium text-text-secondary">Email address</label>
+          <input id="email" name="email" type="email" required autocomplete="email" class="w-full rounded-xl border border-border-strong px-4 py-3 text-sm" />
+        </div>
+        <div>
+          <label for="company" class="mb-1 block text-sm font-medium text-text-secondary">Company or practice name</label>
+          <input id="company" name="company" type="text" required autocomplete="organization" class="w-full rounded-xl border border-border-strong px-4 py-3 text-sm" />
+        </div>
+        <div>
+          <label for="website" class="mb-1 block text-sm font-medium text-text-secondary">Website</label>
+          <input id="website" name="website" type="url" autocomplete="url" placeholder="https://" class="w-full rounded-xl border border-border-strong px-4 py-3 text-sm" />
+        </div>
+        <button type="submit" class="button-primary">Apply</button>
+        <p
+          id="partner-application-status"
+          class="partner-application-status"
+          role="status"
+          aria-live="polite"
+          data-partner-application-status
+          data-tone={applicationError ? 'error' : 'success'}
+          hidden={!applicationSucceeded && !applicationError}
+        >
+          {applicationSucceeded
+            ? 'Application received. We will review it and follow up by email.'
+            : applicationError
+              ? 'Could not submit the application. Please check the form and try again.'
+              : ''}
+        </p>
+      </form>
+    </div>
+  </section>
+</MarketingLayout>
+
+<script>
+  const partnerForm = document.getElementById('partner-application-form') as HTMLFormElement | null
+
+  partnerForm?.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    const submitButton = partnerForm.querySelector<HTMLButtonElement>('button[type="submit"]')
+    const status = partnerForm.querySelector<HTMLParagraphElement>('[data-partner-application-status]')
+    const formData = new FormData(partnerForm)
+    const email = String(formData.get('email') ?? '')
+    const defaultLabel = submitButton?.textContent ?? 'Apply'
+    const analytics = (window as unknown as { phiguardAnalytics?: {
+      identifyLead?: (identity: { email: string; leadId?: string }) => void
+      track?: (event: string, props?: Record<string, unknown>) => void
+    } }).phiguardAnalytics
+
+    const setStatus = (message: string, tone: 'success' | 'error') => {
+      if (!status) return
+      status.textContent = message
+      status.hidden = !message
+      status.dataset.tone = tone
+    }
+
+    analytics?.track?.('partner_application_submitted', { status: 'attempted' })
+    if (submitButton) submitButton.disabled = true
+    if (submitButton) submitButton.textContent = 'Sending...'
+    setStatus('', 'success')
+
+    try {
+      const response = await fetch(partnerForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: { Accept: 'application/json' },
+      })
+
+      if (!response.ok) {
+        throw new Error(`status_${response.status}`)
+      }
+
+      const result = await response.clone().json().catch(() => null) as { leadId?: string; id?: string } | null
+      analytics?.identifyLead?.({ email, leadId: result?.leadId ?? result?.id })
+      analytics?.track?.('partner_application_submitted', { status: 'succeeded' })
+      partnerForm.reset()
+      if (submitButton) submitButton.textContent = 'Application sent'
+      setStatus('Application received. We will review it and follow up by email.', 'success')
+    } catch (error) {
+      analytics?.track?.('partner_application_failed', {
+        reason: error instanceof Error ? error.message : 'unknown',
+      })
+      if (submitButton) submitButton.disabled = false
+      if (submitButton) submitButton.textContent = defaultLabel
+      setStatus('Could not submit the application. Please check the form and try again.', 'error')
+    }
+  })
+</script>
+
+<style>
+  .partner-application-status {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--phig-color-success-700);
+  }
+
+  .partner-application-status[data-tone='error'] {
+    color: var(--phig-color-danger-700);
+  }
+</style>
