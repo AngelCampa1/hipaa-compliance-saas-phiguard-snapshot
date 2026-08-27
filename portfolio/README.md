@@ -23,7 +23,7 @@ myself while building, are dated and open-ended, and are not part of this set.
 | [SECURITY.md](./SECURITY.md) | 279 lines | PHI boundary, audit immutability, access control, key handling, and where each safeguard's guarantee stops |
 | [TESTING.md](./TESTING.md) | 181 lines | The three kinds of test here, both coverage numbers, and where each is blind |
 | [METRICS.md](./METRICS.md) | 110 lines | Every figure in the README with the classification that produced it |
-| [SCREENSHOTS.md](./SCREENSHOTS.md) | 330 lines | The capture archive: small, and honest about why |
+| [SCREENSHOTS.md](./SCREENSHOTS.md) | 330 lines | The capture archive, and why it is a fraction of the original run |
 
 ## The machine-readable files
 
@@ -50,7 +50,7 @@ reconstructed afterwards.
 
 ## If you are only going to read one
 
-[ENGINEERING-LOG.md](./ENGINEERING-LOG.md). It contains the failure that a
-skeptical reader would otherwise have to find on their own: an entire screenshot
-archive that was wrong for four months while every assertion covering it stayed
-green.
+[ENGINEERING-LOG.md](./ENGINEERING-LOG.md). The best evidence for the
+verification discipline behind this repository is a bug it found in its own
+test suite: a screenshot archive that read green for four months, and the
+one-line fix that closed the gap once someone checked the actual pixels.

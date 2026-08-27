@@ -40,17 +40,16 @@ instead of a conversation.
 - `schema-migration-reviewer.md` fails a migration that adds a `*.phi.ts` table
   without a matching audit hook in `packages/audit/src/`.
 
-**The honest gap.** *There is no test that asserts the convention.* Nothing
-enumerates the schema directory and fails when a PHI-bearing table lands in a
-plainly-named file. Enforcement is an agent prompt plus `CLAUDE.md` policy plus
-code review. The nearest thing to a guard is
+*There is no test that asserts the convention itself.* Nothing enumerates the
+schema directory and fails when a PHI-bearing table lands in a plainly-named
+file. Enforcement is an agent prompt plus `CLAUDE.md` policy plus code review.
+The nearest thing to a guard is
 [`apps/web/src/__tests__/app-static-contracts.test.ts:1727`](../apps/web/src/__tests__/app-static-contracts.test.ts),
 which asserts the HIPAA safeguards document still cites five specific `.phi.ts`
 paths: a documentation-drift check, not a naming check.
 
-That is the weakest link in this section and it is worth saying out loud: the
-convention that the whole PHI story rests on is the one thing here without an
-executable guard.
+The convention the whole PHI story rests on is the one thing in this section
+without an executable guard behind it.
 
 ## 2. The audit trail, and why it is hard to work around
 
@@ -182,9 +181,9 @@ There are two enforcement layers:
 - Predicate functions (`isOwner`, `canManageMembers`, `canAccessSoc2`,
   `canWriteLocations`, …) called inside server functions.
 
-**Routes map to roles by calling predicates, not by a declarative table.** That
-is a real weakness: the guard is a line inside each server function, and a new
-route with no guard is silently public to every member. The closest thing to a
+**Each server function checks access by calling a permission predicate
+inline, rather than through a declarative route-to-role table.** A new route
+with no guard is silently public to every member. The closest thing to a
 route→role specification is behavioural rather than structural.
 [`apps/web/e2e/rbac-routes.spec.ts`](../apps/web/e2e/rbac-routes.spec.ts) pins
 four role/route outcomes in Playwright.
@@ -234,12 +233,12 @@ Secrets are read from the environment. The variable names are
 `AUTH_TOKEN_ENCRYPTION_KEY` and `INTEGRATION_TOKEN_ENCRYPTION_KEY`; no value
 appears in this repository, and `.env.example` carries placeholders only.
 
-**One honest criticism.** The key is derived by taking a bare `SHA-256` of the
-configured secret, not by running it through a KDF such as HKDF or PBKDF2. With
-a high-entropy random secret that is adequate; with a human-chosen one it is
-weaker than it looks, and it offers no domain separation between the two key
-slots beyond the secrets themselves. HKDF with a per-slot info string would have
-been the correct call and would have cost about four lines.
+The key is derived by hashing the configured secret directly with `SHA-256`,
+rather than passing it through a KDF such as HKDF or PBKDF2. With a
+high-entropy random secret that is adequate. With a human-chosen one it is
+weaker than it looks, and there is no domain separation between the two key
+slots beyond the secrets themselves. HKDF with a per-slot info string would
+have been the correct call, and would have cost about four lines.
 
 ## 6. The telemetry boundary
 

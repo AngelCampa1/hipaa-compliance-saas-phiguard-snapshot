@@ -49,8 +49,8 @@ image is the hero instead.*
 
 ## Contents
 
-- [If you read one thing](#if-you-read-one-thing)
 - [What it did](#what-it-did)
+- [If you read one thing](#if-you-read-one-thing)
 - [Architecture](#architecture)
 - [Engineering worth pointing at](#engineering-worth-pointing-at)
 - [By the numbers](#by-the-numbers)
@@ -64,26 +64,6 @@ image is the hero instead.*
 - [License](#license)
 
 ---
-
-## If you read one thing
-
-The best evidence for the verification discipline behind this repository is
-a bug it found in its own test suite. [The screenshot archive was wrong for
-four months, and every assertion covering it stayed
-green.](portfolio/ENGINEERING-LOG.md) The automated capture spec only
-rejected a screen on an HTTP error, but the router redirects on the client,
-so a screen the seeded account couldn't reach still wrote to disk under the
-requested screen's filename. 38 of the original 43 captures were the
-onboarding gate wearing other screens' names, including all four images this
-README used as its hero strip at the time, found while preparing this
-snapshot for publication, not during development. Three assertions passed
-the whole time; none of them checked the property anyone actually cared
-about.
-
-The fix is in the same file the bug was in: the spec now compares the
-landed pathname against the requested one and throws, `redirected to
-/app/dashboard: the account cannot reach this screen`, on any mismatch
-between them.
 
 ## What it did
 
@@ -101,6 +81,26 @@ instead of a spreadsheet assembled after the fact.
 The compliance content is grounded in a careful reading of the HIPAA
 Security and Privacy Rules by an engineer. It was never reviewed by
 counsel, and it is not legal advice.
+
+## If you read one thing
+
+The best evidence for the verification discipline behind this repository is
+a bug it found in its own test suite. [The screenshot archive was wrong for
+four months, and every assertion covering it stayed
+green.](portfolio/ENGINEERING-LOG.md) The automated capture spec only
+rejected a screen on an HTTP error, but the router redirects on the client,
+so a screen the seeded account couldn't reach still wrote to disk under the
+requested screen's filename. 38 of the original 43 captures were the
+onboarding gate wearing other screens' names, including all four images this
+README used as its hero strip at the time, found during preparation of this
+snapshot for publication rather than during development. Three assertions
+passed the whole time; none of them checked the property anyone actually
+cared about.
+
+The fix is in the same file the bug was in: the spec now compares the
+landed pathname against the requested one and throws, `redirected to
+/app/dashboard: the account cannot reach this screen`, on any mismatch
+between them.
 
 ---
 
@@ -131,7 +131,7 @@ buckets live in D1, a physically separate store. That is why PostHog's browser
 SDK is allowed on the public site and forbidden behind auth: authenticated
 analytics go through a same-origin `/api/analytics/product` proxy with an
 explicit event allowlist, route normalization, and a scalar-only property
-sanitizer, so no third-party JavaScript ever runs on a page that can render PHI.
+sanitizer, so authenticated analytics ship no third-party JavaScript.
 
 **[→ Full architecture notes](portfolio/ARCHITECTURE.md)**, covering request
 path, data model, package graph, and deploy topology.
@@ -183,6 +183,20 @@ between requests. [ADR 0018](docs/adr/0018-hyperdrive-request-scoped-db.md)
 records the fix: per-request construction inside an `AsyncLocalStorage` scope
 that also carries the acting user, so `auditedWrite()` can attribute writes
 without threading a parameter through every call site.
+
+**A SOC 2 controls-and-evidence module, gated behind a paid plan.**
+[`packages/compliance/src/soc2/`](packages/compliance/src/soc2/) seeds ten
+Trust Services Criteria controls and maps each one to the audit event types
+that evidence it, so `collectAuditEvidence` turns the audit trail the product
+already writes into per-control evidence instead of a second logging path. A
+quarterly access-review workflow opens one review item per membership, lets a
+reviewer record a decision on each, revokes membership on the spot for anyone
+marked for removal, and refuses to close until every item has a decision. The
+whole surface is also readable by a lateral `auditor` role: `canAccessSoc2()`
+admits `org_owner`, `org_admin` and `auditor`, and the auditor's own
+capability grant (`ac: ['read']` in the better-auth matrix, see
+[SECURITY.md](portfolio/SECURITY.md)) is what keeps it read-only.
+[→ Control-to-code mapping](docs/soc2/README.md)
 
 **Also in here:** a 5-role RBAC model with its own route-level spec; 64
 React-PDF compliance document templates sharing design tokens with the web app;
@@ -254,14 +268,12 @@ rather than letting a partial run pass as a full one.
 | `db` | 92.9% | | `marketing` | 17.5% |
 | | | | `ui` | 4.9% |
 
-**The honest aggregate across everything measured is 48.9%.** Across
-`packages/*` excluding `ui` (the domain, data, auth, billing and compliance
-layer), it is **94.2%**. The gap is `web`, `marketing` and `ui`, and it is there
-on purpose: the repository's own contributor guide says *"For UI code in
-`apps/web`: write tests for logic and server functions. Do not write tests for
-markup rendering."* Server functions, domain logic and data access are tested;
-React components rendering markup are not. Both numbers are here because quoting
-only the flattering one is how coverage sections become useless.
+**Coverage across the twelve packages, everything except `ui`, `brand` and `config`, is 94.2%.**
+Across the whole tree, including the `web` and `marketing` application shells and the shared UI
+component library, it is 48.9%. That split is deliberate: the repository's own contributor guide
+says *"For UI code in `apps/web`: write tests for logic and server functions. Do not write tests for
+markup rendering."* Server functions, domain logic and data access are tested. React components
+rendering markup are not.
 
 `brand` and `config` have no tests and are excluded rather than counted as
 zeroes: one is a constants file, the other is shared ESLint and TypeScript
@@ -367,9 +379,9 @@ are specialized review agents wired into the merge process.
 that writes to a `*.phi.ts` table without a same-transaction audit event.
 `schema-migration-reviewer` fails a migration that adds a `*.phi.ts` table
 without a matching audit hook, or a new table missing `tenant_id`. Both are
-named in [SECURITY.md](portfolio/SECURITY.md), which also records the
-honest gap: there is no automated test for the `.phi.ts` naming convention
-itself, only agent review and `CLAUDE.md` policy.
+named in [SECURITY.md](portfolio/SECURITY.md), which also records the gap:
+there is no automated test for the `.phi.ts` naming convention itself, only
+agent review and `CLAUDE.md` policy.
 
 ---
 

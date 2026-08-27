@@ -58,7 +58,7 @@ attribute a write without threading an actor parameter through every call site.
 
 ## 0017: migration numbering
 
-Unglamorous and worth reading anyway, because it is an honest record of a
+Unglamorous and worth reading anyway, because it is a plain record of a
 coordination failure rather than a design.
 
 Concurrent branches kept minting the same Drizzle migration number. The state that

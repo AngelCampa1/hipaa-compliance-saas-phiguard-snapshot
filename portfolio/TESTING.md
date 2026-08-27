@@ -135,24 +135,21 @@ Measured with v8 on 2026-08-11 and written to
 | `db` | 92.9% | | `marketing` | 17.5% |
 | | | | `ui` | 4.9% |
 
-**Two numbers, both real:**
+**Two numbers, both real, at different scope:**
 
-- **48.9%** across everything measured: 34,313 of 70,226 statements.
-- **94.2%** across `packages/*` excluding `ui` (the domain, data, auth, billing
-  and compliance layer): 19,425 of 20,626 statements.
+- **94.2%** across the twelve packages, everything except `ui`, `brand` and
+  `config`: 19,425 of 20,626 statements. The aggregate sums covered and total
+  statements rather than averaging percentages, so a tiny well-covered
+  package cannot flatter the total.
+- **48.9%** across the whole tree, including the `web` and `marketing`
+  application shells and the shared UI component library: 34,313 of 70,226
+  statements.
 
-The aggregate sums covered and total statements rather than averaging
-percentages, so a tiny well-covered package cannot flatter the total.
-
-The gap between the two numbers is `web` (36.1%), `marketing` (17.5%) and `ui`
-(4.9%), and it is deliberate. The contributor guide says: *"For UI code in
-`apps/web`: write tests for logic and server functions. Do not write tests for
-markup rendering."* Server functions, domain logic and data access are tested.
-React components rendering markup are not.
-
-Both numbers are here because quoting only the 94.2% is how coverage sections
-stop being worth reading, and quoting only the 48.9% would misrepresent where the
-risk actually lives.
+The difference is `web` (36.1%), `marketing` (17.5%) and `ui` (4.9%), and it
+is deliberate. The contributor guide says: *"For UI code in `apps/web`: write
+tests for logic and server functions. Do not write tests for markup
+rendering."* Server functions, domain logic and data access are tested. React
+components rendering markup are not.
 
 `brand` and `config` are excluded rather than counted as zeroes: one is a
 constants file, the other is shared ESLint and TypeScript presets. Counting them

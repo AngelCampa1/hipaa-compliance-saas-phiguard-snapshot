@@ -51,7 +51,7 @@ no suite, because it converts an unexamined assumption into documented fact.
 
 **Current state, stated plainly.** The 38 mislabelled files were deleted rather
 than relabelled. Seven of the automated captures survive: four signed-out screens,
-the billing page, and the onboarding gate under an honest name.
+the billing page, and the onboarding gate correctly named this time.
 
 Four more came from an unexpected place. A manual QA sweep on 2026-04-19 had left
 hand-taken screenshots in `docs/qa/screenshots/`, which nothing referenced and
@@ -201,11 +201,11 @@ The mitigations are real: it is environment-gated, it passes no user data, and t
 CSP allowlists exactly one origin for it. The rule is still categorical and this
 still breaks it.
 
-It is listed here, and in the root README's limitations, for the same reason the
-screenshot failure is: it was found by a review of this snapshot rather than
-during development. Writing the rules down where a reviewer can check them against
-the code is what surfaced it. That is an argument for the practice, not against
-it.
+It is listed here and in [SECURITY.md](./SECURITY.md), for the same reason the
+screenshot failure is: found by a review of this snapshot rather than during
+development. Writing the rules down where a reviewer can check them against
+the code is what surfaced it. That is an argument for the practice, not
+against it.
 
 ---
 

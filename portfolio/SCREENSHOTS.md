@@ -36,22 +36,22 @@ These are the only verified captures of the compliance features in a populated s
 <table>
 <tr>
 <td width="50%" valign="top">
-<img src="./screenshots/qa/audit-log.png" alt="Audit log — append-only record, filterable by actor, resource type, resource ID and date range. Captured before QA finding P2-008 landed, so the Actor column still shows raw ids; the shipped UI resolves them to names" width="100%"><br>
-<sub><code>/app/audit</code><br>Audit log — append-only record, filterable by actor, resource type, resource ID and date range. Captured before QA finding P2-008 landed, so the Actor column still shows raw ids; the shipped UI resolves them to names</sub>
+<img src="./screenshots/qa/audit-log.png" alt="Audit log: append-only record, filterable by actor, resource type, resource ID and date range. Captured before QA finding P2-008 landed, so the Actor column still shows raw ids; the shipped UI resolves them to names" width="100%"><br>
+<sub><code>/app/audit</code><br>Audit log: append-only record, filterable by actor, resource type, resource ID and date range. Captured before QA finding P2-008 landed, so the Actor column still shows raw ids; the shipped UI resolves them to names</sub>
 </td>
 <td width="50%" valign="top">
-<img src="./screenshots/qa/compliance-checklist-detail.png" alt="Access Review checklist — items cited to 45 CFR §164.308, each with an inline PHI warning on evidence upload" width="100%"><br>
-<sub><code>/app/compliance/checklists/:id</code><br>Access Review checklist — items cited to 45 CFR §164.308, each with an inline PHI warning on evidence upload</sub>
+<img src="./screenshots/qa/compliance-checklist-detail.png" alt="Access Review checklist: items cited to 45 CFR §164.308, each with an inline PHI warning on evidence upload" width="100%"><br>
+<sub><code>/app/compliance/checklists/:id</code><br>Access Review checklist: items cited to 45 CFR §164.308, each with an inline PHI warning on evidence upload</sub>
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
-<img src="./screenshots/qa/compliance-checklists-list.png" alt="Checklist rollout — assign one starter template across locations without duplicating the template" width="100%"><br>
-<sub><code>/app/compliance/checklists</code><br>Checklist rollout — assign one starter template across locations without duplicating the template</sub>
+<img src="./screenshots/qa/compliance-checklists-list.png" alt="Checklist rollout: assign one starter template across locations without duplicating the template" width="100%"><br>
+<sub><code>/app/compliance/checklists</code><br>Checklist rollout: assign one starter template across locations without duplicating the template</sub>
 </td>
 <td width="50%" valign="top">
-<img src="./screenshots/qa/task-detail-activity.png" alt="Task detail — status, assignee, and the activity trail read back out of the audit events the task's own mutations wrote" width="100%"><br>
-<sub><code>/app/tasks/:id</code><br>Task detail — status, assignee, and the activity trail read back out of the audit events the task's own mutations wrote</sub>
+<img src="./screenshots/qa/task-detail-activity.png" alt="Task detail: status, assignee, and the activity trail read back out of the audit events the task's own mutations wrote" width="100%"><br>
+<sub><code>/app/tasks/:id</code><br>Task detail: status, assignee, and the activity trail read back out of the audit events the task's own mutations wrote</sub>
 </td>
 </tr>
 </table>
@@ -63,8 +63,8 @@ Full access. This is what the clinic administrator who owns the compliance progr
 <table>
 <tr>
 <td width="50%" valign="top">
-<img src="./screenshots/app/onboarding-choose-plan.png" alt="Onboarding gate — plan choice and BAA acceptance, step 2 of 5 (synthetic seed account)" width="100%"><br>
-<sub><code>/app/dashboard</code><br>Onboarding gate — plan choice and BAA acceptance, step 2 of 5 (synthetic seed account)</sub>
+<img src="./screenshots/app/onboarding-choose-plan.png" alt="Onboarding gate: plan choice and BAA acceptance, step 2 of 5 (synthetic seed account)" width="100%"><br>
+<sub><code>/app/dashboard</code><br>Onboarding gate: plan choice and BAA acceptance, step 2 of 5 (synthetic seed account)</sub>
 </td>
 <td width="50%" valign="top">
 <img src="./screenshots/app/billing.png" alt="Plan and billing, with trial and legal-acceptance status (synthetic seed account)" width="100%"><br>
